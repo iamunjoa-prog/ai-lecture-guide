@@ -7,7 +7,7 @@ const Q = {
   automation: "API나 자동화 도구를 써본 적 있나요?",
   coding: "코딩은 어느 정도 하세요?",
   domains: "어떤 분야에 AI를 쓰고 싶으세요?",
-  goal: "AI로 이루고 싶은 목표는 뭐예요?",
+  goal: "AI로 이루고 싶은 목표는 무엇인가요?",
   language: "한국어로 들을 수 있는 강의가 좋으세요?",
 };
 
@@ -15,8 +15,9 @@ test.describe("랜딩", () => {
   test("첫 화면이 보이고 CTA를 누르면 진단으로 간다", async ({ page, consoleErrors }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/AI 강의 길잡이/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("막막하셨죠?");
-    await expect(page.getByText(/검증된 강사 \d+명 · 강의 \d+개/)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("직접 배우세요.");
+    await expect(page.locator("dl")).toContainText(/검증된 강사\s*\d+명/);
+    await expect(page.locator("dl")).toContainText(/선별한 유튜브 강의\s*\d+개/);
 
     const cta = page.getByRole("link", { name: /1분 진단 시작하기/ });
     await expect(cta).toBeVisible();
@@ -72,7 +73,7 @@ test.describe("진단", () => {
     await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
 
     // 로딩 연출 후 결과 화면
-    await expect(page.getByText("맞춤 학습 플랜을 만들고 있어요")).toBeVisible();
+    await expect(page.getByText("수준을 분석하고 있어요")).toBeVisible();
     await page.waitForURL(/\/result\?/, { timeout: 15_000 });
     const url = new URL(page.url());
     expect(Object.fromEntries(url.searchParams)).toEqual({
@@ -81,7 +82,7 @@ test.describe("진단", () => {
       g: "build_agents",
       ko: "0",
     });
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("개발자 맞춤 AI 학습 플랜이 준비됐어요");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("개발자 맞춤 학습 로드맵");
     expect(await page.locator("article").count()).toBeGreaterThanOrEqual(3);
     expect(consoleErrors).toEqual([]);
   });
@@ -96,17 +97,17 @@ test.describe("진단", () => {
 test.describe("결과", () => {
   test("강의 카드마다 강사·추천 사유·얻을 것 3가지·유튜브 새 탭 링크가 있다", async ({ page, consoleErrors }) => {
     await page.goto(`/result?${RESULT_QUERY}`);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("맞춤 AI 학습 플랜이 준비됐어요");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("맞춤 학습 로드맵");
     const cards = page.locator("article");
     const n = await cards.count();
     expect(n).toBeGreaterThanOrEqual(3);
 
     for (let i = 0; i < n; i++) {
       const card = cards.nth(i);
-      // 강사명 (헤더의 굵은 글씨)
+      // 강사 정보가 카드 맨 위(헤더)에 있다
       await expect(card.locator("header p").first()).not.toBeEmpty();
       // 추천 사유
-      const reasonBox = card.locator("div", { hasText: "이런 분께 추천해요" }).last();
+      const reasonBox = card.locator("div", { hasText: "추천 이유" }).last();
       await expect(reasonBox.locator("p").nth(1)).not.toBeEmpty();
       // 강의 제목
       await expect(card.getByRole("heading", { level: 3 })).not.toBeEmpty();
@@ -149,7 +150,7 @@ test.describe("강사 선정 기준 시트", () => {
     test(`${path === "/" ? "랜딩" : "결과"}: 열리고 Esc·확인 버튼으로 닫힌다`, async ({ page }) => {
       await page.goto(path);
       const trigger = page.getByRole("button", { name: /강사 선정 기준 보기/ });
-      const dialog = page.getByRole("dialog", { name: "이런 강사의 강의만 추천해요" });
+      const dialog = page.getByRole("dialog", { name: "이런 강사의 유튜브 강의만 선별합니다" });
       await expect(dialog).toBeHidden();
 
       await trigger.click();
@@ -160,7 +161,7 @@ test.describe("강사 선정 기준 시트", () => {
 
       await trigger.click();
       await expect(dialog).toBeVisible();
-      await dialog.getByRole("button", { name: "확인했어요" }).click();
+      await dialog.getByRole("button", { name: "확인", exact: true }).click();
       await expect(dialog).toBeHidden();
       // 닫힌 뒤 스크롤 잠금이 풀린다
       expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
@@ -180,7 +181,7 @@ test.describe("좁은 화면(320px)", () => {
         const bad: string[] = [];
         document.querySelectorAll("body *").forEach((el) => {
           const r = el.getBoundingClientRect();
-          // 마키(가로로 흐르는 강사 목록)처럼 overflow로 잘린 부모 안의 요소는 제외
+          // overflow로 잘린 부모 안의 요소는 제외
           let p = el.parentElement;
           let clipped = false;
           while (p && p !== document.body) {

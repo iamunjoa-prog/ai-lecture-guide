@@ -8,30 +8,28 @@ export interface RoadmapStepProps {
   label: ReactNode;
   /** 단계 설명(선택) */
   description?: ReactNode;
-  /** 마지막 단계면 연결선 숨김 */
+  /** 첫 단계면 위쪽 헤어라인 숨김 */
+  isFirst?: boolean;
+  /** (호환용) 마지막 단계 여부 */
   isLast?: boolean;
   children?: ReactNode;
   className?: string;
 }
 
-/** 세로 타임라인형 로드맵 단계. <ol> 안에 나열하세요 */
-export function RoadmapStep({ step, label, description, isLast = false, children, className }: RoadmapStepProps) {
+/** 로드맵 한 단계: 큰 얇은 숫자 "01" + 단계 이름 + 강의 카드들. <ol> 안에 나열하세요 */
+export function RoadmapStep({ step, label, description, isFirst = false, children, className }: RoadmapStepProps) {
+  const num = String(step).padStart(2, "0");
   return (
-    <li className={cn("relative flex gap-4", className)}>
-      <div className="flex flex-col items-center" aria-hidden="true">
-        <span className="z-10 flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-[15px] font-bold text-primary-fg shadow-cta ring-4 ring-bg">
-          {step}
-        </span>
-        {!isLast && <span className="mt-1 w-0.5 flex-1 rounded-full bg-gradient-to-b from-primary/60 to-border" />}
-      </div>
-      <div className={cn("min-w-0 flex-1", isLast ? "pb-2" : "pb-8")}>
-        <h3 className="pt-1 text-lg font-bold text-fg">
-          <span className="sr-only">{step}단계: </span>
-          {label}
-        </h3>
-        {description && <p className="mt-0.5 text-sm text-fg-muted">{description}</p>}
-        {children && <div className="mt-4 flex flex-col gap-4">{children}</div>}
-      </div>
+    <li className={cn("py-12", !isFirst && "border-t border-border", isFirst && "pt-4", className)}>
+      <span aria-hidden="true" className="block text-[64px] leading-none font-extralight tracking-[-0.05em] text-fg tabular-nums">
+        {num}
+      </span>
+      <h3 className="mt-5 text-[24px] font-bold tracking-[-0.03em] text-fg">
+        <span className="sr-only">{step}단계: </span>
+        {label}
+      </h3>
+      {description && <p className="mt-1.5 text-[15px] leading-relaxed text-fg-muted">{description}</p>}
+      {children && <div className="mt-8 flex flex-col gap-5">{children}</div>}
     </li>
   );
 }

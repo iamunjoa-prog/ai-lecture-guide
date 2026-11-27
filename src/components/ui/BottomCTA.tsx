@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Button } from "./Button";
+import { Button, type ButtonVariant } from "./Button";
 import { cn } from "./cn";
 
 export interface BottomCTAProps {
@@ -11,11 +11,13 @@ export interface BottomCTAProps {
   disabled?: boolean;
   /** form 제출용 등 */
   type?: "button" | "submit";
-  /** 버튼 위 보조 문구(예: "여러 개 선택할 수 있어요") */
+  /** 버튼 위 보조 문구(예: "최대 3개까지 고를 수 있어요") */
   helperText?: ReactNode;
-  /** 버튼 아래 보조 액션(예: 건너뛰기 링크/버튼) */
+  /** 버튼 아래 보조 액션 */
   secondary?: ReactNode;
   trailingIcon?: ReactNode;
+  /** 기본 primary(잉크) */
+  variant?: ButtonVariant;
   className?: string;
 }
 
@@ -29,23 +31,24 @@ export function BottomCTA({
   helperText,
   secondary,
   trailingIcon,
+  variant = "primary",
   className,
 }: BottomCTAProps) {
   return (
     <div
       className={cn(
-        "sticky bottom-0 z-20 -mx-5 mt-auto px-5 pt-6 pb-[max(16px,env(safe-area-inset-bottom))]",
-        "bg-gradient-to-t from-bg from-70% to-transparent",
+        "sticky bottom-0 z-20 -mx-5 mt-auto px-5 pt-8 pb-[max(20px,env(safe-area-inset-bottom))]",
+        "bg-gradient-to-t from-bg from-60% to-transparent",
         className,
       )}
     >
-      {helperText && <p className="mb-2 text-center text-sm text-fg-muted">{helperText}</p>}
+      {helperText && <p className="mb-3 text-center text-[13px] text-fg-muted">{helperText}</p>}
       {href && !disabled ? (
-        <Button href={href} size="lg" fullWidth trailingIcon={trailingIcon}>
+        <Button href={href} variant={variant} size="lg" fullWidth trailingIcon={trailingIcon}>
           {label}
         </Button>
       ) : (
-        <Button type={type} size="lg" fullWidth disabled={disabled} onClick={onClick} trailingIcon={trailingIcon}>
+        <Button type={type} variant={variant} size="lg" fullWidth disabled={disabled} onClick={onClick} trailingIcon={trailingIcon}>
           {label}
         </Button>
       )}

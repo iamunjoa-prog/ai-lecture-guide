@@ -1,4 +1,6 @@
 export { AppShell, type AppShellProps } from "./AppShell";
+export { Slide, type SlideProps, type SlideTone } from "./Slide";
+export { Reveal, type RevealProps } from "./Reveal";
 export { TopBar, type TopBarProps } from "./TopBar";
 export { ProgressBar, type ProgressBarProps } from "./ProgressBar";
 export { OptionCard, OptionGroup, type OptionCardProps, type OptionGroupProps } from "./OptionCard";
@@ -10,4 +12,5 @@ export { ResultHero, type ResultHeroProps, type ResultHeroChip } from "./ResultH
 export { Chip, Tag, type ChipProps, type ChipTone } from "./Chip";
 export { LectureCard, formatDuration, type LectureCardProps } from "./LectureCard";
 export { RoadmapStep, type RoadmapStepProps } from "./RoadmapStep";
+export * from "./icons";
 export { cn } from "./cn";

@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { AppShell, Button, LectureCard, ResultHero, RoadmapStep, type ResultHeroChip } from "@/components/ui";
+import Link from "next/link";
+import { AppShell, LectureCard, ResultHero, RoadmapStep, Slide, type ResultHeroChip } from "@/components/ui";
 import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { ResultActions } from "@/components/ResultActions";
 import { ResultEmptyState } from "@/components/ResultEmptyState";
-import { instructors, thumbnailFor, videos } from "@/components/catalog";
+import { credentialBadge, instructors, thumbnailFor, videos } from "@/components/catalog";
 import { decodeDiagnosis, type SearchParamsRecord } from "@/lib/diagnosis-state";
-import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_DESCRIPTIONS, LEVEL_EMOJIS, LEVEL_LABELS } from "@/lib/questions";
+import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_DESCRIPTIONS, LEVEL_LABELS } from "@/lib/questions";
 import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
 
 export const metadata: Metadata = {
-  title: "맞춤 학습 플랜",
+  title: "맞춤 학습 로드맵",
 };
 
 const STEP_DESCRIPTIONS: Record<string, string> = {
-  [STEP_LABELS.foundation]: "먼저 기본기를 채워 두면 뒤가 훨씬 쉬워요",
-  [STEP_LABELS.practice]: "지금 수준에서 바로 써먹을 수 있는 강의예요",
-  [STEP_LABELS.next]: "익숙해지면 한 단계 더 도전해 보세요",
+  [STEP_LABELS.foundation]: "먼저 기본기를 채워 두면 다음 단계가 훨씬 수월합니다.",
+  [STEP_LABELS.practice]: "지금 수준에서 바로 활용할 수 있는 강의입니다.",
+  [STEP_LABELS.next]: "익숙해지면 한 단계 더 나아가 보세요.",
 };
 
 export default async function ResultPage({ searchParams }: { searchParams: Promise<SearchParamsRecord> }) {
@@ -34,47 +35,62 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
   const levelLabel = LEVEL_LABELS[diagnosis.level];
 
   const chips: ResultHeroChip[] = [
-    { label: levelLabel, icon: LEVEL_EMOJIS[diagnosis.level], tone: "primary" },
-    ...diagnosis.domains.map((d): ResultHeroChip => ({ label: DOMAIN_LABELS[d], tone: "accent" })),
-    { label: GOAL_LABELS[diagnosis.goal], icon: "🎯", tone: "success" },
+    { label: levelLabel },
+    ...diagnosis.domains.map((d): ResultHeroChip => ({ label: DOMAIN_LABELS[d] })),
+    { label: GOAL_LABELS[diagnosis.goal] },
   ];
-  if (diagnosis.preferKorean) chips.push({ label: "한국어 우선", icon: "🇰🇷", tone: "neutral" });
+  if (diagnosis.preferKorean) chips.push({ label: "한국어 우선" });
 
   return (
-    <AppShell>
-      <header className="flex h-14 items-center justify-between">
-        <Button href="/" variant="ghost" size="sm" className="-ml-3 text-fg" aria-label="처음 화면으로">
-          <span className="flex items-center gap-1.5 text-[15px] font-bold">
-            <span aria-hidden="true">🧭</span>
+    <main className="flex min-h-dvh flex-col bg-bg">
+      {/* 키노트 히어로 */}
+      <Slide tone="stage" as="header" innerClassName="pt-[env(safe-area-inset-top)]">
+        <div className="flex h-14 items-center">
+          <Link
+            href="/"
+            aria-label="처음 화면으로"
+            className="-ml-1 rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
+          >
             AI 강의 길잡이
-          </span>
-        </Button>
-      </header>
+          </Link>
+        </div>
+        <ResultHero
+          eyebrow="진단 완료"
+          title={
+            <>
+              <span className="text-accent">{levelLabel}</span> 맞춤{" "}
+              <br />
+              학습 로드맵
+            </>
+          }
+          description={
+            lectureCount > 0
+              ? `${LEVEL_DESCRIPTIONS[diagnosis.level]} 선별된 유튜브 강의 ${lectureCount}개로 구성했어요.`
+              : LEVEL_DESCRIPTIONS[diagnosis.level]
+          }
+          chips={chips}
+        />
+      </Slide>
 
-      <ResultHero
-        className="mt-2"
-        emoji={LEVEL_EMOJIS[diagnosis.level]}
-        eyebrow="진단 완료"
-        title={`${levelLabel} 맞춤 AI 학습 플랜이 준비됐어요`}
-        description={`${LEVEL_DESCRIPTIONS[diagnosis.level]} 아래 순서대로 들어 보세요.`}
-        chips={chips}
-      />
-
-      <section aria-labelledby="roadmap-title" className="pt-10">
-        <div className="mb-6 flex items-end justify-between gap-3">
-          <h2 id="roadmap-title" className="text-xl font-bold text-fg">
-            추천 로드맵
-          </h2>
+      {/* 로드맵 */}
+      <Slide tone="light" aria-labelledby="roadmap-title" innerClassName="pt-14 pb-10">
+        <div className="mb-8 flex items-end justify-between gap-3">
+          <div>
+            <p className="eyebrow text-fg-muted">Roadmap</p>
+            <h2 id="roadmap-title" className="mt-2 text-[28px] font-bold tracking-[-0.03em] text-fg">
+              추천 로드맵
+            </h2>
+          </div>
           {lectureCount > 0 && (
-            <p className="shrink-0 text-sm font-semibold text-fg-muted">
+            <p className="shrink-0 pb-1 text-[13px] font-medium text-fg-muted tabular-nums">
               {roadmap.steps.length}단계 · 강의 {lectureCount}개
             </p>
           )}
         </div>
 
         {roadmap.steps.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-border-strong bg-surface p-6 text-center text-fg-muted">
-            아직 딱 맞는 강의를 찾지 못했어요. 다른 분야나 목표로 다시 진단해 보세요.
+          <p className="rounded-xl border border-border p-6 text-center text-fg-muted">
+            아직 꼭 맞는 강의를 찾지 못했습니다. 다른 분야나 목표로 다시 진단해 보세요.
           </p>
         ) : (
           <ol>
@@ -84,6 +100,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
                 step={i + 1}
                 label={step.label}
                 description={STEP_DESCRIPTIONS[step.label]}
+                isFirst={i === 0}
                 isLast={i === roadmap.steps.length - 1}
               >
                 {step.items.map(({ video, instructor, reason }) => (
@@ -91,6 +108,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
                     key={video.id}
                     instructorName={instructor.name}
                     instructorTitle={instructor.title}
+                    instructorBadge={credentialBadge(instructor)}
                     reason={reason}
                     videoTitle={video.title}
                     durationMin={video.durationMin}
@@ -106,16 +124,18 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
             ))}
           </ol>
         )}
-      </section>
 
-      <section className="mt-8 rounded-lg bg-surface-2 px-5 py-4 text-center">
-        <p className="text-[15px] leading-relaxed text-fg-muted">
-          AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 강의만 골랐어요.
-        </p>
-        <CriteriaSheet className="mt-1" />
-      </section>
+        <section className="mt-4 rounded-xl bg-surface-2 px-6 py-6">
+          <p className="eyebrow text-fg-muted">Selection</p>
+          <p className="mt-2 text-[15px] leading-relaxed text-fg">
+            AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 유튜브 강의만 선별했습니다. 모든 링크는 직접
+            확인했습니다.
+          </p>
+          <CriteriaSheet className="mt-2" />
+        </section>
+      </Slide>
 
       <ResultActions />
-    </AppShell>
+    </main>
   );
 }

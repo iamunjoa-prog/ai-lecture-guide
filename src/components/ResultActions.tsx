@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Button, cn } from "@/components/ui";
+import { Button, cn, IconCheck, IconLink, IconRefresh } from "@/components/ui";
 import { clearAllDiagnosisStorage } from "./progress-storage";
 
 async function copyText(text: string): Promise<boolean> {
@@ -30,10 +30,7 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
-// 320px 같은 좁은 화면에서는 아이콘을 숨기고 글자를 줄여 두 버튼이 한 줄에 들어가게 한다
-const narrow = "min-w-0 flex-1 px-3 max-[359px]:gap-0 max-[359px]:px-2 max-[359px]:text-base";
-
-/** 결과 화면 하단: 링크 복사 + 다시 진단하기 */
+/** 결과 화면 하단: 링크 복사(잉크) + 다시 진단하기(고스트) */
 export function ResultActions() {
   const router = useRouter();
   const [toast, setToast] = useState<{ text: string; ok: boolean } | null>(null);
@@ -54,7 +51,7 @@ export function ResultActions() {
 
   const onCopy = async () => {
     const ok = await copyText(window.location.href);
-    show(ok ? "링크를 복사했어요. 친구에게 공유해 보세요!" : "복사하지 못했어요. 주소창의 링크를 직접 복사해 주세요.", ok);
+    show(ok ? "링크를 복사했어요" : "복사하지 못했어요. 주소창의 링크를 직접 복사해 주세요.", ok);
   };
 
   const onRestart = () => {
@@ -62,30 +59,46 @@ export function ResultActions() {
     router.push("/diagnosis");
   };
 
+  // 320px처럼 좁은 화면에서는 아이콘을 숨겨 두 버튼이 한 줄에 들어가게 한다
+  const icon = "max-[359px]:hidden";
+
   return (
     <>
-      <div className="sticky bottom-0 z-20 -mx-5 mt-8 flex gap-2.5 bg-gradient-to-t from-bg from-70% to-transparent px-5 pt-6 pb-[max(16px,env(safe-area-inset-bottom))]">
-        <Button variant="secondary" size="lg" className={narrow} onClick={onCopy} leadingIcon={<span className="max-[359px]:hidden">🔗</span>}>
-          링크 복사하기
-        </Button>
-        <Button size="lg" className={narrow} onClick={onRestart} leadingIcon={<span className="max-[359px]:hidden">↻</span>}>
-          다시 진단하기
-        </Button>
+      <div className="sticky bottom-0 z-20 border-t border-border bg-bg/85 backdrop-blur-xl backdrop-saturate-150">
+        <div className="mx-auto flex w-full max-w-content gap-2 px-5 pt-3 pb-[max(12px,env(safe-area-inset-bottom))]">
+          <Button
+            size="lg"
+            className="min-w-0 flex-1 px-4"
+            onClick={onCopy}
+            leadingIcon={<IconLink size={18} className={icon} />}
+          >
+            링크 복사하기
+          </Button>
+          <Button
+            variant="ghost"
+            size="lg"
+            className="min-w-0 shrink-0 px-4 max-[359px]:px-3"
+            onClick={onRestart}
+            leadingIcon={<IconRefresh size={18} className={icon} />}
+          >
+            다시 진단하기
+          </Button>
+        </div>
       </div>
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-none fixed inset-x-0 bottom-28 z-30 flex justify-center px-5"
+        className="pointer-events-none fixed inset-x-0 bottom-24 z-30 flex justify-center px-5"
       >
         {toast && (
           <p
             key={toast.text}
             className={cn(
-              "animate-fade-up rounded-full px-4 py-2.5 text-center text-sm font-semibold shadow-lg",
-              toast.ok ? "bg-fg text-bg" : "bg-danger text-white",
+              "flex animate-fade-in items-center gap-2 rounded-full px-4 py-2.5 text-center text-sm font-medium",
+              toast.ok ? "bg-ink text-ink-fg" : "bg-danger text-white",
             )}
           >
-            {toast.ok && <span aria-hidden="true">✓ </span>}
+            {toast.ok && <IconCheck size={16} strokeWidth={2} />}
             {toast.text}
           </p>
         )}

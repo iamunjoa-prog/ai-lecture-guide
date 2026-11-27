@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
+import { IconCheck } from "./icons";
 import { cn } from "./cn";
 
 export interface OptionCardProps {
   /** "single" → role="radio", "multi" → role="checkbox". 기본 "single" */
   variant?: "single" | "multi";
-  /** 이모지 아이콘(예: "🧑‍💻") */
+  /** 앞쪽 아이콘(선택) */
   icon?: ReactNode;
   title: ReactNode;
   description?: ReactNode;
@@ -14,15 +15,10 @@ export interface OptionCardProps {
   className?: string;
 }
 
-function CheckMark() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="check-pop">
-      <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-/** 큰 카드형 선택지. OptionGroup 안에서 쓰세요 */
+/**
+ * 선택지 카드.
+ * 선택 전: #f5f5f7 면, 그림자 없음 · 선택: 흰 카드 + 2px 잉크 링 + 잉크 체크 원
+ */
 export function OptionCard({
   variant = "single",
   icon,
@@ -43,41 +39,33 @@ export function OptionCard({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "group relative flex w-full min-h-16 items-center gap-4 rounded-lg border-2 px-4 py-4 text-left",
-        "transition-[border-color,background-color,box-shadow,transform] duration-200 ease-out",
-        "active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100",
+        "relative flex w-full min-h-16 items-center gap-4 rounded-lg px-5 py-4 text-left",
+        "transition-[background-color,box-shadow,opacity] duration-200 ease-out",
+        "disabled:cursor-not-allowed disabled:opacity-50",
         selected
-          ? "border-primary bg-primary-soft shadow-md"
-          : "border-border bg-surface shadow-sm hover:border-border-strong hover:bg-surface-2",
+          ? "bg-surface-raised ring-2 ring-ink"
+          : "bg-surface-2 ring-1 ring-transparent hover:ring-border-strong",
         className,
       )}
     >
       {icon && (
-        <span
-          aria-hidden="true"
-          className={cn(
-            "flex size-12 shrink-0 items-center justify-center rounded-md text-[26px] leading-none transition-colors duration-200",
-            selected ? "bg-surface" : "bg-surface-2",
-          )}
-        >
+        <span aria-hidden="true" className="flex shrink-0 text-fg-muted">
           {icon}
         </span>
       )}
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className={cn("text-[17px] font-semibold leading-snug", selected ? "text-primary-soft-fg" : "text-fg")}>
-          {title}
-        </span>
+      <span className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="text-[17px] font-semibold leading-snug tracking-[-0.01em] text-fg">{title}</span>
         {description && <span className="text-sm leading-relaxed text-fg-muted">{description}</span>}
       </span>
       <span
         aria-hidden="true"
         className={cn(
-          "flex size-6 shrink-0 items-center justify-center border-2 transition-colors duration-200",
-          isMulti ? "rounded-[7px]" : "rounded-full",
-          selected ? "border-primary bg-primary text-primary-fg" : "border-border-strong bg-surface",
+          "flex size-[22px] shrink-0 items-center justify-center transition-colors duration-200",
+          isMulti ? "rounded-[6px]" : "rounded-full",
+          selected ? "bg-ink text-ink-fg" : "border-[1.5px] border-border-strong",
         )}
       >
-        {selected && <CheckMark />}
+        {selected && <IconCheck size={14} strokeWidth={2.25} />}
       </span>
     </button>
   );
@@ -99,7 +87,7 @@ export function OptionGroup({ variant = "single", labelledBy, children, classNam
       role={variant === "multi" ? "group" : "radiogroup"}
       aria-labelledby={labelledBy}
       aria-label={rest["aria-label"]}
-      className={cn("flex flex-col gap-3", className)}
+      className={cn("flex flex-col gap-2.5", className)}
     >
       {children}
     </div>
