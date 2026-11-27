@@ -43,7 +43,7 @@ export default function SavedPage() {
   return (
     <main className="flex min-h-dvh flex-col bg-bg">
       <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
-        <SiteHeaderBar showSaved={false} />
+        <SiteHeaderBar showSaved={false} current="saved" />
         <div className="animate-fade-in pt-12 pb-12">
           <p className="eyebrow text-stage-muted">My shelf</p>
           <h1 className="display mt-4 text-[clamp(36px,11vw,52px)] text-stage-fg">내 학습함</h1>
