@@ -17,7 +17,7 @@ import type { Domain, Video } from "../../types";
 
 const missions = realPractice as PracticeMission[];
 const videos = realVideos as Video[];
-const DOMAINS: Domain[] = ["automation", "marketing", "coding", "data", "education", "startup"];
+const DOMAINS: Domain[] = ["automation", "marketing", "creative", "coding", "data", "education", "startup"];
 const TOOLS = ["chat", "coding", "automation"];
 
 /** 비밀·인증 정보를 떠올리게 하는 말 */

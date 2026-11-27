@@ -25,7 +25,7 @@ const glossary = realGlossary as GlossaryTerm[];
 const theory = realTheory as TheoryConcept[];
 
 const GOALS: Goal[] = ["understand", "use_tools", "build_agents", "build_products"];
-const DOMAINS: Domain[] = ["automation", "marketing", "coding", "data", "education", "startup"];
+const DOMAINS: Domain[] = ["automation", "marketing", "creative", "coding", "data", "education", "startup"];
 
 function diag(level: Level, goals: Goal[], domains: Domain[] = []): Pick<DiagnosisResult, "level" | "goals" | "domains"> {
   return { level, goals, domains };

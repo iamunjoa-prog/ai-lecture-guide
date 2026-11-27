@@ -23,6 +23,7 @@ export const LEVELS: readonly Level[] = ["beginner", "user", "practitioner", "de
 export const DOMAINS: readonly Domain[] = [
   "automation",
   "marketing",
+  "creative",
   "coding",
   "data",
   "education",
@@ -66,6 +67,7 @@ export const LEVEL_DESCRIPTIONS: Record<Level, string> = {
 export const DOMAIN_LABELS: Record<Domain, string> = {
   automation: "업무 자동화",
   marketing: "마케팅·콘텐츠",
+  creative: "이미지·영상 제작",
   coding: "코딩",
   data: "데이터 분석",
   education: "교육",
@@ -425,6 +427,11 @@ export const DOMAIN_OPTIONS: QuestionOption<Domain | typeof UNSURE_ID>[] = [
     id: "marketing",
     label: DOMAIN_LABELS.marketing,
     description: "글, 이미지, 광고 문구를 더 빨리 만들고 싶어요",
+  },
+  {
+    id: "creative",
+    label: DOMAIN_LABELS.creative,
+    description: "그림, 썸네일, 짧은 영상을 AI로 만들고 싶어요",
   },
   {
     id: "coding",

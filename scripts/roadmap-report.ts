@@ -45,7 +45,10 @@ const DOMAIN_SETS: Domain[][] = [
   ["data"],
   ["education"],
   ["startup"],
+  ["creative"],
   ["automation", "marketing", "data"],
+  ["marketing", "creative"],
+  ["creative", "education", "startup"],
   ["coding", "startup"],
   ["education", "data"],
 ];
