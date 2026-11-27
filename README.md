@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI 강의 길잡이
 
-## Getting Started
+AI를 배우고 싶지만 어떤 강의부터 들어야 할지 모르는 사람을 위한 서비스입니다.
+8개 질문(수준 5 · 분야 · 목표 · 한국어 선호)에 답하면, **AI를 만든 사람들(창업자·핵심 연구자·대학 교수·AI 기업 공식 채널)의 검증된 유튜브 강의**를 기초 → 실전 → 한 단계 더 순서의 로드맵으로 정리해 줍니다.
 
-First, run the development server:
+- 회원가입·서버 저장 없음. 진단 결과는 주소(URL)와 브라우저 세션에만 담깁니다.
+- 강의는 직접 확인한 링크만 등록합니다(아래 "강의 추가하기" 참고).
+- `/glossary`에서 입문부터 개발까지 AI 용어를 쉬운 말로 볼 수 있습니다.
+
+Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · 정적 JSON 데이터
+
+## 실행하기
+
+Node.js 20 이상이 필요합니다.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm i
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 스크립트
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| 명령 | 하는 일 |
+|---|---|
+| `npm run dev` | 개발 서버 |
+| `npm run build` / `npm start` | 프로덕션 빌드 / 실행 |
+| `npm run lint` | ESLint |
+| `npm test` | 단위 테스트(vitest): 질문지, 점수·로드맵, 진단 URL 변환, 용어 선택 |
+| `npm run e2e` | Playwright E2E + 접근성(axe). 프로덕션 빌드를 띄워 모바일 화면(390px)으로 검사합니다. 이미 빌드했다면 `E2E_SKIP_BUILD=1`, 포트는 `E2E_PORT`(기본 3500) |
+| `npm run check-links` | 데이터 스키마 점검 + 모든 유튜브 링크를 oEmbed로 확인(네트워크 필요). 네트워크 없이 스키마만: `npm run check-links -- --schema-only` |
+| `npm run report` | 여러 진단 유형(수준 × 목표 × 분야)별 로드맵과 품질 경고를 출력. 예: `npm run report -- --level user --goal understand --domains none --summary` |
+| `npm run og` | 공유용 이미지 `public/og.png`와 앱 아이콘 `src/app/apple-icon.png`를 다시 만듭니다(아래 "공유 이미지" 참고) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 데이터 파일과 강의 추가하기
 
-## Learn More
+| 파일 | 내용 |
+|---|---|
+| `data/instructors.json` | 강사(이름, 이력, 선정 기준, 채널 URL) |
+| `data/videos.json` | 강의(영상 또는 재생목록) |
+| `data/glossary.json` | 용어집 |
+| `data/CURATION.md` | 큐레이션 기록: 강사별 선정 근거, 탈락시킨 후보와 이유 |
 
-To learn more about Next.js, take a look at the following resources:
+스키마는 `src/types.ts`의 `Instructor`, `Video`, `GlossaryTerm`입니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+강의 하나를 추가하는 순서
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. 강사가 이미 `instructors.json`에 있는지 확인합니다. 없으면 아래 화이트리스트 기준을 만족하는지 먼저 판단하고 추가합니다.
+2. 유튜브에서 직접 재생해 확인한 뒤 `videos.json`에 항목을 넣습니다. 필수 필드: `id`(영상 ID 11자 또는 재생목록 ID), `kind`, `url`, `title`, `instructorId`, `language`, `hasKoreanSubtitle`, `durationMin`, `levels`, `domains`, `goals`, `summary`, `takeaways`(정확히 3개), `verifiedAt`(확인한 날짜 `YYYY-MM-DD`). 핵심 용어가 있으면 `terms`에 용어 id를 2~3개 적습니다.
+3. `npm run check-links`로 점검합니다. 스키마 오류, 강사 참조 오류, 접근 불가 링크, 강사 채널과 다른 업로드 채널이 있으면 표로 알려 주고 실패 처리합니다.
+4. `npm run report`로 새 강의가 어떤 진단 결과에서 추천되는지 확인합니다.
 
-## Deploy on Vercel
+**추측하거나 지어낸 URL은 절대 넣지 않습니다.** 확인하지 못한 링크는 등록하지 않습니다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 강사 화이트리스트 기준
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+다음 중 하나 이상을 만족하는 강사만 등록합니다(`credentials`).
+
+- `founder`: AI 기업 창업자 (Anthropic, OpenAI, DeepMind, Upstage 등)
+- `core_researcher`: 핵심 연구자·기술 창시자
+- `professor`: 대학 정규 AI 강의 교수
+- `official_channel`: AI 기업 공식 채널
+
+제외: 위 기준 밖의 일반 유튜버, 수익형 강의 판매 채널, 출처 불명 재업로드.
+
+## 진단과 추천 규칙
+
+- 수준 질문 5개의 점수 합계로 입문자 · 활용자 · 실무자 · 개발자를 정합니다(`src/lib/questions.ts`).
+- 분야는 최대 3개까지 고르며, **"잘 모르겠어요"를 고르면 분야 없이(빈 목록) 추천**합니다. 목표에서 "아직 잘 모르겠어요"는 "개념 이해"와 같게 처리합니다.
+- 점수는 수준 일치 4 + 분야 일치(첫 일치 2, 이후 1씩) + 목표 일치 4 + 한국어 1이며, 분야가 비어 있으면 분야 점수만 0입니다(`src/lib/recommend.ts`).
+- 진단 결과는 `/result?l=user&d=marketing,coding&g=use_tools&ko=1` 형식입니다. 분야 미정은 `d=`(빈 값)입니다.
+
+## 공유 이미지·아이콘
+
+`npm run og`는 `scripts/og-template.html`을 Playwright(Chromium)로 캡처해 `public/og.png`(1200×630)와 `src/app/apple-icon.png`(180×180)를 만듭니다. 폰트는 `node_modules/pretendard`의 파일을 직접 읽으므로 인터넷이 필요 없습니다. 문구나 색을 바꾸려면 템플릿을 고치고 다시 실행하세요. Chromium이 없으면 `npx playwright install chromium`을 먼저 실행합니다.
+
+폰트(Pretendard)는 npm 패키지로 설치해 **사이트에서 직접 제공**합니다. 외부 CDN을 쓰지 않으며, 글자 범위별로 쪼개진 파일을 화면에 필요한 만큼만 받습니다.
+
+## Vercel에 배포하기
+
+1. 이 저장소를 GitHub에 올립니다.
+2. [vercel.com/new](https://vercel.com/new)에서 저장소를 **Import** 합니다.
+3. Framework Preset은 Next.js로 자동 인식됩니다. Build/Output/Install Command는 **기본값 그대로** 두고 **Deploy**를 누릅니다(`vercel.json`은 필요 없습니다).
+4. 배포 주소(`xxx.vercel.app`)는 **프로젝트 이름**으로 정해집니다. 원하는 주소가 있다면 Project Settings → General → Project Name에서 `ai-lecture-guide`처럼 바꾸세요. 같은 이름이 이미 있으면 뒤에 붙는 문자가 달라집니다.
+5. (선택) 공유 미리보기(OG)에 쓰는 사이트 주소를 직접 지정하려면 Settings → Environment Variables에 `NEXT_PUBLIC_SITE_URL`을 `https://내도메인` 형식으로 추가하고 다시 배포합니다.
+6. (선택) 내 도메인은 Settings → Domains에서 추가합니다. 연결한 뒤에는 5번의 `NEXT_PUBLIC_SITE_URL`을 그 도메인으로 맞춰 주세요.
+
+### 사이트 주소(`metadataBase`) 정하는 순서
+
+공유 이미지·sitemap·robots의 절대 주소는 다음 순서로 정합니다(`src/lib/site.ts`).
+
+1. `NEXT_PUBLIC_SITE_URL` (예: `https://guide.example.kr`)
+2. `VERCEL_PROJECT_PRODUCTION_URL` (Vercel이 자동으로 넣어 줍니다. 프로토콜은 없어도 됩니다)
+3. 기본값 `https://ai-lecture-guide.vercel.app`
+
+로컬에서 확인할 때: `NEXT_PUBLIC_SITE_URL=http://localhost:3000 npm run build`
+
+### 공유할 때 주의
+
+**프리뷰 배포 주소**(`프로젝트-해시-팀이름.vercel.app`)에는 Vercel 프로젝트·팀 이름이 그대로 드러납니다. 다른 사람에게 알릴 때는 **프로덕션 도메인**(`프로젝트이름.vercel.app` 또는 내 도메인)을 쓰세요.
+
+## 방문 통계
+
+Vercel Web Analytics(`@vercel/analytics`)만 사용합니다. 쿠키를 쓰지 않고 개인을 식별하지 않는 방문 통계로, Vercel에 배포된 빌드에서만 켜지며 로컬·다른 서버에서는 아무것도 보내지 않습니다. 다른 추적 도구는 넣지 않았습니다. 통계를 보려면 Vercel 프로젝트의 Analytics 탭에서 Enable 하세요.
+
+## 폴더 구조
+
+```
+src/app/          페이지(/, /diagnosis, /result, /glossary), 메타데이터(robots, sitemap, manifest, 아이콘)
+src/components/   화면 컴포넌트 (ui/ 는 디자인 시스템 부품)
+src/lib/          질문지·진단 URL 변환·추천 알고리즘·용어 선택 (순수 함수 + 단위 테스트)
+data/             강사·강의·용어 JSON
+scripts/          링크 점검, 로드맵 리포트, OG 이미지 생성
+tests/e2e/        Playwright E2E·접근성
+```
+
+디자인은 "키노트 하이브리드"입니다. 어두운 무대 슬라이드와 흰 본문, 포인트 컬러 오렌지(`#ff6a1a`)를 쓰고 이모지는 쓰지 않습니다.

@@ -176,6 +176,13 @@ describe("selectStarterTerms", () => {
     const rvWith = (...terms: string[]) =>
       [makeVideo({ id: "R1", instructorId: "a", levels: ["user"], domains: ["data"], goals: ["build_agents"], terms })];
 
+    it("분야 미정이어도 용어 선택이 같은 범위(5~8개)로 동작한다", () => {
+      const out = selectStarterTerms(diag("user", "understand", []), g);
+      expect(out.length).toBeGreaterThanOrEqual(STARTER_MIN);
+      expect(out.length).toBeLessThanOrEqual(STARTER_MAX);
+      expect(out.map((t) => t.id)).toEqual(selectStarterTerms(diag("user", "understand", ["coding", "data"]), g).map((t) => t.id));
+    });
+
     it("목표가 맞는 용어가 먼저 뽑힌다", () => {
       const out = ids(diag("user", "build_agents"));
       expect(out).toContain("u-agents-1");

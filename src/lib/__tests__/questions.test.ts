@@ -13,6 +13,7 @@ import {
   LEVELS,
   levelScore,
   scoreToLevel,
+  UNSURE_ID,
 } from "../questions";
 
 const base = { lv_frequency: "never", lv_prompt: "simple", lv_work: "none", lv_automation: "none", lv_coding: "none" };
@@ -26,12 +27,22 @@ describe("질문지 구조", () => {
       expect(new Set(ids).size).toBe(ids.length);
     }
   });
-  it("분야 6개·목표 4개, 모두 라벨/설명/이모지가 있다", () => {
-    expect(DOMAIN_OPTIONS.map((o) => o.id).sort()).toEqual([...DOMAINS].sort());
-    expect(GOAL_OPTIONS.map((o) => o.id).sort()).toEqual([...GOALS].sort());
+  it("분야 6개·목표 4개 + 각각 '잘 모르겠어요' 하나, 모두 라벨/설명이 있다", () => {
+    expect(DOMAIN_OPTIONS.map((o) => o.id).sort()).toEqual([...DOMAINS, UNSURE_ID].sort());
+    expect(GOAL_OPTIONS.map((o) => o.id).sort()).toEqual([...GOALS, UNSURE_ID].sort());
     for (const o of [...DOMAIN_OPTIONS, ...GOAL_OPTIONS]) {
-      expect(o.label && o.description && o.emoji).toBeTruthy();
+      expect(o.label && o.description).toBeTruthy();
     }
+  });
+  it("'잘 모르겠어요'는 마지막 선택지이고, 분야에서만 배타(exclusive)다", () => {
+    expect(DOMAIN_OPTIONS.at(-1)).toMatchObject({ id: UNSURE_ID, exclusive: true });
+    expect(DOMAIN_OPTIONS.filter((o) => o.exclusive)).toHaveLength(1);
+    expect(GOAL_OPTIONS.at(-1)?.id).toBe(UNSURE_ID);
+    // 목표의 두 선택지(개념 이해 / 아직 잘 모르겠어요)는 서로 다른 문구
+    const u = GOAL_OPTIONS.find((o) => o.id === "understand")!;
+    const s = GOAL_OPTIONS.find((o) => o.id === UNSURE_ID)!;
+    expect(u.label).not.toBe(s.label);
+    expect(u.description).not.toBe(s.description);
   });
   it("라벨 맵이 모든 값을 덮는다", () => {
     LEVELS.forEach((l) => expect(LEVEL_LABELS[l]).toBeTruthy());
@@ -92,6 +103,24 @@ describe("buildDiagnosis", () => {
     expect(
       buildDiagnosis({ lv_frequency: ["daily"], domains: ["marketing", "data"], goal: ["use_tools"], preferKorean: ["yes"] }),
     ).toEqual({ level: "user", domains: ["marketing", "data"], goal: "use_tools", preferKorean: true });
+  });
+  it("분야 '잘 모르겠어요' → domains []", () => {
+    expect(buildDiagnosis({ domains: ["unsure"], goal: ["use_tools"], preferKorean: ["no"] })).toEqual({
+      level: "beginner", domains: [], goal: "use_tools", preferKorean: false,
+    });
+  });
+  it("분야 '잘 모르겠어요'를 다른 분야와 섞거나, 아예 안 고르면 null", () => {
+    const ok = { goal: ["use_tools"], preferKorean: ["no"] };
+    expect(buildDiagnosis({ ...ok, domains: ["unsure", "coding"] })).toBeNull();
+    expect(buildDiagnosis({ ...ok, domains: undefined })).toBeNull();
+  });
+  it("목표 '아직 잘 모르겠어요' → understand", () => {
+    expect(buildDiagnosis({ domains: ["coding"], goal: ["unsure"], preferKorean: ["yes"] })).toEqual({
+      level: "beginner", domains: ["coding"], goal: "understand", preferKorean: true,
+    });
+    expect(buildDiagnosis({ domains: ["unsure"], goal: ["unsure"], preferKorean: ["yes"] })).toMatchObject({
+      domains: [], goal: "understand",
+    });
   });
   it("분야 0개/4개/모르는 값, 목표·한국어 누락 → null", () => {
     const ok = { domains: ["marketing"], goal: ["understand"], preferKorean: ["no"] };

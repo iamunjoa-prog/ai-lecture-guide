@@ -63,19 +63,23 @@ test.describe("진단", () => {
     await page.getByRole("checkbox", { name: /^데이터 분석/ }).click();
     await expect(page.getByText("(3/3)")).toBeVisible();
     const marketing = page.getByRole("checkbox", { name: /^마케팅·콘텐츠/ });
-    await expect(marketing).toBeDisabled();
-    await marketing.click({ force: true });
+    // 네이티브 disabled가 아니라 aria-disabled: 눌러도 선택되지 않고, 안내 문구가 잠깐 강조된다
+    await expect(marketing).toHaveAttribute("aria-disabled", "true");
+    await expect(marketing).not.toHaveAttribute("disabled", /.*/); // 네이티브 disabled 아님
+    const helper = page.getByText(/3개를 모두 골랐어요/);
+    await expect(helper).toBeVisible();
+    await expect(helper).not.toHaveClass(/bg-accent-soft/);
+    await marketing.click({ force: true }); // Playwright는 aria-disabled를 "눌 수 없음"으로 보므로 force
     await expect(marketing).toHaveAttribute("aria-checked", "false");
-    await expect(page.getByText(/3개를 모두 골랐어요/)).toBeVisible();
+    await expect(helper).toHaveClass(/bg-accent-soft/);
     await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(3);
     await next.click();
 
     await chooseSingle(page, /^나만의 에이전트 만들기/, Q.language);
     await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
 
-    // 로딩 연출 후 결과 화면
-    await expect(page.getByText("수준을 분석하고 있어요")).toBeVisible();
-    await page.waitForURL(/\/result\?/, { timeout: 15_000 });
+    // 로딩 연출(약 1.2초) 후 결과 화면
+    await page.waitForURL(/\/result\?/, { timeout: 10_000 });
     const url = new URL(page.url());
     expect(Object.fromEntries(url.searchParams)).toEqual({
       l: "developer",

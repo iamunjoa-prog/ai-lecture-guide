@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { buildReason, buildRoadmap, josa, MAX_PER_INSTRUCTOR, scoreBreakdown, scoreVideo, STEP_LABELS } from "../recommend";
 
 import { diag, instructors, makeVideo, videos } from "./fixtures";
+import realVideos from "../../../data/videos.json";
+import realInstructors from "../../../data/instructors.json";
 import mockVideos from "../../../data/videos.mock.json";
 import mockInstructors from "../../../data/instructors.mock.json";
 import type { Instructor, Roadmap, Video } from "../../types";
@@ -46,6 +48,11 @@ describe("점수", () => {
     expect(scoreVideo({ ...d, preferKorean: false }, v)).toBe(0);
     expect(scoreVideo(d, { ...v, hasKoreanSubtitle: false })).toBe(0);
     expect(scoreVideo(d, { ...v, hasKoreanSubtitle: false, language: "ko" })).toBe(1);
+  });
+  it("분야 미정이면 분야 점수는 0 (수준 4 + 목표 4 + 한국어 1)", () => {
+    expect(scoreVideo(diag({ domains: [] }), v)).toBe(8);
+    expect(scoreVideo(diag({ domains: [], preferKorean: true }), v)).toBe(9);
+    expect(scoreBreakdown(diag({ domains: [] }), v).matchedDomains).toEqual([]);
   });
   it("breakdown이 맞은 분야를 돌려준다", () => {
     expect(scoreBreakdown(diag({ domains: ["data", "startup"] }), v).matchedDomains).toEqual(["data"]);
@@ -164,6 +171,26 @@ describe("buildRoadmap — 빈/희소 데이터", () => {
   });
 });
 
+describe("buildRoadmap — 분야 미정", () => {
+  for (const level of ["beginner", "user", "practitioner", "developer"] as const) {
+    it(`${level}: 분야가 비어도 3개 이상, 불변식 유지`, () => {
+      const r = buildRoadmap(diag({ level, domains: [], goal: "understand" }), videos, instructors);
+      checkInvariants(r);
+      expect(all(r).length).toBeGreaterThanOrEqual(3);
+      all(r).forEach((i) => expect(i.reason).not.toContain("에 AI를 적용하려는"));
+    });
+  }
+  it("실제 데이터로 모든 수준·목표에서 3개 이상 나온다", () => {
+    for (const level of ["beginner", "user", "practitioner", "developer"] as const) {
+      for (const goal of ["understand", "use_tools", "build_agents", "build_products"] as const) {
+        const r = buildRoadmap(diag({ level, domains: [], goal }), realVideos as Video[], realInstructors as Instructor[]);
+        checkInvariants(r);
+        expect(all(r).length).toBeGreaterThanOrEqual(3);
+      }
+    }
+  });
+});
+
 describe("추천 사유", () => {
   it("분야 + 수준 + 목표 효용", () => {
     const v = videos.find((x) => x.id === "U1")!;
@@ -177,6 +204,15 @@ describe("추천 사유", () => {
   it("분야가 안 맞고 목표만 맞으면 목표 문장", () => {
     const v = videos.find((x) => x.id === "U2")!;
     expect(buildReason(diag({ domains: ["startup"] }), v)).toBe("AI를 업무 도구로 쓰고 싶은 활용자에게 추천하는 강의예요.");
+  });
+  it("분야 미정이면 분야 문구 없이 목표·수준으로 쓴다", () => {
+    const v = videos.find((x) => x.id === "U2")!;
+    const r = buildReason(diag({ domains: [] }), v);
+    expect(r).toBe("AI를 업무 도구로 쓰고 싶은 활용자에게 추천하는 강의예요.");
+    expect(r).not.toContain("에 AI를 적용하려는");
+    const foundation = buildReason(diag({ domains: [] }), videos.find((x) => x.id === "B1")!, "foundation");
+    expect(foundation).toBe("본격적으로 시작하기 전에 기본기를 채워 주는 강의예요.");
+    expect(buildReason(diag({ domains: [], level: "beginner", goal: "understand" }), videos.find((x) => x.id === "B1")!)).toContain("AI 개념을 제대로 이해하고 싶은 입문자에게");
   });
   it("한국어 강의 / 한국어 자막 문장", () => {
     const ko = videos.find((x) => x.id === "U1")!;
