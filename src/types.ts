@@ -57,6 +57,20 @@ export interface Video {
   summary: string; // 강의 한 줄 소개
   takeaways: [string, string, string]; // 강의로 얻을 수 있는 것 3가지
   verifiedAt: string; // 링크 확인 날짜 ISO (YYYY-MM-DD)
+  terms?: string[]; // 이 강의의 핵심 용어 GlossaryTerm.id 2~3개
+}
+
+/** 강의 전에 알아두면 좋은 용어 */
+export interface GlossaryTerm {
+  id: string; // kebab-case, 예: "prompt", "context-window"
+  term: string; // 표시 이름 (한국어 우선, 예: "프롬프트")
+  termEn?: string; // 영어 원어 (예: "Prompt")
+  level: Level; // 이 용어를 처음 알아야 하는 수준
+  goals: Goal[]; // 특히 중요한 목표 (범용이면 전부)
+  short: string; // 한 줄 정의 (40자 안팎)
+  detail: string; // 쉬운 설명 2~3문장, 비유 환영
+  example?: string; // 실제 쓰임 예시 한 문장
+  related?: string[]; // 관련 용어 id
 }
 
 /** 진단 결과 */
