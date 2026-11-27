@@ -223,7 +223,7 @@ export function DiagnosisFlow() {
         backHref={index === 0 ? "/" : undefined}
         onBack={index === 0 ? undefined : goBack}
       />
-      <div key={question.id} className="flex animate-fade-in flex-col">
+      <div key={question.id} data-question-body="" className="flex animate-fade-in flex-col pb-8">
         <QuestionHeader
           id={headingId}
           stepLabel={stepLabel(question, index)}
