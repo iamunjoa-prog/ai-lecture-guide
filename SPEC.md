@@ -39,8 +39,8 @@ AI를 배우고 싶지만 어떤 강의를 들어야 할지 모르는 사람에�
 ## 4. 추천 알고리즘 (1차 버전: 규칙 기반)
 ```
 score = 4·[level ∈ video.levels]
-      + 2·|domains ∩ video.domains|
-      + 3·[goal ∈ video.goals]
+      + (n = |domains ∩ video.domains|) > 0 ? 2 + (n−1) : 0
+      + 4·[goal ∈ video.goals]
       + 1·[preferKorean && (language=ko || hasKoreanSubtitle)]
 ```
 - 동점이면 짧은 강의 우선, 한 강사당 최대 2개

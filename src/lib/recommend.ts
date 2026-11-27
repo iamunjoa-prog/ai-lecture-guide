@@ -32,7 +32,11 @@ import type {
 } from "../types";
 import { DOMAIN_LABELS, LEVEL_LABELS, LEVELS } from "./questions";
 
-export const WEIGHTS = { level: 4, domain: 2, goal: 3, korean: 1 } as const;
+/**
+ * 분야는 첫 일치 2점, 그 다음부터 일치마다 1점. 분야를 여러 개 고른 사람에게
+ * 범용 강의가 목표에 맞는 강의를 이기지 않도록 목표(4점)보다 커지기 어렵게 한다.
+ */
+export const WEIGHTS = { level: 4, domain: 2, domainExtra: 1, goal: 4, korean: 1 } as const;
 export const MAX_PER_INSTRUCTOR = 2;
 export const MIN_TOTAL = 3;
 
@@ -75,7 +79,7 @@ export function scoreBreakdown(diagnosis: DiagnosisResult, video: Video): ScoreB
   const koreanMatch = diagnosis.preferKorean && isKoreanFriendly(video);
   const total =
     (levelMatch ? WEIGHTS.level : 0) +
-    WEIGHTS.domain * matchedDomains.length +
+    (matchedDomains.length > 0 ? WEIGHTS.domain + WEIGHTS.domainExtra * (matchedDomains.length - 1) : 0) +
     (goalMatch ? WEIGHTS.goal : 0) +
     (koreanMatch ? WEIGHTS.korean : 0);
   return { total, levelMatch, matchedDomains, goalMatch, koreanMatch };

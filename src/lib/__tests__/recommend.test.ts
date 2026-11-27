@@ -37,8 +37,8 @@ describe("점수", () => {
   it("요소별 가중치", () => {
     expect(scoreVideo(diag({ level: "developer", domains: ["startup"], goal: "understand" }), v)).toBe(0);
     expect(scoreVideo(diag({ domains: ["startup"], goal: "understand" }), v)).toBe(4); // 수준
-    expect(scoreVideo(diag({ level: "developer", domains: ["marketing", "data", "coding"], goal: "understand" }), v)).toBe(6); // 분야 3개
-    expect(scoreVideo(diag({ level: "developer", domains: ["startup"] }), v)).toBe(3); // 목표
+    expect(scoreVideo(diag({ level: "developer", domains: ["marketing", "data", "coding"], goal: "understand" }), v)).toBe(4); // 분야 3개: 2 + 1 + 1
+    expect(scoreVideo(diag({ level: "developer", domains: ["startup"] }), v)).toBe(4); // 목표
   });
   it("한국어 가점: 선호할 때만, ko 강의 또는 한국어 자막", () => {
     const d = diag({ level: "developer", domains: ["startup"], goal: "understand", preferKorean: true });
@@ -73,7 +73,7 @@ describe("buildRoadmap — 수준별 단계", () => {
     r.steps[0].items.forEach((i) => expect(i.video.levels).not.toContain("user"));
     // U1(25분)과 B3(45분)은 둘 다 10점 → U1이 먼저
     expect(ids(r)[1]).toEqual(["U1", "B3", "U2"]);
-    expect(r.steps[1].items.map((i) => i.score)).toEqual([10, 10, 9]);
+    expect(r.steps[1].items.map((i) => i.score)).toEqual([11, 11, 10]);
     r.steps[2].items.forEach((i) => expect(i.video.levels).toContain("practitioner"));
   });
 
