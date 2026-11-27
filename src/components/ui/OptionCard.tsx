@@ -9,6 +9,10 @@ export interface OptionCardProps {
   icon?: ReactNode;
   title: ReactNode;
   description?: ReactNode;
+  /** 선택지 안의 용어 설명 한 줄 (작게, 설명 아래) */
+  hint?: ReactNode;
+  /** 다중 선택에서 고른 순서(1부터). 있으면 체크 대신 순번을 보여 준다 */
+  order?: number;
   selected?: boolean;
   /** 눌러도 선택되지 않는다. 네이티브 disabled가 아니라 aria-disabled라 포커스·탭이 가능하다 */
   disabled?: boolean;
@@ -27,6 +31,8 @@ export function OptionCard({
   icon,
   title,
   description,
+  hint,
+  order,
   selected = false,
   disabled = false,
   onClick,
@@ -59,7 +65,11 @@ export function OptionCard({
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="text-[17px] font-semibold leading-snug tracking-[-0.01em] text-fg">{title}</span>
         {description && <span className="text-sm leading-relaxed text-fg-muted">{description}</span>}
+        {hint && (
+          <span className="mt-0.5 border-t border-border pt-1.5 text-[13px] leading-relaxed text-fg-muted">{hint}</span>
+        )}
       </span>
+      {selected && order !== undefined && <span className="sr-only">{`${order}순위`}</span>}
       <span
         aria-hidden="true"
         className={cn(
@@ -68,7 +78,12 @@ export function OptionCard({
           selected ? "bg-ink text-ink-fg" : "border-[1.5px] border-border-strong",
         )}
       >
-        {selected && <IconCheck size={14} strokeWidth={2.25} />}
+        {selected &&
+          (order !== undefined ? (
+            <span className="text-[13px] font-bold tabular-nums leading-none">{order}</span>
+          ) : (
+            <IconCheck size={14} strokeWidth={2.25} />
+          ))}
       </span>
     </button>
   );
@@ -79,16 +94,19 @@ export interface OptionGroupProps {
   variant?: "single" | "multi";
   /** 질문 제목 요소의 id (QuestionHeader의 id) */
   labelledBy?: string;
+  /** 보조 설명·용어 한 입 요소의 id (공백으로 여러 개) */
+  describedBy?: string;
   "aria-label"?: string;
   children: ReactNode;
   className?: string;
 }
 
-export function OptionGroup({ variant = "single", labelledBy, children, className, ...rest }: OptionGroupProps) {
+export function OptionGroup({ variant = "single", labelledBy, describedBy, children, className, ...rest }: OptionGroupProps) {
   return (
     <div
       role={variant === "multi" ? "group" : "radiogroup"}
       aria-labelledby={labelledBy}
+      aria-describedby={describedBy || undefined}
       aria-label={rest["aria-label"]}
       className={cn("flex flex-col gap-2.5", className)}
     >

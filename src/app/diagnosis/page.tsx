@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { DiagnosisFlow } from "@/components/DiagnosisFlow";
+import { DIAGNOSIS_MINUTES } from "@/lib/questions";
 
 export const metadata: Metadata = {
-  title: "1분 진단",
+  title: `${DIAGNOSIS_MINUTES}분 진단`,
 };
 
 export default function DiagnosisPage() {

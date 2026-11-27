@@ -29,6 +29,22 @@ function stepLabel(q: Question, index: number): string {
   return index === TOTAL - 1 ? STEP_LABELS.language : STEP_LABELS[q.step];
 }
 
+/** 다중 선택 질문 하단 안내 문구 */
+function multiHelper(
+  q: Question,
+  { exclusivePicked, full, count, maxSelect }: { exclusivePicked: boolean; full: boolean; count: number; maxSelect: number },
+): string {
+  if (q.step === "goal") {
+    if (exclusivePicked) return "AI가 무엇인지부터 차근차근 알려 드려요";
+    if (full) return "목표를 모두 골랐어요. 숫자는 고른 순서예요";
+    if (count >= 1) return "먼저 고른 목표가 1순위예요";
+    return `최대 ${maxSelect}개, 중요한 것부터 골라 주세요`;
+  }
+  if (exclusivePicked) return "분야를 정하지 않고 폭넓게 추천해 드려요";
+  if (full) return `${maxSelect}개를 모두 골랐어요. 바꾸려면 고른 항목을 눌러 해제하세요`;
+  return `최대 ${maxSelect}개까지 고를 수 있어요`;
+}
+
 function isAnswered(q: Question, answers: DiagnosisAnswers): boolean {
   const picked = answers[q.id] ?? [];
   return picked.length > 0 && picked.every((id) => q.options.some((o) => o.id === id));
@@ -53,6 +69,9 @@ export function DiagnosisFlow() {
   const maxSelect = isMulti ? (question.maxSelect ?? question.options.length) : 1;
   const isLast = index === TOTAL - 1;
   const headingId = `q-${question.id}`;
+  const helperId = `q-${question.id}-helper`;
+  const hintsId = `q-${question.id}-hints`;
+  const describedBy = [question.subtitle ? helperId : "", question.hints?.length ? hintsId : ""].filter(Boolean).join(" ");
 
   // 진행 중이던 답변 복원 (SSR 결과와 맞추기 위해 마운트 후에 읽는다)
   useEffect(() => {
@@ -130,7 +149,7 @@ export function DiagnosisFlow() {
     [],
   );
 
-  /** 3개가 가득 찬 상태에서 4번째를 눌렀을 때 안내 문구를 잠깐 강조 */
+  /** 최대 개수를 다 고른 상태에서 더 눌렀을 때 안내 문구를 잠깐 강조 */
   const showNudge = () => {
     setNudge(true);
     if (nudgeTimer.current !== null) window.clearTimeout(nudgeTimer.current);
@@ -210,18 +229,24 @@ export function DiagnosisFlow() {
           stepLabel={stepLabel(question, index)}
           title={question.title}
           helper={question.subtitle}
+          helperId={helperId}
+          hints={question.hints}
+          hintsId={hintsId}
         />
-        <OptionGroup variant={question.type} labelledBy={headingId}>
+        <OptionGroup variant={question.type} labelledBy={headingId} describedBy={describedBy}>
           {question.options.map((o) => {
             const isSelected = selected.includes(o.id);
+            const order = question.ordered && isSelected && !o.exclusive ? selected.indexOf(o.id) + 1 : undefined;
             return (
               <OptionCard
                 key={o.id}
                 variant={question.type}
                 title={o.label}
                 description={o.description}
+                hint={o.hint}
+                order={order}
                 selected={isSelected}
-                disabled={full && !isSelected}
+                disabled={full && !isSelected && !o.exclusive}
                 onDisabledClick={showNudge}
                 onClick={() => choose(o.id)}
               />
@@ -240,11 +265,7 @@ export function DiagnosisFlow() {
                 aria-live="polite"
                 className={nudge ? "rounded-md bg-accent-soft px-2 py-1 font-semibold text-accent-soft-fg" : undefined}
               >
-                {exclusivePicked
-                  ? "분야를 정하지 않고 폭넓게 추천해 드려요"
-                  : full
-                    ? "3개를 모두 골랐어요. 바꾸려면 고른 항목을 눌러 해제하세요"
-                    : `최대 ${maxSelect}개까지 고를 수 있어요`}
+                {multiHelper(question, { exclusivePicked, full, count: selected.length, maxSelect })}
                 {!exclusivePicked && (
                   <span className="ml-1.5 font-semibold text-fg tabular-nums">
                     ({selected.length}/{maxSelect})

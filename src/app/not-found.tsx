@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AppShell, Button, IconArrowRight } from "@/components/ui";
+import { DIAGNOSIS_MINUTES } from "@/lib/questions";
 
 export const metadata: Metadata = {
   title: "페이지를 찾을 수 없어요",
@@ -22,7 +23,7 @@ export default function NotFound() {
             처음 화면으로
           </Button>
           <Button href="/diagnosis" variant="secondary" size="lg" fullWidth className="border-stage-border! text-stage-fg! hover:bg-white/5!">
-            1분 진단 시작하기
+            {DIAGNOSIS_MINUTES}분 진단 시작하기
           </Button>
         </div>
       </div>

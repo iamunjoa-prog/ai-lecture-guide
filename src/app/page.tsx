@@ -3,9 +3,13 @@ import { Button, IconArrowRight, IconCheck, Reveal, Slide } from "@/components/u
 import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { credentialBadge, instructors, videos } from "@/components/catalog";
 import { CRITERIA, EXCLUDED_NOTE } from "@/components/criteria";
+import { DIAGNOSIS_MINUTES, LEVEL_QUESTIONS, QUESTION_COUNT } from "@/lib/questions";
 
 const STEPS = [
-  { title: "지금 수준을 진단합니다", desc: "AI 사용 경험, 프롬프트 작성, 자동화·코딩 경험을 묻는 다섯 문항으로 수준을 판단합니다." },
+  {
+    title: "지금 수준을 진단합니다",
+    desc: `AI 사용 경험, 요청하는 방법, 자동화·코딩 경험을 묻는 ${LEVEL_QUESTIONS.length}개 문항으로 수준을 판단합니다. 낯선 용어는 질문 아래에서 바로 풀어 드려요.`,
+  },
   { title: "분야와 목표를 고릅니다", desc: "업무 자동화, 마케팅, 코딩 등 관심 분야와 이루고 싶은 목표를 알려 주세요." },
   { title: "순서대로 정리해 드립니다", desc: "기초부터 실전, 다음 단계까지 들을 순서에 맞춰 유튜브 강의를 배치합니다." },
 ];
@@ -38,9 +42,9 @@ export default function Home() {
           </p>
           <div className="mt-10 flex animate-fade-in flex-col items-start gap-4 [animation-delay:240ms]">
             <Button href="/diagnosis" variant="accent" size="lg" trailingIcon={<IconArrowRight size={18} strokeWidth={2} />}>
-              1분 진단 시작하기
+              {DIAGNOSIS_MINUTES}분 진단 시작하기
             </Button>
-            <p className="text-[14px] text-stage-muted">질문 8개 · 약 1분 · 회원가입 없이 바로 시작합니다</p>
+            <p className="text-[14px] text-stage-muted">질문 {QUESTION_COUNT}개 · 약 {DIAGNOSIS_MINUTES}분 · 회원가입 없이 바로 시작합니다</p>
           </div>
         </div>
         <dl className="grid animate-fade-in grid-cols-2 border-t border-stage-border py-6 [animation-delay:320ms]">
@@ -60,7 +64,7 @@ export default function Home() {
         <Reveal>
           <p className="eyebrow text-fg-muted">How it works</p>
           <h2 id="how-title" className="display mt-4 text-[clamp(32px,9vw,44px)] text-fg">
-            질문 8개면
+            질문 {QUESTION_COUNT}개면
             <br />
             충분합니다.
           </h2>
@@ -147,7 +151,7 @@ export default function Home() {
             <span className="text-accent">시작하세요.</span>
           </h2>
           <p className="mt-6 text-[17px] leading-relaxed text-stage-muted">
-            1분이면 나에게 맞는 강의 순서를 받아 볼 수 있습니다. 모든 강의는 유튜브에서 무료로 볼 수 있습니다.
+            {DIAGNOSIS_MINUTES}분이면 나에게 맞는 강의 순서를 받아 볼 수 있습니다. 모든 강의는 유튜브에서 무료로 볼 수 있습니다.
           </p>
           <Button
             href="/diagnosis"

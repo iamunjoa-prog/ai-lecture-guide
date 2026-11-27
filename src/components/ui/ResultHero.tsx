@@ -14,6 +14,8 @@ export interface ResultHeroProps {
   /** 큰 헤드라인 */
   title: ReactNode;
   description?: ReactNode;
+  /** 진단 결론 두 줄: 지금 할 수 있는 것 + 다음 한 걸음 */
+  conclusion?: { now: ReactNode; next: ReactNode };
   /** 진단 요약 칩 */
   chips?: ResultHeroChip[];
   /** 바로가기 링크(예: 추천 강의 바로 보기) */
@@ -22,12 +24,21 @@ export interface ResultHeroProps {
 }
 
 /** 결과 화면 상단 키노트 슬라이드 내용 (어두운 Slide 안에 둔다) */
-export function ResultHero({ eyebrow, title, description, chips, jump, className }: ResultHeroProps) {
+export function ResultHero({ eyebrow, title, description, conclusion, chips, jump, className }: ResultHeroProps) {
   return (
     <div className={cn("animate-fade-in pt-8 pb-10", className)}>
       {eyebrow && <p className="eyebrow-ko text-[13px] text-stage-muted">{eyebrow}</p>}
       <h1 className="display mt-4 text-[clamp(36px,11vw,52px)] text-stage-fg text-balance">{title}</h1>
       {description && <p className="mt-5 text-[17px] leading-relaxed text-stage-muted">{description}</p>}
+      {conclusion && (
+        <section aria-label="진단 결론" data-testid="diagnosis-conclusion" className="mt-6 border-l-2 border-accent pl-4">
+          <p className="eyebrow-ko text-[12px] text-stage-muted" aria-hidden="true">
+            진단 결론
+          </p>
+          <p className="mt-1.5 text-[16px] leading-relaxed text-stage-muted">{conclusion.now}</p>
+          <p className="mt-1 text-[16px] font-semibold leading-relaxed text-stage-fg">{conclusion.next}</p>
+        </section>
+      )}
       {jump && (
         <a
           href={jump.href}

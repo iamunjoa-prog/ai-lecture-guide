@@ -7,6 +7,7 @@ import { instructors, theory, videos } from "@/components/catalog";
 import { Slide } from "@/components/ui";
 import { LEVEL_DESCRIPTIONS } from "@/lib/questions";
 import { groupTheoryByLevel } from "@/lib/theory";
+import { DIAGNOSIS_MINUTES } from "@/lib/questions";
 
 export const metadata: Metadata = {
   title: "3분 이론",
@@ -83,11 +84,11 @@ export default function TheoryPage() {
 
       <Slide tone="light" as="footer" innerClassName="py-12 pb-[max(48px,env(safe-area-inset-bottom))]">
         <p className="text-[15px] leading-relaxed text-fg-muted">
-          내 수준에 맞는 강의 순서가 궁금하다면 1분 진단을 받아 보세요.
+          내 수준에 맞는 강의 순서가 궁금하다면 {DIAGNOSIS_MINUTES}분 진단을 받아 보세요.
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-x-5">
           <Link href="/diagnosis" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
-            1분 진단 시작하기
+            {DIAGNOSIS_MINUTES}분 진단 시작하기
           </Link>
           <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
             AI 용어집

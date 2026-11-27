@@ -10,7 +10,8 @@ import { StarterTerms } from "@/components/StarterTerms";
 import { TheorySection } from "@/components/TheorySection";
 import { credentialBadge, glossary, instructors, theory, thumbnailFor, videos } from "@/components/catalog";
 import { decodeDiagnosis, type SearchParamsRecord } from "@/lib/diagnosis-state";
-import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_DESCRIPTIONS, LEVEL_LABELS } from "@/lib/questions";
+import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_LABELS } from "@/lib/questions";
+import { buildConclusion } from "@/lib/conclusion";
 import { glossaryById, selectStarterTerms, termsForVideo } from "@/lib/glossary";
 import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
 import affiliateJson from "@data/affiliate.json";
@@ -55,8 +56,10 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     ...(diagnosis.domains.length > 0
       ? diagnosis.domains.map((d): ResultHeroChip => ({ label: DOMAIN_LABELS[d] }))
       : [{ label: "분야 미정" } satisfies ResultHeroChip]),
-    { label: GOAL_LABELS[diagnosis.goal] },
+    // 목표는 고른 순서(우선순위)대로 하나씩
+    ...diagnosis.goals.map((g): ResultHeroChip => ({ label: GOAL_LABELS[g] })),
   ];
+  const conclusion = buildConclusion(diagnosis);
   if (diagnosis.preferKorean) chips.push({ label: "한국어 우선" });
 
   return (
@@ -81,11 +84,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
               학습 로드맵
             </>
           }
-          description={
-            lectureCount > 0
-              ? `${LEVEL_DESCRIPTIONS[diagnosis.level]} 선별된 유튜브 강의 ${lectureCount}개로 구성했어요.`
-              : LEVEL_DESCRIPTIONS[diagnosis.level]
-          }
+          conclusion={conclusion}
           chips={chips}
           jump={{ href: "#roadmap", label: "추천 강의 바로 보기" }}
         />

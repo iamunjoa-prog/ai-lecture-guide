@@ -6,7 +6,7 @@ export { ProgressBar, type ProgressBarProps } from "./ProgressBar";
 export { OptionCard, OptionGroup, type OptionCardProps, type OptionGroupProps } from "./OptionCard";
 export { BottomCTA, type BottomCTAProps } from "./BottomCTA";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
-export { QuestionHeader, type QuestionHeaderProps } from "./QuestionHeader";
+export { QuestionHeader, type QuestionHeaderProps, type QuestionHint } from "./QuestionHeader";
 export { LoadingPlan, type LoadingPlanProps } from "./LoadingPlan";
 export { ResultHero, type ResultHeroProps, type ResultHeroChip } from "./ResultHero";
 export { Chip, Tag, type ChipProps, type ChipTone } from "./Chip";
