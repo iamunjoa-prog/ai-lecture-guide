@@ -42,8 +42,8 @@ export interface LectureCardProps {
   startHere?: boolean;
   /** 카드 오른쪽 위 동작(예: 저장 버튼). 44px 정사각형을 권장 */
   headerAction?: ReactNode;
-  /** "자세히 보기" 안 맨 아래에 붙는 내용(예: 강의 보고 해보기) */
-  extra?: ReactNode;
+  /** 유튜브 버튼 아래 늘 보이는 작은 동작 줄 (예: 다 봤어요 · 실습하기) */
+  actions?: ReactNode;
   /** 자세히 보기를 펼친 채로 시작 */
   defaultOpen?: boolean;
   className?: string;
@@ -97,7 +97,7 @@ export function LectureCard({
   fullReason = true,
   startHere = false,
   headerAction,
-  extra,
+  actions,
   defaultOpen = false,
   className,
 }: LectureCardProps) {
@@ -219,6 +219,8 @@ export function LectureCard({
         유튜브에서 보기
       </Button>
 
+      {actions && <div className="mt-3 flex flex-wrap items-center justify-between gap-2">{actions}</div>}
+
       {/* 자세히 보기 */}
       <div className="mt-4 border-t border-border pt-1">
         <button
@@ -312,7 +314,6 @@ export function LectureCard({
             </div>
           </div>
         )}
-        {extra}
       </div>
     </article>
   );

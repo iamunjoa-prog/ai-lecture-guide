@@ -90,15 +90,3 @@ export function MissionActions({ videoId, title, className }: { videoId: string;
     </div>
   );
 }
-
-/** 강의 카드 '자세히 보기' 안의 '강의 보고 해보기' */
-export function PracticeMissionBlock({ mission, prompts }: { mission: PracticeMission; prompts: ResolvedPrompt[] }) {
-  return (
-    <section aria-label="강의 보고 해보기" className="mt-6 border-t border-border pt-5" data-testid="practice-mission">
-      <p className="eyebrow-ko text-accent-ink">강의 보고 해보기</p>
-      <h4 className="mt-1 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-fg">{mission.title}</h4>
-      <PracticeMissionBody mission={mission} prompts={prompts} className="mt-1.5" />
-      <MissionActions videoId={mission.videoId} className="mt-4" />
-    </section>
-  );
-}
