@@ -1,5 +1,17 @@
+"use client";
+
+import { useId, useState } from "react";
+import Link from "next/link";
 import { Button } from "./Button";
-import { IconArrowUpRight, IconCheck, IconClock, IconGlobe, IconPlay, IconSubtitles } from "./icons";
+import {
+  IconArrowUpRight,
+  IconCheck,
+  IconChevronDown,
+  IconClock,
+  IconGlobe,
+  IconPlay,
+  IconSubtitles,
+} from "./icons";
 import { cn } from "./cn";
 
 export interface LectureCardProps {
@@ -22,7 +34,17 @@ export interface LectureCardProps {
   thumbnailUrl?: string;
   /** 플레이리스트면 "재생목록" 표시 */
   kind?: "video" | "playlist";
+  /** 핵심 용어 (최대 3개). 태그를 누르면 짧은 설명과 용어집 링크가 열린다 */
+  terms?: { id: string; term: string; short: string }[];
+  /** true면 추천 이유 전체를 박스로, false면 첫 문장만 흐린 글씨로 보여 준다 */
+  fullReason?: boolean;
   className?: string;
+}
+
+/** 첫 문장만 (문장부호 뒤 공백 기준) */
+export function firstSentence(text: string): string {
+  const m = text.match(/^.*?[.!?](?=\s|$)/);
+  return m ? m[0] : text;
 }
 
 export function formatDuration(min: number): string {
@@ -32,7 +54,13 @@ export function formatDuration(min: number): string {
   return m ? `${h}시간 ${m}분` : `${h}시간`;
 }
 
-function Meta({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+function Meta({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <li className="flex items-center gap-1.5">
       <span aria-hidden="true" className="flex text-fg-subtle">
@@ -43,7 +71,7 @@ function Meta({ icon, children }: { icon: React.ReactNode; children: React.React
   );
 }
 
-/** 추천 강의 카드 — 강사가 가장 먼저 보인다 (프레젠테이션 전용) */
+/** 추천 강의 카드 — 강사가 가장 먼저 보이고, 세부 내용은 "자세히 보기"로 접어 둔다 */
 export function LectureCard({
   instructorName,
   instructorTitle,
@@ -57,79 +85,202 @@ export function LectureCard({
   url,
   thumbnailUrl,
   kind = "video",
+  terms = [],
+  fullReason = true,
   className,
 }: LectureCardProps) {
+  const uid = useId();
+  const [open, setOpen] = useState(false);
+  const [termId, setTermId] = useState<string | null>(null);
+  const selected = terms.find((t) => t.id === termId);
+
   return (
-    <article className={cn("rounded-xl border border-border bg-surface p-5", className)}>
+    <article
+      className={cn(
+        "rounded-xl border border-border bg-surface p-5",
+        className,
+      )}
+    >
       {/* 강사 */}
       <header>
-        {instructorBadge && <p className="eyebrow-ko text-accent-ink">{instructorBadge}</p>}
-        <p className={cn("text-[19px] font-bold leading-snug tracking-[-0.02em] text-fg", instructorBadge && "mt-1.5")}>
+        {instructorBadge && (
+          <p className="eyebrow-ko text-accent-ink">{instructorBadge}</p>
+        )}
+        <p
+          className={cn(
+            "text-[19px] font-bold leading-snug tracking-[-0.02em] text-fg",
+            instructorBadge && "mt-1.5",
+          )}
+        >
           {instructorName}
         </p>
-        <p className="mt-0.5 text-sm leading-relaxed text-fg-muted">{instructorTitle}</p>
+        <p className="mt-0.5 text-sm leading-relaxed text-fg-muted">
+          {instructorTitle}
+        </p>
       </header>
 
-      {/* 썸네일 */}
-      {thumbnailUrl && (
-        <div className="relative mt-5 aspect-video w-full overflow-hidden rounded-md bg-stage" aria-hidden="true">
-          {/* 배경 이미지: 로드 실패 시 어두운 면 + 재생 아이콘이 보인다 */}
-          <span className="absolute inset-0 flex items-center justify-center text-stage-muted">
-            <IconPlay size={32} strokeWidth={1.25} />
-          </span>
-          <span className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${thumbnailUrl}")` }} />
-          <span className="absolute right-2 bottom-2 rounded-[6px] bg-black/75 px-1.5 py-0.5 text-xs font-medium text-white tabular-nums">
-            {formatDuration(durationMin)}
-          </span>
+      {/* 주요 강의 (+ 작은 썸네일) */}
+      <div className="mt-4 flex items-start gap-3.5">
+        <div className="min-w-0 flex-1">
+          <p className="eyebrow-ko text-fg-muted">
+            {kind === "playlist" ? "재생목록" : "주요 강의"}
+          </p>
+          <h3 className="mt-1 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-fg">
+            {videoTitle}
+          </h3>
+          <ul
+            className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5 text-[13px] text-fg-muted"
+            aria-label="강의 정보"
+          >
+            <Meta icon={<IconClock size={15} />}>
+              {formatDuration(durationMin)}
+            </Meta>
+            <Meta icon={<IconGlobe size={15} />}>
+              {language === "ko" ? "한국어" : "영어"}
+            </Meta>
+            {language === "en" && (
+              <Meta icon={<IconSubtitles size={15} />}>
+                {hasKoreanSubtitle ? "한국어 자막" : "자막 없음"}
+              </Meta>
+            )}
+          </ul>
         </div>
+        {thumbnailUrl && (
+          <div
+            className="relative mt-1 hidden aspect-video w-24 shrink-0 overflow-hidden rounded-md bg-stage min-[360px]:block"
+            aria-hidden="true"
+          >
+            <span className="absolute inset-0 flex items-center justify-center text-stage-muted">
+              <IconPlay size={20} strokeWidth={1.25} />
+            </span>
+            <span
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url("${thumbnailUrl}")` }}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* 추천 사유: 단계의 첫 카드는 전체, 나머지는 첫 문장만 */}
+      {fullReason ? (
+        <div className="mt-4 rounded-md bg-accent-soft px-4 py-3.5">
+          <p className="text-[13px] font-semibold text-accent-soft-fg">
+            추천 이유
+          </p>
+          <p className="mt-1 text-[15px] leading-relaxed text-accent-soft-fg">
+            {reason}
+          </p>
+        </div>
+      ) : (
+        <p className="mt-4 text-[14px] leading-relaxed text-fg-muted">
+          {firstSentence(reason)}
+        </p>
       )}
-
-      {/* 주요 강의 */}
-      <div className="mt-5">
-        <p className="eyebrow-ko text-fg-muted">{kind === "playlist" ? "재생목록" : "주요 강의"}</p>
-        <h3 className="mt-1.5 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-fg">{videoTitle}</h3>
-        <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[13px] text-fg-muted" aria-label="강의 정보">
-          <Meta icon={<IconClock size={15} />}>{formatDuration(durationMin)}</Meta>
-          <Meta icon={<IconGlobe size={15} />}>{language === "ko" ? "한국어" : "영어"}</Meta>
-          {language === "en" && (
-            <Meta icon={<IconSubtitles size={15} />}>{hasKoreanSubtitle ? "한국어 자막" : "자막 없음"}</Meta>
-          )}
-        </ul>
-      </div>
-
-      {/* 추천 사유 */}
-      <div className="mt-5 rounded-md bg-accent-soft px-4 py-3.5">
-        <p className="text-[13px] font-semibold text-accent-soft-fg">추천 이유</p>
-        <p className="mt-1 text-[15px] leading-relaxed text-accent-soft-fg">{reason}</p>
-      </div>
-
-      {/* 얻을 수 있는 것 */}
-      <div className="mt-5">
-        <p className="text-[13px] font-semibold text-fg">이 강의로 얻을 수 있는 것</p>
-        <ul className="mt-2.5 flex flex-col gap-2">
-          {takeaways.slice(0, 3).map((t, i) => (
-            <li key={i} className="flex gap-2.5 text-[15px] leading-relaxed text-fg">
-              <span aria-hidden="true" className="mt-[4px] flex shrink-0 text-accent-ink">
-                <IconCheck size={16} strokeWidth={2} />
-              </span>
-              <span>{t}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
 
       <Button
         href={url}
         external
         variant="secondary"
         fullWidth
-        className="mt-6"
+        className="mt-5"
         aria-label={`유튜브에서 보기: ${videoTitle} (새 탭)`}
         leadingIcon={<IconPlay size={16} />}
         trailingIcon={<IconArrowUpRight size={16} className="text-fg-muted" />}
       >
         유튜브에서 보기
       </Button>
+
+      {/* 자세히 보기 */}
+      <div className="mt-4 border-t border-border pt-1">
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={`${uid}-more`}
+          onClick={() => setOpen((v) => !v)}
+          className="flex min-h-11 w-full items-center justify-between rounded-md text-[15px] font-medium text-fg"
+        >
+          <span>{open ? "접기" : "자세히 보기"}</span>
+          <span
+            aria-hidden="true"
+            className={cn(
+              "flex text-fg-muted transition-transform duration-300",
+              open && "rotate-180",
+            )}
+          >
+            <IconChevronDown size={18} />
+          </span>
+        </button>
+      </div>
+
+      <div id={`${uid}-more`} hidden={!open} className="mt-3">
+        <p className="text-[13px] font-semibold text-fg">
+          이 강의로 얻을 수 있는 것
+        </p>
+        <ul className="mt-2.5 flex flex-col gap-2">
+          {takeaways.slice(0, 3).map((t, i) => (
+            <li
+              key={i}
+              className="flex gap-2.5 text-[15px] leading-relaxed text-fg"
+            >
+              <span
+                aria-hidden="true"
+                className="mt-[4px] flex shrink-0 text-accent-ink"
+              >
+                <IconCheck size={16} strokeWidth={2} />
+              </span>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+
+        {terms.length > 0 && (
+          <div className="mt-5">
+            <p className="text-[13px] font-semibold text-fg">핵심 용어</p>
+            <ul className="mt-2.5 flex flex-wrap gap-2">
+              {terms.map((t) => (
+                <li key={t.id}>
+                  <button
+                    type="button"
+                    aria-pressed={termId === t.id}
+                    aria-controls={`${uid}-term`}
+                    onClick={() =>
+                      setTermId((cur) => (cur === t.id ? null : t.id))
+                    }
+                    className={cn(
+                      "inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm font-medium transition-colors duration-200",
+                      termId === t.id
+                        ? "border-fg bg-surface-2 text-fg"
+                        : "border-border-strong text-fg-muted hover:text-fg",
+                    )}
+                  >
+                    {t.term}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div
+              id={`${uid}-term`}
+              hidden={!selected}
+              className="mt-3 rounded-md bg-surface-2 px-4 py-3.5"
+            >
+              {selected && (
+                <>
+                  <p className="text-[15px] leading-relaxed text-fg">
+                    {selected.short}
+                  </p>
+                  <Link
+                    href={`/glossary#${selected.id}`}
+                    className="mt-1.5 inline-flex items-center gap-1 rounded-full text-sm font-medium text-accent-ink"
+                  >
+                    자세히 보기
+                    <IconArrowUpRight size={14} />
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </article>
   );
 }

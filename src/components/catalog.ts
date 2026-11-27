@@ -5,10 +5,12 @@
  */
 import instructorsJson from "@data/instructors.json";
 import videosJson from "@data/videos.json";
-import type { CredentialType, Instructor, Video } from "@/types";
+import glossaryJson from "@data/glossary.json";
+import type { CredentialType, GlossaryTerm, Instructor, Video } from "@/types";
 
 export const instructors = instructorsJson as unknown as Instructor[];
 export const videos = videosJson as unknown as Video[];
+export const glossary = glossaryJson as unknown as GlossaryTerm[];
 
 /** 유튜브 썸네일 (영상만, 재생목록은 id가 영상이 아니라서 없음) */
 export function thumbnailFor(video: Video): string | undefined {

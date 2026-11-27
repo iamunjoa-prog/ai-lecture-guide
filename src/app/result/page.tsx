@@ -4,9 +4,11 @@ import { AppShell, LectureCard, ResultHero, RoadmapStep, Slide, type ResultHeroC
 import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { ResultActions } from "@/components/ResultActions";
 import { ResultEmptyState } from "@/components/ResultEmptyState";
-import { credentialBadge, instructors, thumbnailFor, videos } from "@/components/catalog";
+import { StarterTerms } from "@/components/StarterTerms";
+import { credentialBadge, glossary, instructors, thumbnailFor, videos } from "@/components/catalog";
 import { decodeDiagnosis, type SearchParamsRecord } from "@/lib/diagnosis-state";
 import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_DESCRIPTIONS, LEVEL_LABELS } from "@/lib/questions";
+import { glossaryById, selectStarterTerms, termsForVideo } from "@/lib/glossary";
 import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
 
 export const metadata: Metadata = {
@@ -33,6 +35,9 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
   const roadmap = buildRoadmap(diagnosis, videos, instructors);
   const lectureCount = roadmap.steps.reduce((n, s) => n + s.items.length, 0);
   const levelLabel = LEVEL_LABELS[diagnosis.level];
+  const byId = glossaryById(glossary);
+  const roadmapVideos = roadmap.steps.flatMap((st) => st.items.map((it) => it.video));
+  const starterTerms = selectStarterTerms(diagnosis, glossary, roadmapVideos);
 
   const chips: ResultHeroChip[] = [
     { label: levelLabel },
@@ -44,7 +49,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
   return (
     <main className="flex min-h-dvh flex-col bg-bg">
       {/* 키노트 히어로 */}
-      <Slide tone="stage" as="header" innerClassName="pt-[env(safe-area-inset-top)]">
+      <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
         <div className="flex h-14 items-center">
           <Link
             href="/"
@@ -71,6 +76,9 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           chips={chips}
         />
       </Slide>
+
+      {/* 시작 전에 알아두면 좋은 용어 */}
+      <StarterTerms terms={starterTerms} byId={byId} glossaryHref={`/glossary?l=${diagnosis.level}`} />
 
       {/* 로드맵 */}
       <Slide tone="light" aria-labelledby="roadmap-title" innerClassName="pt-14 pb-10">
@@ -103,7 +111,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
                 isFirst={i === 0}
                 isLast={i === roadmap.steps.length - 1}
               >
-                {step.items.map(({ video, instructor, reason }) => (
+                {step.items.map(({ video, instructor, reason }, idx) => (
                   <LectureCard
                     key={video.id}
                     instructorName={instructor.name}
@@ -118,6 +126,8 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
                     url={video.url}
                     thumbnailUrl={thumbnailFor(video)}
                     kind={video.kind}
+                    fullReason={idx === 0}
+                    terms={termsForVideo(video, byId).map(({ id, term, short }) => ({ id, term, short }))}
                   />
                 ))}
               </RoadmapStep>

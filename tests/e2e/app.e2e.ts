@@ -106,15 +106,18 @@ test.describe("결과", () => {
       const card = cards.nth(i);
       // 강사 정보가 카드 맨 위(헤더)에 있다
       await expect(card.locator("header p").first()).not.toBeEmpty();
-      // 추천 사유
-      const reasonBox = card.locator("div", { hasText: "추천 이유" }).last();
-      await expect(reasonBox.locator("p").nth(1)).not.toBeEmpty();
+      // 추천 사유: 단계 첫 카드는 "추천 이유" 박스, 나머지는 첫 문장만 (아래 별도 테스트)
+      await expect(card.locator("p").filter({ hasText: /강의예요\./ }).first()).not.toBeEmpty();
       // 강의 제목
       await expect(card.getByRole("heading", { level: 3 })).not.toBeEmpty();
-      // 얻을 수 있는 것 3가지
-      const takeaways = card.locator("div", { hasText: "이 강의로 얻을 수 있는 것" }).last().locator("li");
-      await expect(takeaways).toHaveCount(3);
-      for (let t = 0; t < 3; t++) await expect(takeaways.nth(t)).not.toBeEmpty();
+      // 얻을 수 있는 것 3가지 (자세히 보기 안에 있다)
+      const more = card.locator("button[aria-expanded]");
+      await expect(more).toHaveAttribute("aria-expanded", "false");
+      await more.click();
+      await expect(more).toHaveAttribute("aria-expanded", "true");
+      const list = card.locator("div", { hasText: "이 강의로 얻을 수 있는 것" }).last().locator("ul").first().locator("li");
+      await expect(list).toHaveCount(3);
+      for (let t = 0; t < 3; t++) await expect(list.nth(t)).not.toBeEmpty();
       // 유튜브 링크 (새 탭)
       const link = card.getByRole("link", { name: /유튜브에서 보기/ });
       await expect(link).toHaveAttribute("href", /^https:\/\/www\.youtube\.com\/(watch\?v=|playlist\?list=)[\w-]+$/);
@@ -172,7 +175,7 @@ test.describe("강사 선정 기준 시트", () => {
 test.describe("좁은 화면(320px)", () => {
   test.use({ viewport: { width: 320, height: 640 } });
 
-  for (const path of ["/", "/diagnosis", `/result?${RESULT_QUERY}`, "/result?l=user&d=startup,marketing,education&g=use_tools&ko=1", "/result"]) {
+  for (const path of ["/", "/diagnosis", "/glossary", `/result?${RESULT_QUERY}`, "/result?l=user&d=startup,marketing,education&g=use_tools&ko=1", "/result"]) {
     test(`가로 스크롤이 생기지 않는다: ${path}`, async ({ page }) => {
       await page.goto(path);
       await page.waitForLoadState("networkidle");
@@ -210,4 +213,86 @@ test("주요 화면에서 콘솔 에러가 없다", async ({ page, consoleErrors
     await page.waitForLoadState("networkidle");
   }
   expect(consoleErrors).toEqual([]);
+});
+
+test.describe("결과: 용어와 간결한 카드", () => {
+  test("시작 전 용어 섹션이 5~8개 행으로 보이고 하나를 펼칠 수 있다", async ({ page }) => {
+    await page.goto(`/result?${RESULT_QUERY}`);
+    await expect(page.getByRole("heading", { level: 2, name: "시작 전에 알아두면 좋은 용어" })).toBeVisible();
+    const rows = page.getByTestId("starter-terms").locator("details");
+    const n = await rows.count();
+    expect(n).toBeGreaterThanOrEqual(5);
+    expect(n).toBeLessThanOrEqual(8);
+    const first = rows.first();
+    await expect(first).not.toHaveAttribute("open", "");
+    await first.locator("summary").click();
+    await expect(first).toHaveAttribute("open", "");
+    await expect(first.getByText("예시", { exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: /용어 전체 보기/ })).toHaveAttribute("href", /^\/glossary/);
+  });
+
+  test("단계의 첫 카드만 추천 이유 박스를 보여 준다", async ({ page }) => {
+    await page.goto(`/result?${RESULT_QUERY}`);
+    const steps = page.locator("ol > li");
+    const stepCount = await steps.count();
+    for (let i = 0; i < stepCount; i++) {
+      const cards = steps.nth(i).locator("article");
+      await expect(cards.first().getByText("추천 이유", { exact: true })).toBeVisible();
+      const c = await cards.count();
+      for (let k = 1; k < c; k++) await expect(cards.nth(k).getByText("추천 이유", { exact: true })).toHaveCount(0);
+    }
+  });
+
+  test("자세히 보기가 얻을 것을 펼치고, 핵심 용어 태그가 설명을 토글한다", async ({ page }) => {
+    await page.goto(`/result?${RESULT_QUERY}`);
+    const card = page.locator("article").first();
+    const more = card.getByRole("button", { name: "자세히 보기" });
+    await expect(card.getByText("이 강의로 얻을 수 있는 것")).toBeHidden();
+    await more.focus();
+    await page.keyboard.press("Enter");
+    await expect(card.getByText("이 강의로 얻을 수 있는 것")).toBeVisible();
+    await expect(card.getByRole("button", { name: "접기" })).toHaveAttribute("aria-expanded", "true");
+
+    const tag = card.locator("button[aria-pressed]").first();
+    await expect(tag).toBeVisible();
+    await tag.click();
+    await expect(tag).toHaveAttribute("aria-pressed", "true");
+    const link = card.getByRole("link", { name: /자세히 보기/ });
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("href", /^\/glossary#[\w-]+$/);
+    await tag.click();
+    await expect(link).toBeHidden();
+  });
+});
+
+test.describe("용어집", () => {
+  test("수준별 4개 구역과 빠른 이동이 있다", async ({ page, consoleErrors }) => {
+    await page.goto("/glossary");
+    await expect(page).toHaveTitle(/용어집/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("용어집");
+    for (const t of ["입문 용어", "활용 용어", "실무 용어", "개발 용어"]) {
+      await expect(page.getByRole("heading", { level: 2, name: t })).toBeVisible();
+    }
+    await expect(page.getByRole("navigation", { name: "수준별 바로가기" }).getByRole("link")).toHaveCount(4);
+    expect(await page.locator("main details").count()).toBeGreaterThanOrEqual(40);
+    expect(consoleErrors).toEqual([]);
+  });
+
+  test("해시 딥링크가 해당 용어를 펼친다 (로드·hashchange)", async ({ page }) => {
+    await page.goto("/glossary#llm");
+    await expect(page.locator("details#llm")).toHaveAttribute("open", "");
+    await page.evaluate(() => (window.location.hash = "#hallucination"));
+    await expect(page.locator("details#hallucination")).toHaveAttribute("open", "");
+  });
+
+  test("결과 카드의 용어 링크로 용어집에 닿으면 펼쳐진다", async ({ page }) => {
+    await page.goto(`/result?${RESULT_QUERY}`);
+    const card = page.locator("article").first();
+    await card.getByRole("button", { name: "자세히 보기" }).click();
+    await card.locator("button[aria-pressed]").first().click();
+    await card.getByRole("link", { name: /자세히 보기/ }).click();
+    await expect(page).toHaveURL(/\/glossary#[\w-]+$/);
+    const id = new URL(page.url()).hash.slice(1);
+    await expect(page.locator(`details#${id}`)).toHaveAttribute("open", "");
+  });
 });

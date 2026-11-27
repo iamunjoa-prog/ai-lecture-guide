@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button, IconArrowRight, IconCheck, Reveal, Slide } from "@/components/ui";
 import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { credentialBadge, instructors, videos } from "@/components/catalog";
@@ -17,13 +18,18 @@ export default function Home() {
     <main className="flex min-h-dvh flex-col">
       {/* 1. 히어로 — 어두운 키노트 슬라이드 */}
       <Slide tone="stage" as="header" innerClassName="flex min-h-[92svh] flex-col pt-[env(safe-area-inset-top)]">
-        <div className="flex h-14 items-center">
+        <div className="flex h-14 items-center justify-between">
           <p className="text-[15px] font-semibold tracking-[-0.01em] text-stage-fg">AI 강의 길잡이</p>
+          <Link href="/glossary" className="rounded-full px-1 text-[14px] font-medium text-stage-muted transition-colors duration-200 hover:text-stage-fg">
+            용어집
+          </Link>
         </div>
         <div className="flex flex-1 flex-col justify-center py-14">
           <p className="eyebrow animate-fade-in text-stage-muted">Curated YouTube Lectures</p>
-          <h1 className="display mt-5 animate-fade-in text-[clamp(38px,11.5vw,60px)] text-stage-fg [animation-delay:80ms]">
-            <span className="text-accent">AI를 만든 사람</span>에게
+          <h1 className="display mt-5 animate-fade-in text-[clamp(30px,9.6vw,52px)] text-stage-fg [animation-delay:80ms]">
+            <span className="whitespace-nowrap">
+              <span className="text-accent">AI를 만든 사람</span>에게
+            </span>
             <br />
             직접 배우세요.
           </h1>
@@ -153,7 +159,12 @@ export default function Home() {
             지금 진단 받기
           </Button>
         </Reveal>
-        <p className="mt-20 border-t border-stage-border pt-6 text-[13px] text-stage-muted">AI 강의 길잡이</p>
+        <div className="mt-20 flex items-center justify-between border-t border-stage-border pt-6 text-[13px] text-stage-muted">
+          <p>AI 강의 길잡이</p>
+          <Link href="/glossary" className="rounded-full px-1 transition-colors duration-200 hover:text-stage-fg">
+            AI 용어집
+          </Link>
+        </div>
       </Slide>
     </main>
   );
