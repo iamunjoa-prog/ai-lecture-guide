@@ -29,9 +29,9 @@ for (const scheme of ["light", "dark"] as const) {
 
     test("진단: 분야 질문(다중 선택, 일부 비활성)", async ({ page }) => {
       await page.goto("/diagnosis");
-      for (const name of [/거의 매일 써요/, /템플릿으로 만들어 둬요/, /여러 AI 도구를/, /AI API를 직접/, /개발이 제 일이에요/]) {
+      for (const name of [/거의 매일 써요/, /양식으로 만들어 둬요/, /여러 AI 도구를/, /AI API를 직접/, /개발이 제 일이에요/]) {
         await page.getByRole("radio", { name }).click();
-        await page.waitForTimeout(350);
+        await page.waitForTimeout(650);
       }
       for (const name of [/^코딩/, /^업무 자동화/, /^데이터 분석/]) await page.getByRole("checkbox", { name }).click();
       await page.waitForTimeout(800);

@@ -9,7 +9,7 @@ import { loadProgress, saveProgress } from "./progress-storage";
 
 const QUESTIONS: readonly Question[] = DIAGNOSIS_QUESTIONS;
 const TOTAL = QUESTIONS.length;
-const AUTO_ADVANCE_MS = 250;
+const AUTO_ADVANCE_MS = 400;
 const LOADING_MS = 1800;
 
 const STEP_LABELS: Record<Question["step"], string> = {
@@ -39,6 +39,7 @@ export function DiagnosisFlow() {
   const [answers, setAnswers] = useState<DiagnosisAnswers>({});
   const [phase, setPhase] = useState<"quiz" | "loading">("quiz");
   const [hydrated, setHydrated] = useState(false);
+  const [advancing, setAdvancing] = useState(false);
   const timer = useRef<number | null>(null);
   const navigated = useRef(false);
 
@@ -71,6 +72,7 @@ export function DiagnosisFlow() {
       window.clearTimeout(timer.current);
       timer.current = null;
     }
+    setAdvancing(false);
   }, []);
   useEffect(() => clearTimer, [clearTimer]);
 
@@ -143,6 +145,7 @@ export function DiagnosisFlow() {
     setAnswers(next);
     clearTimer();
     // 단일 선택은 선택 효과를 잠깐 보여 준 뒤 자동으로 다음 질문으로
+    setAdvancing(true);
     timer.current = window.setTimeout(() => goNext(next), AUTO_ADVANCE_MS);
   };
 
@@ -189,21 +192,27 @@ export function DiagnosisFlow() {
           })}
         </OptionGroup>
       </div>
-      <BottomCTA
-        label={isLast ? "결과 보기" : "다음"}
-        disabled={!canProceed}
-        onClick={() => goNext(answers)}
-        helperText={
-          isMulti ? (
-            <span aria-live="polite">
-              최대 {maxSelect}개까지 고를 수 있어요
-              <span className="ml-1.5 font-semibold text-fg tabular-nums">
-                ({selected.length}/{maxSelect})
+      {isMulti || (canProceed && !advancing) ? (
+        <BottomCTA
+          label={isLast ? "결과 보기" : "다음"}
+          disabled={!canProceed}
+          onClick={() => goNext(answers)}
+          helperText={
+            isMulti ? (
+              <span aria-live="polite">
+                {full ? "3개를 모두 골랐어요. 바꾸려면 고른 항목을 눌러 해제하세요" : `최대 ${maxSelect}개까지 고를 수 있어요`}
+                <span className="ml-1.5 font-semibold text-fg tabular-nums">
+                  ({selected.length}/{maxSelect})
+                </span>
               </span>
-            </span>
-          ) : undefined
-        }
-      />
+            ) : undefined
+          }
+        />
+      ) : (
+        <p className="mt-auto pt-8 pb-[max(24px,env(safe-area-inset-bottom))] text-center text-[14px] text-fg-muted">
+          {index === 0 ? "고르면 바로 다음 질문으로 넘어가요. 잘못 골랐다면 왼쪽 위 화살표로 돌아올 수 있어요." : "고르면 바로 다음으로 넘어가요."}
+        </p>
+      )}
     </AppShell>
   );
 }

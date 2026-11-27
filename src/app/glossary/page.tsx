@@ -25,7 +25,7 @@ export default function GlossaryPage() {
           <Link
             href="/"
             aria-label="처음 화면으로"
-            className="-ml-1 rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
+            className="-ml-1 inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
           >
             AI 강의 길잡이
           </Link>
@@ -48,7 +48,7 @@ export default function GlossaryPage() {
             <li key={g.level}>
               <a
                 href={`#level-${g.level}`}
-                className="inline-flex h-9 items-center rounded-full border border-border-strong px-4 text-sm font-medium text-fg transition-colors duration-200 hover:bg-surface-2"
+                className="inline-flex h-11 items-center rounded-full border border-border-strong px-4 text-sm font-medium text-fg transition-colors duration-200 hover:bg-surface-2"
               >
                 {NAV_LABELS[g.level]}
               </a>
@@ -80,7 +80,7 @@ export default function GlossaryPage() {
       ))}
 
       <Slide tone="light" innerClassName="py-12 pb-[max(48px,env(safe-area-inset-bottom))]">
-        <Link href="/" className="rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
+        <Link href="/" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
           처음 화면으로
         </Link>
       </Slide>

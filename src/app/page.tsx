@@ -20,7 +20,7 @@ export default function Home() {
       <Slide tone="stage" as="header" innerClassName="flex min-h-[92svh] flex-col pt-[env(safe-area-inset-top)]">
         <div className="flex h-14 items-center justify-between">
           <p className="text-[15px] font-semibold tracking-[-0.01em] text-stage-fg">AI 강의 길잡이</p>
-          <Link href="/glossary" className="rounded-full px-1 text-[14px] font-medium text-stage-muted transition-colors duration-200 hover:text-stage-fg">
+          <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full px-2 text-[15px] font-medium text-stage-muted transition-colors duration-200 hover:text-stage-fg">
             용어집
           </Link>
         </div>
@@ -40,16 +40,16 @@ export default function Home() {
             <Button href="/diagnosis" variant="accent" size="lg" trailingIcon={<IconArrowRight size={18} strokeWidth={2} />}>
               1분 진단 시작하기
             </Button>
-            <p className="text-[13px] text-stage-muted">질문 8개 · 회원가입 없이 바로 시작합니다</p>
+            <p className="text-[14px] text-stage-muted">질문 8개 · 약 1분 · 회원가입 없이 바로 시작합니다</p>
           </div>
         </div>
         <dl className="grid animate-fade-in grid-cols-2 border-t border-stage-border py-6 [animation-delay:320ms]">
           <div>
-            <dt className="text-[13px] text-stage-muted">검증된 강사</dt>
+            <dt className="text-[14px] text-stage-muted">검증된 강사</dt>
             <dd className="mt-1 text-[28px] font-semibold tracking-[-0.03em] text-stage-fg tabular-nums">{instructorCount}명</dd>
           </div>
           <div>
-            <dt className="text-[13px] text-stage-muted">선별한 유튜브 강의</dt>
+            <dt className="text-[14px] text-stage-muted">선별한 유튜브 강의</dt>
             <dd className="mt-1 text-[28px] font-semibold tracking-[-0.03em] text-stage-fg tabular-nums">{videoCount}개</dd>
           </div>
         </dl>
@@ -132,7 +132,7 @@ export default function Home() {
                 <span className="text-[16px] font-semibold tracking-[-0.015em] text-fg">{ins.name}</span>
                 <span className="eyebrow-ko shrink-0 text-[11px] text-fg-muted">{credentialBadge(ins)}</span>
               </p>
-              <p className="text-[13px] leading-relaxed text-fg-muted">{ins.title}</p>
+              <p className="text-[14px] leading-relaxed text-fg-muted">{ins.title}</p>
             </li>
           ))}
         </ul>
@@ -159,9 +159,9 @@ export default function Home() {
             지금 진단 받기
           </Button>
         </Reveal>
-        <div className="mt-20 flex items-center justify-between border-t border-stage-border pt-6 text-[13px] text-stage-muted">
+        <div className="mt-20 flex items-center justify-between border-t border-stage-border pt-6 text-[14px] text-stage-muted">
           <p>AI 강의 길잡이</p>
-          <Link href="/glossary" className="rounded-full px-1 transition-colors duration-200 hover:text-stage-fg">
+          <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
             AI 용어집
           </Link>
         </div>

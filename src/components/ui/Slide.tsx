@@ -12,6 +12,7 @@ export interface SlideProps {
   innerClassName?: string;
   as?: "section" | "header" | "footer" | "div";
   "aria-labelledby"?: string;
+  id?: string;
 }
 
 const tones: Record<SlideTone, string> = {
@@ -23,7 +24,7 @@ const tones: Record<SlideTone, string> = {
 /** 전체 폭 배경 + 가운데 480px 컬럼. 키노트 슬라이드 한 장 */
 export function Slide({ children, tone = "light", className, innerClassName, as: Tag = "section", ...rest }: SlideProps) {
   return (
-    <Tag className={cn("w-full", tones[tone], className)} aria-labelledby={rest["aria-labelledby"]}>
+    <Tag id={rest.id} className={cn("w-full", tones[tone], className)} aria-labelledby={rest["aria-labelledby"]}>
       <div
         className={cn(
           "mx-auto w-full max-w-content px-5",

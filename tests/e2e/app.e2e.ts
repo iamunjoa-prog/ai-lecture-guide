@@ -37,7 +37,7 @@ test.describe("진단", () => {
 
     // 단일 선택은 고르면 자동으로 다음 질문으로 넘어간다
     await chooseSingle(page, /거의 매일 써요/, Q.prompt);
-    await chooseSingle(page, /템플릿으로 만들어 둬요/, Q.work);
+    await chooseSingle(page, /양식으로 만들어 둬요/, Q.work);
     await chooseSingle(page, /여러 AI 도구를 상황에 맞게/, Q.automation);
     await chooseSingle(page, /AI API를 직접 호출해 봤어요/, Q.coding);
     await chooseSingle(page, /개발이 제 일이에요/, Q.domains);
@@ -66,6 +66,7 @@ test.describe("진단", () => {
     await expect(marketing).toBeDisabled();
     await marketing.click({ force: true });
     await expect(marketing).toHaveAttribute("aria-checked", "false");
+    await expect(page.getByText(/3개를 모두 골랐어요/)).toBeVisible();
     await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(3);
     await next.click();
 
@@ -216,19 +217,51 @@ test("주요 화면에서 콘솔 에러가 없다", async ({ page, consoleErrors
 });
 
 test.describe("결과: 용어와 간결한 카드", () => {
-  test("시작 전 용어 섹션이 5~8개 행으로 보이고 하나를 펼칠 수 있다", async ({ page }) => {
+  test("시작 전 용어는 처음 4개만 보이고 '더 보기'로 나머지를 펼친다", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}`);
     await expect(page.getByRole("heading", { level: 2, name: "시작 전에 알아두면 좋은 용어" })).toBeVisible();
     const rows = page.getByTestId("starter-terms").locator("details");
-    const n = await rows.count();
-    expect(n).toBeGreaterThanOrEqual(5);
-    expect(n).toBeLessThanOrEqual(8);
+    await expect(rows).toHaveCount(4);
+    const more = page.getByRole("button", { name: /^용어 \d+개 더 보기$/ });
+    await expect(more).toHaveAttribute("aria-expanded", "false");
+    const hidden = Number((await more.innerText()).match(/\d+/)![0]);
+    await more.focus();
+    await page.keyboard.press("Enter");
+    await expect(rows).toHaveCount(4 + hidden);
+    expect(4 + hidden).toBeLessThanOrEqual(8);
+    const less = page.getByRole("button", { name: "용어 접기" });
+    await expect(less).toHaveAttribute("aria-expanded", "true");
+    await less.click();
+    await expect(rows).toHaveCount(4);
+
     const first = rows.first();
     await expect(first).not.toHaveAttribute("open", "");
     await first.locator("summary").click();
     await expect(first).toHaveAttribute("open", "");
     await expect(first.getByText("예시", { exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: /용어 전체 보기/ })).toHaveAttribute("href", /^\/glossary/);
+  });
+
+  test("'추천 강의 바로 보기'가 로드맵으로 이동하고 순서·시작 강의를 안내한다", async ({ page }) => {
+    await page.goto(`/result?${RESULT_QUERY}`);
+    const jump = page.getByRole("link", { name: "추천 강의 바로 보기", exact: true });
+    await expect(jump).toBeVisible();
+    await jump.click();
+    await expect(page).toHaveURL(/#roadmap$/);
+    await expect(page.getByRole("heading", { level: 2, name: "추천 로드맵" })).toBeInViewport();
+    await expect(page.getByText("1단계부터 순서대로 보세요")).toBeVisible();
+    await expect(page.getByText("여기서 먼저 시작하세요")).toHaveCount(1);
+  });
+
+  test("강의 카드에 언어와 한국어 자막 여부가 쉬운 말로 표시된다", async ({ page }) => {
+    await page.goto(`/result?${RESULT_QUERY}`);
+    const info = page.locator("article ul[aria-label='강의 정보']");
+    const texts = await info.allInnerTexts();
+    expect(texts.length).toBeGreaterThan(0);
+    for (const t of texts) {
+      expect(t).toMatch(/(한국어|영어) 강의/);
+      if (t.includes("영어 강의")) expect(t).toMatch(/한국어 자막 (있음|없음)/);
+    }
   });
 
   test("단계의 첫 카드만 추천 이유 박스를 보여 준다", async ({ page }) => {
