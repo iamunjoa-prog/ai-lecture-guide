@@ -88,6 +88,9 @@ export default function GlossaryPage() {
         <Link href="/" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
           처음 화면으로
         </Link>
+        <Link href="/theory" className="ml-5 inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
+          3분 이론
+        </Link>
         <Link href="/privacy" className="ml-5 inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
           개인정보 처리방침
         </Link>
