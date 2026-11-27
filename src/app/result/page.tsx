@@ -13,6 +13,8 @@ import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
 
 export const metadata: Metadata = {
   title: "맞춤 학습 로드맵",
+  // 진단 결과마다 주소가 달라 검색에 노출할 필요가 없다
+  robots: { index: false, follow: true },
 };
 
 const STEP_DESCRIPTIONS: Record<string, string> = {
@@ -41,7 +43,9 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
 
   const chips: ResultHeroChip[] = [
     { label: levelLabel },
-    ...diagnosis.domains.map((d): ResultHeroChip => ({ label: DOMAIN_LABELS[d] })),
+    ...(diagnosis.domains.length > 0
+      ? diagnosis.domains.map((d): ResultHeroChip => ({ label: DOMAIN_LABELS[d] }))
+      : [{ label: "분야 미정" } satisfies ResultHeroChip]),
     { label: GOAL_LABELS[diagnosis.goal] },
   ];
   if (diagnosis.preferKorean) chips.push({ label: "한국어 우선" });

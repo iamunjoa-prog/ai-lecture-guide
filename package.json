@@ -10,10 +10,13 @@
     "test": "vitest run",
     "check-links": "tsx scripts/check-links.ts",
     "report": "tsx scripts/roadmap-report.ts",
+    "og": "tsx scripts/make-og.ts",
     "e2e": "playwright test --trace off"
   },
   "dependencies": {
+    "@vercel/analytics": "2.0.1",
     "next": "15.5.4",
+    "pretendard": "1.3.9",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },

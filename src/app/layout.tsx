@@ -1,13 +1,33 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
+// Pretendard 가변 폰트(동적 서브셋): 글자 범위별 woff2 조각을 필요한 만큼만 받는다. 외부 CDN 요청 없음.
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "./globals.css";
+import { getSiteUrl, OG_ALT, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "AI 강의 길잡이",
-    template: "%s · AI 강의 길잡이",
+    default: SITE_NAME,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 유튜브 강의 중 검증된 것만 선별했습니다. 1분 진단으로 수준과 목표에 맞는 학습 로드맵을 순서대로 정리해 드립니다.",
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: "/",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: OG_ALT }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [{ url: "/og.png", alt: OG_ALT }],
+  },
 };
 
 export const viewport: Viewport = {
@@ -32,13 +52,12 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        {/* 쿠키 없는 방문 통계(Vercel Web Analytics). Vercel 배포 빌드에서만 넣는다(로컬·자체 서버에서는 스크립트 404를 피한다) */}
+        {process.env.VERCEL ? <Analytics /> : null}
+      </body>
     </html>
   );
 }
