@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteFooterLinks } from "@/components/SiteFooterLinks";
 import { SiteHeaderBar } from "@/components/SiteHeaderBar";
 import { formatAsOf, latestAsOf, parseSkillFilter, skillLectureLinks, skillTerms } from "@/components/skill-links";
 import { SkillsBrowser } from "@/components/SkillsBrowser";
@@ -55,20 +56,13 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
         <p className="text-[15px] leading-relaxed text-fg-muted">
           내 수준에 맞는 스킬과 강의 순서가 궁금하다면 {DIAGNOSIS_MINUTES}분 진단을 받아 보세요.
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-5">
-          <Link href="/diagnosis" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
-            {DIAGNOSIS_MINUTES}분 진단 시작하기
-          </Link>
-          <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
-            AI 용어집
-          </Link>
-          <Link href="/theory" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
-            3분 이론
-          </Link>
-          <Link href="/" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
-            처음 화면으로
-          </Link>
-        </div>
+        <Link
+          href="/diagnosis"
+          className="mt-3 inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4"
+        >
+          {DIAGNOSIS_MINUTES}분 진단 시작하기
+        </Link>
+        <SiteFooterLinks exclude={["skills"]} className="mt-2" />
       </Slide>
     </main>
   );
