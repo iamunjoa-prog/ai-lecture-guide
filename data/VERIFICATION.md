@@ -123,3 +123,23 @@ AI 강의 길잡이의 강사·강의 정보를 **독립적으로 다시 점검*
 - 새 강의 6개의 `durationMin`은 공식 채널 검색 결과에 표시된 재생 시간을 반올림한 값이에요(직접 재생해 확인하지는 않음). `hasKoreanSubtitle`은 확인하지 못해 모두 `false`.
 - 맞춤 GPT 종료(2026-12-11, 일부 Enterprise·FedRAMP는 2027-02-28)는 OpenAI Help「Custom GPT retirement and migration FAQ」에서 원문 확인했어요. 데이터에 맞춤 GPT를 주제로 한 강의는 없었어요.
 - 3차 정비 후 커버리지(level × goal): beginner 10·14·5·4 / user 16·20·8·8 / practitioner 20·10·11·11 / developer 13·5·16·11 (understand·use_tools·build_agents·build_products 순). 모든 칸 ≥ 4. `npm run check-links`(oEmbed 70/70) 통과.
+
+## 6. 변경 기록 — 이미지·영상 분야 추가 (2026-11-27)
+자세한 근거는 [`CURATION.md`](./CURATION.md) 「이미지·영상 분야 추가」. 강의 70개 → 80개, 강사 19명 → 21명. 영상은 시청하지 않았어요.
+
+| 구분 | id | 내용 | 근거 |
+|---|---|---|---|
+| 강사 추가 | runway | Runway 공식 채널(@RunwayML), official_channel | 영상 생성·편집 모델 개발사. oEmbed author_url |
+| 강사 추가 | adobe-firefly | Adobe Firefly 채널(@AdobeFirefly), official_channel | Firefly 모델은 Adobe 개발. 채널 소유는 간접 근거(설명의 adobe.ly 링크·제3자 채널 목록) — **약함** |
+| 추가 | CrrpfvbNyMw, bH2nP-aCFjk, jDxKzlGLCas | OpenAI 이미지 입문·팟캐스트·DevDay 2026 세션 | oEmbed(OpenAI) · 채널 검색 설명 · OpenAI Help「ChatGPT Images in ChatGPT」(원문, 현재 기능) |
+| 추가 | nRLZqaNOrwQ, VldX34mM95o | Google for Developers GenMedia 세션·Veo 대담 | oEmbed(Google for Developers) · 채널 검색 설명 |
+| 추가 | 56MhbPXEr9k | Google Vids 레슨 | oEmbed(Google Workspace) · 채널 검색 설명 · 채널 최근 Vids 업로드 |
+| 추가 | Uvl-tRga98g | Claude Design 세션 | oEmbed(Claude, 허용 채널) · Anthropic 발표문(원문, 2026-04-17) |
+| 추가 | -lVVZDuEIVs | Runway Aleph 2.0 사용법 | oEmbed(Runway) · Runway 발표(검색 확인, 2026-05-21) |
+| 추가 | sqwbGJL4Pdk | Adobe Firefly 입문 | oEmbed(Adobe Firefly) · 채널 검색 설명 |
+| 추가 | 6oBmJARc0Aw | 카카오 비디오 생성 잠재 공간 압축(한국어) | oEmbed(kakao tech) · 채널 검색 결과. 발표자·행사·수치는 확인 못 해 요약에 넣지 않음 |
+| 재태그 | G2fqAlgmoPo, PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv, 8ib4Qnh2HFE | `domains`에 creative | 범용 개념 강의 원칙 / 공식 코스 페이지의 멀티미디어 프롬프트 레슨 |
+| 넣지 않음 | Sora 영상 전부 | Sora 종료 | OpenAI Help 출처 신호 문서(원문: "Sora is discontinued") · 2026-03-24 종료 보도(Axios·CBS 등, 검색 확인) |
+
+- 새 용어 `ai-media-rights`의 워터마크·C2PA 설명 근거: OpenAI Help「Provenance signals in content processed by OpenAI tools」(원문 확인, "Images generated with ChatGPT or the OpenAI API include both signals", 신호가 편집·캡처로 사라질 수 있고 신호만으로 출처를 보장하지 않음). Google SynthID 범위(이미지·영상 등)는 Google 블로그(검색 확인). 법률 판단은 하지 않고 "서비스 약관과 관련 법을 확인하세요"로만 안내해요.
+- `npm run check-links`(oEmbed 80/80) 통과.
