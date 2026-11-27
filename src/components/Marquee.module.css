@@ -1,0 +1,42 @@
+.viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+
+.viewport:hover .track,
+.viewport:focus-within .track {
+  animation-play-state: paused;
+}
+
+.reverse {
+  animation-direction: reverse;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* 모션 줄이기: 흐르지 않고 줄바꿈해서 전부 보여 준다 */
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .duplicate {
+    display: none;
+  }
+}
