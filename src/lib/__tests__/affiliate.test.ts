@@ -3,7 +3,7 @@ import affiliateJson from "../../../data/affiliate.json";
 import { selectAffiliate, type AffiliateItem } from "../affiliate";
 import type { DiagnosisResult } from "@/types";
 
-const dx: DiagnosisResult = { level: "user", domains: [], goal: "use_tools", preferKorean: true };
+const dx: DiagnosisResult = { level: "user", domains: [], goals: ["use_tools"], preferKorean: true };
 const item = (id: string, extra: Partial<AffiliateItem> = {}): AffiliateItem => ({
   id,
   title: id,
@@ -31,6 +31,10 @@ describe("selectAffiliate", () => {
   it("수준·목표를 지정했는데 둘 다 안 맞으면 제외", () => {
     const items = [item("x", { levels: ["developer"], goals: ["build_agents"] }), item("y")];
     expect(selectAffiliate(dx, items).map((i) => i.id)).toEqual(["y"]);
+  });
+  it("고른 목표 중 하나라도 맞으면 목표 일치", () => {
+    const items = [item("agents", { levels: ["developer"], goals: ["build_agents"] }), item("products", { levels: ["developer"], goals: ["build_products"] })];
+    expect(selectAffiliate({ ...dx, goals: ["use_tools", "build_agents"] }, items).map((i) => i.id)).toEqual(["agents"]);
   });
   it("max 개수를 지키고 원본을 바꾸지 않는다", () => {
     const items = [item("1"), item("2"), item("3")];

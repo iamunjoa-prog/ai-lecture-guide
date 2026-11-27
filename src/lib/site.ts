@@ -6,10 +6,12 @@
  *  2. VERCEL_PROJECT_PRODUCTION_URL (Vercel이 자동 제공, 프로토콜 없음)
  *  3. 기본값 https://ai-lecture-guide.vercel.app
  */
+import { DIAGNOSIS_MINUTES } from "./questions";
+
 export const SITE_NAME = "AI 강의 길잡이";
 export const SITE_TAGLINE = "AI를 만든 사람에게 직접 배우세요.";
 export const SITE_DESCRIPTION =
-  "AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 유튜브 강의 중 검증된 것만 선별했습니다. 1분 진단으로 수준과 목표에 맞는 학습 로드맵을 순서대로 정리해 드립니다.";
+  `AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 유튜브 강의 중 검증된 것만 선별했습니다. ${DIAGNOSIS_MINUTES}분 진단으로 수준과 목표에 맞는 학습 로드맵을 순서대로 정리해 드립니다.`;
 export const OG_ALT = "AI 강의 길잡이 — AI를 만든 사람에게 직접 배우세요. 검증된 유튜브 AI 강의를 수준·목표별로 선별합니다";
 
 export const DEFAULT_SITE_URL = "https://ai-lecture-guide.vercel.app";

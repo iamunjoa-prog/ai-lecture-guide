@@ -1,8 +1,24 @@
 import { activeAdProvider, type AdEnv } from "./ads";
 import { REPO_URL } from "./site";
+import { SAVED_STORAGE_KEY } from "./saved";
 
 /** 개인정보 처리방침 시행일. 내용을 고칠 때 함께 바꾸고 개정 이력에 적는다 */
 export const PRIVACY_EFFECTIVE_DATE = "2026-11-27";
+
+/** '내 학습함' 저장 기능 안내 (개인정보 처리방침 "저장 기능" 항목) */
+export const SAVED_FEATURE_PRIVACY = {
+  storageKey: SAVED_STORAGE_KEY,
+  /** 저장되는 것 */
+  items: ["저장한 강의와 시청 상태", "실습 미션과 완료 여부", "저장한 스킬·3분 이론·용어", "마지막으로 본 진단 결과 주소"],
+  /** 저장 위치 */
+  where: "이 브라우저의 로컬 저장소(localStorage)",
+} as const;
+
+/** 개정 이력 (최근 것이 위) */
+export const PRIVACY_REVISIONS: readonly { date: string; note: string }[] = [
+  { date: "2026-11-27", note: "'내 학습함' 저장 기능 항목 추가 (브라우저에만 저장)." },
+  { date: "2026-11-27", note: "최초 시행." },
+];
 
 export interface PrivacyFlags {
   adProvider: "adfit" | "adsense" | null;

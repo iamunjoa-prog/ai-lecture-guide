@@ -1,4 +1,4 @@
-import { answerLevelQuestionsLow, chooseSingle, expect, test } from "./fixtures";
+import { answerLevelQuestionsLow, chooseGoals, expect, test } from "./fixtures";
 
 const Q = {
   domains: "어떤 분야에 AI를 쓰고 싶으세요?",
@@ -44,8 +44,8 @@ test.describe("'잘 모르겠어요' 선택지", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(Q.goal);
 
     // 목표 선택지: '개념 이해'와 '아직 잘 모르겠어요'는 서로 다른 선택지
-    await expect(page.getByRole("radio", { name: /^개념 이해/ })).toBeVisible();
-    await chooseSingle(page, /^아직 잘 모르겠어요/, Q.language);
+    await expect(page.getByRole("checkbox", { name: /^개념 이해/ })).toBeVisible();
+    await chooseGoals(page, [/^아직 잘 모르겠어요/]);
     await page.getByRole("radio", { name: /네, 한국어가 편해요/ }).click();
 
     // 로딩 화면 + 건너뛰기 버튼(44px 이상)
@@ -60,7 +60,7 @@ test.describe("'잘 모르겠어요' 선택지", () => {
     await page.waitForURL(/\/result\?/, { timeout: 5_000 });
     expect(Object.fromEntries(new URL(page.url()).searchParams)).toEqual({ l: "beginner", d: "", g: "understand", ko: "1" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("입문자 맞춤 학습 로드맵");
-    await expect(page.getByRole("list", { name: "진단 요약" })).toContainText("분야 미정");
+    await expect(page.getByRole("group", { name: "진단 요약" })).toContainText("분야 미정");
     expect(await page.locator("article").count()).toBeGreaterThanOrEqual(3);
     // 분야 문구 없이 사유가 만들어진다
     await expect(page.locator("article").first()).not.toContainText("에 AI를 적용하려는");
@@ -80,7 +80,7 @@ test.describe("로딩 화면", () => {
     await answerLevelQuestionsLow(page);
     await page.getByRole("checkbox", { name: /^코딩/ }).click();
     await page.getByRole("button", { name: "다음", exact: true }).click();
-    await chooseSingle(page, /^개념 이해/, Q.language);
+    await chooseGoals(page, [/^개념 이해/]);
     await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
   }
 

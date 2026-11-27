@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { GlossaryTerm, Level } from "@/types";
 import { cn, IconChevronDown, Tag } from "@/components/ui";
+import { SaveToggle } from "./saved/SaveToggle";
 
 export const LEVEL_TAGS: Record<Level, string> = {
   beginner: "입문",
@@ -19,61 +20,74 @@ export interface TermAccordionProps {
   linkRelated?: boolean;
   /** 앵커 id를 붙일지 (용어집 페이지 전용) */
   anchor?: boolean;
+  /** 저장 버튼 표시 (기본 true) */
+  savable?: boolean;
 }
 
 /** 용어 한 줄 아코디언 (네이티브 details). 접힘: 용어·영어·한 줄 정의 / 펼침: 설명·예시·관련 용어 */
-export function TermAccordion({ term, byId, showLevel = false, linkRelated = false, anchor = false }: TermAccordionProps) {
+export function TermAccordion({
+  term,
+  byId,
+  showLevel = false,
+  linkRelated = false,
+  anchor = false,
+  savable = true,
+}: TermAccordionProps) {
   const related = (term.related ?? []).map((id) => byId[id]).filter(Boolean);
+  // 저장 버튼은 summary 밖(details 뒤 형제)에 두고 위치만 오른쪽 위로 겹친다: summary 안의 버튼은 접근성·동작이 꼬인다
   return (
-    <details id={anchor ? term.id : undefined} className="group scroll-mt-24 border-b border-border">
-      <summary
-        className={cn(
-          "flex list-none items-start gap-3 rounded-md py-4 [&::-webkit-details-marker]:hidden",
-          "cursor-pointer select-none",
-        )}
-      >
-        <span className="min-w-0 flex-1">
-          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            {showLevel && <Tag>{LEVEL_TAGS[term.level]}</Tag>}
-            <span className="text-[17px] font-semibold tracking-[-0.015em] text-fg">{term.term}</span>
-            {term.termEn && <span className="text-[13px] text-fg-muted">{term.termEn}</span>}
-          </span>
-          <span className="mt-1 block text-[15px] leading-relaxed text-fg-muted">{term.short}</span>
-        </span>
-        <span
-          aria-hidden="true"
-          className="mt-1 flex shrink-0 text-fg-muted transition-transform duration-300 group-open:rotate-180"
+    <div className="relative border-b border-border" data-term-row={term.id}>
+      <details id={anchor ? term.id : undefined} className="group scroll-mt-24">
+        <summary
+          className={cn(
+            "flex list-none items-start gap-3 rounded-md py-4 [&::-webkit-details-marker]:hidden",
+            "cursor-pointer select-none",
+          )}
         >
-          <IconChevronDown size={20} />
-        </span>
-      </summary>
-      <div className="pb-5 pr-8">
-        <p className="text-[15px] leading-relaxed text-fg">{term.detail}</p>
-        {term.example && (
-          <div className="mt-3 rounded-md bg-accent-soft px-4 py-3">
-            <p className="text-[13px] font-semibold text-accent-soft-fg">예시</p>
-            <p className="mt-0.5 text-[15px] leading-relaxed text-accent-soft-fg">{term.example}</p>
-          </div>
-        )}
-        {related.length > 0 && (
-          <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            <span className="text-[13px] text-fg-muted">관련 용어</span>
-            {related.map((r) =>
-              linkRelated ? (
-                <Link
-                  key={r.id}
-                  href={`#${r.id}`}
-                  className="rounded-full border border-border-strong px-2.5 py-0.5 text-[13px] font-medium text-fg-muted transition-colors duration-200 hover:text-fg"
-                >
-                  {r.term}
-                </Link>
-              ) : (
-                <Tag key={r.id}>{r.term}</Tag>
-              ),
-            )}
-          </div>
-        )}
-      </div>
-    </details>
+          <span className="min-w-0 flex-1">
+            <span className={cn("flex flex-wrap items-center gap-x-2 gap-y-1", savable && "pr-10")}>
+              {showLevel && <Tag>{LEVEL_TAGS[term.level]}</Tag>}
+              <span className="text-[17px] font-semibold tracking-[-0.015em] text-fg">{term.term}</span>
+              {term.termEn && <span className="text-[13px] text-fg-muted">{term.termEn}</span>}
+            </span>
+            <span className="mt-1 block text-[15px] leading-relaxed text-fg-muted">{term.short}</span>
+          </span>
+          <span
+            aria-hidden="true"
+            className="mt-1 flex shrink-0 text-fg-muted transition-transform duration-300 group-open:rotate-180"
+          >
+            <IconChevronDown size={20} />
+          </span>
+        </summary>
+        <div className="pb-5 pr-8">
+          <p className="text-[15px] leading-relaxed text-fg">{term.detail}</p>
+          {term.example && (
+            <div className="mt-3 rounded-md bg-accent-soft px-4 py-3">
+              <p className="text-[13px] font-semibold text-accent-soft-fg">예시</p>
+              <p className="mt-0.5 text-[15px] leading-relaxed text-accent-soft-fg">{term.example}</p>
+            </div>
+          )}
+          {related.length > 0 && (
+            <div className="mt-3 flex flex-wrap items-center gap-1.5">
+              <span className="text-[13px] text-fg-muted">관련 용어</span>
+              {related.map((r) =>
+                linkRelated ? (
+                  <Link
+                    key={r.id}
+                    href={`#${r.id}`}
+                    className="rounded-full border border-border-strong px-2.5 py-0.5 text-[13px] font-medium text-fg-muted transition-colors duration-200 hover:text-fg"
+                  >
+                    {r.term}
+                  </Link>
+                ) : (
+                  <Tag key={r.id}>{r.term}</Tag>
+                ),
+              )}
+            </div>
+          )}
+        </div>
+      </details>
+      {savable && <SaveToggle kind="term" id={term.id} label={`용어 저장: ${term.term}`} className="absolute top-1.5 right-8" />}
+    </div>
   );
 }

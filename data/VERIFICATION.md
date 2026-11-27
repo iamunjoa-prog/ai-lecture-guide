@@ -100,3 +100,26 @@ AI 강의 길잡이의 강사·강의 정보를 **독립적으로 다시 점검*
 - 직함은 시점에 민감해요(카파시, 르쿤은 올해 바뀜). 6개월마다 점검하세요.
 - 채널 소유권은 oEmbed 표시명 기반이고 조직 사이트의 링크로 교차 확인한 것이 아니에요(특히 개인·한국어 채널).
 - 사람이 직접 확인하면 좋은 항목: 앤드루 응 CS229/CS230 현재 강의 여부, 김성훈 홍콩과기대 현재 직위, 서울대 재생목록 출연 교수, Anthropic @claude 공식성, 각 영상 길이.
+
+## 5. 변경 기록 — 3차 정비 (2026-11-27)
+자세한 판단 근거는 [`CURATION.md`](./CURATION.md) 「3차 정비」에 있어요. 강의 65개 → 70개. 이번에도 영상은 시청하지 않았어요.
+
+| 구분 | id | 내용 | 근거 |
+|---|---|---|---|
+| 제거 | qtO940hejdE | Gemini at Work 5강(Gmail·**Custom Gems**). 실습 미션·`reusable-skills` 연결도 제거 | Gemini Apps Help「About the transition from Gems to skills」(원문 확인): 개인 계정 2026-11부터 스킬로 전환, 2026-12-17 이후 Gems 사용 불가, 업무·학교 계정 2027 |
+| 문구 갱신 | OfUn6HjwXhI | 요약에 "몇 년 전 공개라 화면은 지금과 달라요" 추가 | 공식 채널 검색 결과의 공개 시점(약 3년 전) |
+| 문구 갱신 | ycAnRjyYC6o | 요약에 "2023년 무렵 강연이라 서비스 화면·기능은 지금과 달라요" 추가 | 업로드 채널 검색 결과의 공개 시점(약 3년 전) |
+| 추가 | uDr0xdA_E_A | Gemini at Work 6강(Gemini Enterprise 에이전트형 AI) — 제거한 5강의 대체 | oEmbed(Google Workspace) · 채널 검색(8:32, 약 7개월 전) · cloud.google.com/gemini-enterprise(현재 제품) |
+| 추가 | YkCDVn3_wiw | Introduction to Deep Research (OpenAI) | oEmbed(OpenAI) · 채널 검색 설명(연구진 4명이 도쿄에서 소개·시연, 20:16) · OpenAI Help「Deep research in ChatGPT」(현재 기능) |
+| 추가 | R-KJgjIrh24 | Getting started with research in Claude.ai | oEmbed(Anthropic) · 검색 설명 첫 줄 · Claude Help「Use research on Claude」 |
+| 추가 | _jjSS0qGFbI | Getting started with connectors in Claude.ai | oEmbed(Anthropic) · 검색 설명 첫 줄 · Claude Help 커넥터 문서 |
+| 추가 | 6Mmevs1877A | How AI jailbreaks work and what stops them (Microsoft Mechanics) | oEmbed(Microsoft Mechanics, 기존 허용 채널) · 검색 설명 첫 줄(프롬프트 인젝션 공격과 방어) |
+| 추가 | IJsp9AC-n7Q | How to use AI for Marketing with NotebookLM & Gemini Deep Research (Google Workspace) | oEmbed(Google Workspace) · 검색 설명(마케팅 팀용 AI Boost Bootcamp 레슨) · Gemini Apps Help 딥 리서치 문서 |
+| 넣지 않음 | jv-lpIsnLOo | 같은 제목의 OpenAI 영상이지만 채널·검색 목록에 나오지 않아 길이·설명 확인 불가 → `YkCDVn3_wiw`로 대체 | oEmbed만 통과 |
+| 넣지 않음 | Y0KidGr9Z2Y, QbLf2zb3oPc | 이미 연결한 AI Fluency 재생목록(PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv) 안의 레슨이라 중복 | 재생목록 페이지의 레슨 목록 |
+| 넣지 않음 | buwMJxvW7wI (@Google), LCEmiRjPEtQ (@ycombinator) | 새 허용 채널이 필요하고, 각각 낡은 데모·투자사 채널 강연이라 이유가 약함 | — |
+| 유지 확인 | dlS2meHJWAk, kktBVmjA19A | Microsoft 365 Copilot Agent Builder·ChatGPT 워크스페이스 에이전트는 현재 기능(맞춤 GPT·OpenAI Agent Builder 종료와 별개) | Microsoft Learn「Agent Builder overview」· OpenAI Help「ChatGPT Workspace Agents for Enterprise and Business」 |
+
+- 새 강의 6개의 `durationMin`은 공식 채널 검색 결과에 표시된 재생 시간을 반올림한 값이에요(직접 재생해 확인하지는 않음). `hasKoreanSubtitle`은 확인하지 못해 모두 `false`.
+- 맞춤 GPT 종료(2026-12-11, 일부 Enterprise·FedRAMP는 2027-02-28)는 OpenAI Help「Custom GPT retirement and migration FAQ」에서 원문 확인했어요. 데이터에 맞춤 GPT를 주제로 한 강의는 없었어요.
+- 3차 정비 후 커버리지(level × goal): beginner 10·14·5·4 / user 16·20·8·8 / practitioner 20·10·11·11 / developer 13·5·16·11 (understand·use_tools·build_agents·build_products 순). 모든 칸 ≥ 4. `npm run check-links`(oEmbed 70/70) 통과.

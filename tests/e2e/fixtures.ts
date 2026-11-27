@@ -43,15 +43,38 @@ export const test = base.extend<Fixtures>({
 
 export { expect };
 
-/** 단일 선택 질문 5개(수준)를 가장 낮은 답으로 넘기고 분야 질문까지 간다 */
-export async function answerLevelQuestionsLow(page: Page) {
+/** 수준 질문 제목 (순서대로) */
+export const LEVEL_TITLES = {
+  frequency: "AI 챗봇, 얼마나 자주 쓰세요?",
+  prompt: "AI에게 무언가를 부탁할 때 어떻게 말하세요?",
+  work: "업무나 공부에 AI를 어디까지 써 봤나요?",
+  connect: "AI를 다른 앱이나 프로그램과 연결해 본 적 있나요?",
+  coding: "코딩은 어디까지 해 봤나요?",
+  aiCoding: "코드를 만들 때 AI의 도움을 받아 봤나요?",
+} as const;
+
+/** 수준 질문 6개의 가장 낮은 답 */
+export const LEVEL_ANSWERS_LOW = [/^아직 거의 안 써 봤어요/, /^궁금한 걸 바로 물어봐요/, /^아직 써 본 적 없어요/, /^아직 없어요/, /^전혀 안 해요/, /^안 써 봤어요/];
+/** 수준 질문 6개의 가장 높은 답 (→ developer) */
+export const LEVEL_ANSWERS_HIGH = [/^거의 매일 써요/, /^잘 되는 요청을 저장해/, /^반복 업무를 AI로 자동화/, /^AI API를 코드로/, /^개발이 직업이에요/, /^코딩 에이전트에게/];
+
+/** 단일 선택 질문 6개(수준)를 주어진 답(기본: 가장 낮은 답)으로 넘기고 분야 질문까지 간다 */
+export async function answerLevelQuestionsLow(page: Page, answers: RegExp[] = LEVEL_ANSWERS_LOW) {
   await page.goto("/diagnosis");
-  await chooseSingle(page, /아직 거의 안 써봤어요/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/AI에게 질문할 때/);
-  await chooseSingle(page, /그냥 궁금한 걸 바로 물어봐요/);
-  await chooseSingle(page, /아직 써본 적 없어요/);
-  await chooseSingle(page, /처음 들어봐요/);
-  await chooseSingle(page, /전혀 못 해요/, "어떤 분야에 AI를 쓰고 싶으세요?");
+  const titles = Object.values(LEVEL_TITLES);
+  for (let i = 0; i < answers.length; i++) {
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(titles[i]);
+    await chooseSingle(page, answers[i]);
+  }
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("어떤 분야에 AI를 쓰고 싶으세요?");
+}
+
+/** 목표(다중 선택)를 순서대로 고르고 다음으로 */
+export async function chooseGoals(page: Page, names: RegExp[]) {
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("AI로 이루고 싶은 목표는 무엇인가요?");
+  for (const name of names) await page.getByRole("checkbox", { name }).click();
+  await page.getByRole("button", { name: "다음", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("한국어로 들을 수 있는 강의가 좋으세요?");
 }
 
 /** 결과 화면에 바로 들어갈 수 있는 쿼리 */
@@ -62,3 +85,9 @@ export async function chooseSingle(page: Page, optionName: string | RegExp, next
   await page.getByRole("radio", { name: optionName }).click();
   if (nextTitle) await expect(page.getByRole("heading", { level: 1 })).toHaveText(nextTitle);
 }
+
+/** 진단 요약 칩 글자에서 '1순위' 표시를 떼어 낸다 */
+export const chipLabels = (texts: string[]) => texts.map((t) => t.replace(/^1순위\s*/, "").trim());
+
+/** 내 학습함 저장 키 (src/lib/saved.ts와 같다) */
+export const SAVED_KEY = "aig:saved:v1";

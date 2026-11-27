@@ -5,8 +5,10 @@ import { TheoryConceptCard } from "@/components/TheoryConceptCard";
 import { theoryLectureLinks } from "@/components/TheorySection";
 import { instructors, theory, videos } from "@/components/catalog";
 import { Slide } from "@/components/ui";
+import { SiteHeaderBar } from "@/components/SiteHeaderBar";
 import { LEVEL_DESCRIPTIONS } from "@/lib/questions";
 import { groupTheoryByLevel } from "@/lib/theory";
+import { DIAGNOSIS_MINUTES } from "@/lib/questions";
 
 export const metadata: Metadata = {
   title: "3분 이론",
@@ -22,15 +24,7 @@ export default function TheoryPage() {
     <main className="flex min-h-dvh flex-col bg-bg">
       <GlossaryHashOpener />
       <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
-        <div className="flex h-14 items-center">
-          <Link
-            href="/"
-            aria-label="처음 화면으로"
-            className="-ml-1 inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
-          >
-            AI 강의 길잡이
-          </Link>
-        </div>
+        <SiteHeaderBar />
         <div className="animate-fade-in pt-14 pb-14">
           <p className="eyebrow text-stage-muted">3-minute theory</p>
           <h1 className="display mt-4 text-[clamp(36px,11vw,52px)] text-stage-fg">3분 이론</h1>
@@ -83,14 +77,17 @@ export default function TheoryPage() {
 
       <Slide tone="light" as="footer" innerClassName="py-12 pb-[max(48px,env(safe-area-inset-bottom))]">
         <p className="text-[15px] leading-relaxed text-fg-muted">
-          내 수준에 맞는 강의 순서가 궁금하다면 1분 진단을 받아 보세요.
+          내 수준에 맞는 강의 순서가 궁금하다면 {DIAGNOSIS_MINUTES}분 진단을 받아 보세요.
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-x-5">
           <Link href="/diagnosis" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
-            1분 진단 시작하기
+            {DIAGNOSIS_MINUTES}분 진단 시작하기
           </Link>
           <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
             AI 용어집
+          </Link>
+          <Link href="/skills" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
+            AI 스킬
           </Link>
           <Link href="/" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
             처음 화면으로

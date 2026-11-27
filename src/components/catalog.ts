@@ -7,12 +7,36 @@ import instructorsJson from "@data/instructors.json";
 import videosJson from "@data/videos.json";
 import glossaryJson from "@data/glossary.json";
 import theoryJson from "@data/theory.json";
+import practiceJson from "@data/practice.json";
+import skillsJson from "@data/skills.json";
 import type { CredentialType, GlossaryTerm, Instructor, TheoryConcept, Video } from "@/types";
+import type { PracticeMission } from "@/lib/practice";
+import type { TrendingSkill } from "@/lib/skills";
 
 export const instructors = instructorsJson as unknown as Instructor[];
 export const videos = videosJson as unknown as Video[];
 export const glossary = glossaryJson as unknown as GlossaryTerm[];
 export const theory = theoryJson as unknown as TheoryConcept[];
+export const practice = practiceJson as unknown as PracticeMission[];
+export const skills = skillsJson as unknown as TrendingSkill[];
+
+/** 내 학습함 정리용: 지금 데이터에 있는 id 목록 (클라이언트로 넘길 때는 배열로) */
+export interface KnownIdLists {
+  lectures: string[];
+  missions: string[];
+  skills: string[];
+  terms: string[];
+  theory: string[];
+}
+export function knownIdLists(): KnownIdLists {
+  return {
+    lectures: videos.map((v) => v.id),
+    missions: practice.map((m) => m.videoId),
+    skills: skills.map((s) => s.id),
+    terms: glossary.map((t) => t.id),
+    theory: theory.map((c) => c.id),
+  };
+}
 
 /** 유튜브 썸네일 (영상만, 재생목록은 id가 영상이 아니라서 없음) */
 export function thumbnailFor(video: Video): string | undefined {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Button } from "./Button";
 import {
@@ -35,11 +35,17 @@ export interface LectureCardProps {
   /** 플레이리스트면 "재생목록" 표시 */
   kind?: "video" | "playlist";
   /** 핵심 용어 (최대 3개). 태그를 누르면 짧은 설명과 용어집 링크가 열린다 */
-  terms?: { id: string; term: string; short: string }[];
+  terms?: { id: string; term: string; short: string; action?: ReactNode }[];
   /** true면 추천 이유 전체를 박스로, false면 첫 문장만 흐린 글씨로 보여 준다 */
   fullReason?: boolean;
   /** 로드맵에서 가장 먼저 볼 강의 표시 */
   startHere?: boolean;
+  /** 카드 오른쪽 위 동작(예: 저장 버튼). 44px 정사각형을 권장 */
+  headerAction?: ReactNode;
+  /** "자세히 보기" 안 맨 아래에 붙는 내용(예: 강의 보고 해보기) */
+  extra?: ReactNode;
+  /** 자세히 보기를 펼친 채로 시작 */
+  defaultOpen?: boolean;
   className?: string;
 }
 
@@ -90,10 +96,13 @@ export function LectureCard({
   terms = [],
   fullReason = true,
   startHere = false,
+  headerAction,
+  extra,
+  defaultOpen = false,
   className,
 }: LectureCardProps) {
   const uid = useId();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [termId, setTermId] = useState<string | null>(null);
   const [thumbOk, setThumbOk] = useState(true);
   const selected = terms.find((t) => t.id === termId);
@@ -101,10 +110,11 @@ export function LectureCard({
   return (
     <article
       className={cn(
-        "rounded-xl border border-border bg-surface p-5",
+        "relative rounded-xl border border-border bg-surface p-5",
         className,
       )}
     >
+      {headerAction && <div className="absolute top-2.5 right-2.5">{headerAction}</div>}
       {startHere && (
         <p className="mb-3 inline-flex items-center rounded-full bg-accent px-3 py-1 text-[13px] font-bold text-accent-fg">
           여기서 먼저 시작하세요
@@ -113,12 +123,13 @@ export function LectureCard({
       {/* 강사 */}
       <header>
         {instructorBadge && (
-          <p className="eyebrow-ko text-accent-ink">{instructorBadge}</p>
+          <p className={cn("eyebrow-ko text-accent-ink", Boolean(headerAction) && "pr-10")}>{instructorBadge}</p>
         )}
         <p
           className={cn(
             "text-[19px] font-bold leading-snug tracking-[-0.02em] text-fg",
             instructorBadge && "mt-1.5",
+            Boolean(headerAction) && "pr-10",
           )}
         >
           {instructorName}
@@ -254,7 +265,7 @@ export function LectureCard({
         {terms.length > 0 && (
           <div className="mt-5">
             <p className="text-[13px] font-semibold text-fg">핵심 용어</p>
-            <ul className="mt-2.5 flex flex-wrap gap-2">
+            <ul className="mt-2.5 flex flex-wrap gap-2" data-testid="card-terms">
               {terms.map((t) => (
                 <li key={t.id}>
                   <button
@@ -286,18 +297,22 @@ export function LectureCard({
                   <p className="text-[15px] leading-relaxed text-fg">
                     {selected.short}
                   </p>
-                  <Link
-                    href={`/glossary#${selected.id}`}
-                    className="mt-1.5 inline-flex items-center gap-1 rounded-full text-sm font-medium text-accent-ink"
-                  >
-                    자세히 보기
-                    <IconArrowUpRight size={14} />
-                  </Link>
+                  <div className="mt-1.5 flex items-center justify-between gap-2">
+                    <Link
+                      href={`/glossary#${selected.id}`}
+                      className="inline-flex min-h-11 items-center gap-1 rounded-full text-sm font-medium text-accent-ink"
+                    >
+                      자세히 보기
+                      <IconArrowUpRight size={14} />
+                    </Link>
+                    {selected.action}
+                  </div>
                 </>
               )}
             </div>
           </div>
         )}
+        {extra}
       </div>
     </article>
   );

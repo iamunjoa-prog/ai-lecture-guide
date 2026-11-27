@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AppShell, LectureCard, ResultHero, RoadmapStep, Slide, type ResultHeroChip } from "@/components/ui";
+import { AppShell, LectureCard, ResultHero, RoadmapStep, Slide, type ResultHeroChipGroup } from "@/components/ui";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { AffiliateBlock } from "@/components/AffiliateBlock";
 import { CriteriaSheet } from "@/components/CriteriaSheet";
@@ -8,9 +8,18 @@ import { ResultActions } from "@/components/ResultActions";
 import { ResultEmptyState } from "@/components/ResultEmptyState";
 import { StarterTerms } from "@/components/StarterTerms";
 import { TheorySection } from "@/components/TheorySection";
-import { credentialBadge, glossary, instructors, theory, thumbnailFor, videos } from "@/components/catalog";
-import { decodeDiagnosis, type SearchParamsRecord } from "@/lib/diagnosis-state";
-import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_DESCRIPTIONS, LEVEL_LABELS } from "@/lib/questions";
+import { credentialBadge, glossary, instructors, practice, skills, theory, thumbnailFor, videos } from "@/components/catalog";
+import { PracticeMissionBlock, resolvePrompts } from "@/components/PracticeMissionBlock";
+import { WeeklyMissionCard } from "@/components/WeeklyMissionCard";
+import { SkillsSection } from "@/components/SkillsSection";
+import { SiteHeaderBar } from "@/components/SiteHeaderBar";
+import { SaveToggle } from "@/components/saved/SaveToggle";
+import { RememberDiagnosis } from "@/components/saved/RememberDiagnosis";
+import { decodeDiagnosis, diagnosisHref, type SearchParamsRecord } from "@/lib/diagnosis-state";
+import { practiceById, weeklyMission } from "@/lib/practice";
+import { indexVideos, selectSkills } from "@/lib/skills";
+import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_LABELS } from "@/lib/questions";
+import { buildConclusion } from "@/lib/conclusion";
 import { glossaryById, selectStarterTerms, termsForVideo } from "@/lib/glossary";
 import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
 import affiliateJson from "@data/affiliate.json";
@@ -50,43 +59,56 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
 
   const affiliateItems = selectAffiliate(diagnosis, affiliateJson as unknown as AffiliateItem[], 2);
 
-  const chips: ResultHeroChip[] = [
-    { label: levelLabel },
-    ...(diagnosis.domains.length > 0
-      ? diagnosis.domains.map((d): ResultHeroChip => ({ label: DOMAIN_LABELS[d] }))
-      : [{ label: "분야 미정" } satisfies ResultHeroChip]),
-    { label: GOAL_LABELS[diagnosis.goal] },
+  const chipGroups: ResultHeroChipGroup[] = [
+    { label: "수준", chips: [{ label: levelLabel }] },
+    {
+      label: "분야",
+      chips:
+        diagnosis.domains.length > 0 ? diagnosis.domains.map((d) => ({ label: DOMAIN_LABELS[d] })) : [{ label: "분야 미정" }],
+    },
+    // 목표는 고른 순서(우선순위)대로 하나씩. 목표가 여럿이면 첫 목표에 '1순위'
+    {
+      label: "목표",
+      chips: diagnosis.goals.map((g, i) => ({
+        label: GOAL_LABELS[g],
+        badge: i === 0 && diagnosis.goals.length > 1 ? "1순위" : undefined,
+      })),
+    },
   ];
-  if (diagnosis.preferKorean) chips.push({ label: "한국어 우선" });
+  if (diagnosis.preferKorean) chipGroups.push({ label: "언어", chips: [{ label: "한국어 우선" }] });
+  const conclusion = buildConclusion(diagnosis);
+
+  // 강의 보고 해보기 · 이번 주 실습 미션
+  const missionsById = practiceById(practice);
+  const practiceStep = roadmap.steps.find((st) => st.label === STEP_LABELS.practice);
+  const weekly = weeklyMission(
+    diagnosis,
+    roadmapVideos,
+    missionsById,
+    (practiceStep?.items ?? []).map((it) => it.video.id),
+  );
+  const weeklyStepIndex = weekly ? roadmap.steps.findIndex((st) => st.items.some((it) => it.video.id === weekly.video.id)) : -1;
+
+  // 요즘 주목받는 AI 스킬 (입문자는 빈 목록)
+  const pickedSkills = selectSkills(diagnosis, skills);
+  const roadmapIds = new Set(roadmapVideos.map((v) => v.id));
 
   return (
     <main className="flex min-h-dvh flex-col bg-bg">
+      <RememberDiagnosis href={diagnosisHref(diagnosis)} />
       {/* 키노트 히어로 */}
       <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
-        <div className="flex h-14 items-center">
-          <Link
-            href="/"
-            aria-label="처음 화면으로"
-            className="-ml-1 inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
-          >
-            AI 강의 길잡이
-          </Link>
-        </div>
+        <SiteHeaderBar />
         <ResultHero
           eyebrow="진단 완료"
           title={
             <>
-              <span className="text-accent">{levelLabel}</span> 맞춤{" "}
-              <br />
+              <span className="text-accent">{levelLabel}</span> 맞춤 <br />
               학습 로드맵
             </>
           }
-          description={
-            lectureCount > 0
-              ? `${LEVEL_DESCRIPTIONS[diagnosis.level]} 선별된 유튜브 강의 ${lectureCount}개로 구성했어요.`
-              : LEVEL_DESCRIPTIONS[diagnosis.level]
-          }
-          chips={chips}
+          conclusion={conclusion}
+          chipGroups={chipGroups}
           jump={{ href: "#roadmap", label: "추천 강의 바로 보기" }}
         />
       </Slide>
@@ -125,6 +147,19 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           )}
         </div>
 
+        {weekly && (
+          <WeeklyMissionCard
+            mission={weekly.mission}
+            prompts={resolvePrompts(weekly.mission, diagnosis.domains)}
+            lecture={{
+              title: weekly.video.title,
+              instructorName: instructors.find((i) => i.id === weekly.video.instructorId)?.name ?? "",
+              href: `#${lectureAnchorId(weekly.video.id)}`,
+              stepLabel: weeklyStepIndex >= 0 ? `${weeklyStepIndex + 1}단계` : undefined,
+            }}
+          />
+        )}
+
         {roadmap.steps.length === 0 ? (
           <p className="rounded-xl border border-border p-6 text-center text-fg-muted">
             아직 꼭 맞는 강의를 찾지 못했습니다. 다른 분야나 목표로 다시 진단해 보세요.
@@ -140,30 +175,56 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
                 isFirst={i === 0}
                 isLast={i === roadmap.steps.length - 1}
               >
-                {step.items.map(({ video, instructor, reason }, idx) => (
-                  <div key={video.id} id={lectureAnchorId(video.id)} className="scroll-mt-6">
-                    <LectureCard
-                      instructorName={instructor.name}
-                      instructorTitle={instructor.title}
-                      instructorBadge={credentialBadge(instructor)}
-                      reason={reason}
-                      videoTitle={video.title}
-                      durationMin={video.durationMin}
-                      language={video.language}
-                      hasKoreanSubtitle={video.hasKoreanSubtitle}
-                      takeaways={video.takeaways}
-                      url={video.url}
-                      thumbnailUrl={thumbnailFor(video)}
-                      kind={video.kind}
-                      fullReason={idx === 0}
-                      startHere={i === 0 && idx === 0}
-                      terms={termsForVideo(video, byId).map(({ id, term, short }) => ({ id, term, short }))}
-                    />
-                  </div>
-                ))}
+                {step.items.map(({ video, instructor, reason }, idx) => {
+                  const mission = missionsById.get(video.id);
+                  return (
+                    <div key={video.id} id={lectureAnchorId(video.id)} className="scroll-mt-6">
+                      <LectureCard
+                        instructorName={instructor.name}
+                        instructorTitle={instructor.title}
+                        instructorBadge={credentialBadge(instructor)}
+                        reason={reason}
+                        videoTitle={video.title}
+                        durationMin={video.durationMin}
+                        language={video.language}
+                        hasKoreanSubtitle={video.hasKoreanSubtitle}
+                        takeaways={video.takeaways}
+                        url={video.url}
+                        thumbnailUrl={thumbnailFor(video)}
+                        kind={video.kind}
+                        fullReason={idx === 0}
+                        startHere={i === 0 && idx === 0}
+                        terms={termsForVideo(video, byId).map(({ id, term, short }) => ({
+                          id,
+                          term,
+                          short,
+                          action: <SaveToggle kind="term" id={id} label={`용어 저장: ${term}`} />,
+                        }))}
+                        headerAction={<SaveToggle kind="lecture" id={video.id} label={`강의 저장: ${video.title}`} />}
+                        extra={
+                          mission ? (
+                            <PracticeMissionBlock mission={mission} prompts={resolvePrompts(mission, diagnosis.domains)} />
+                          ) : undefined
+                        }
+                      />
+                    </div>
+                  );
+                })}
               </RoadmapStep>
             ))}
           </ol>
+        )}
+
+        {roadmap.steps.length > 0 && (
+          <SkillsSection
+            skills={pickedSkills}
+            isBeginner={diagnosis.level === "beginner"}
+            levelLabel={levelLabel}
+            videosById={indexVideos(videos)}
+            instructors={instructors}
+            roadmapIds={roadmapIds}
+            termsById={byId}
+          />
         )}
 
         {roadmap.steps.length > 0 && (
@@ -177,12 +238,17 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
         <section className="mt-4 rounded-xl bg-surface-2 px-6 py-6">
           <p className="eyebrow text-fg-muted">Selection</p>
           <p className="mt-2 text-[15px] leading-relaxed text-fg">
-            AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 유튜브 강의만 선별했습니다. 모든 링크는 직접
-            확인했습니다.
+            AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 유튜브 강의만 선별했습니다. 모든 링크는 직접 확인했습니다.
           </p>
           <CriteriaSheet className="mt-2" />
         </section>
-        <p className="mt-6 text-[13px] text-fg-muted">
+        <p className="mt-6 flex flex-wrap gap-x-5 text-[13px] text-fg-muted">
+          <Link href="/saved" className="inline-flex min-h-11 items-center underline underline-offset-4">
+            내 학습함
+          </Link>
+          <Link href="/skills" className="inline-flex min-h-11 items-center underline underline-offset-4">
+            요즘 주목받는 AI 스킬
+          </Link>
           <Link href="/privacy" className="inline-flex min-h-11 items-center underline underline-offset-4">
             개인정보 처리방침
           </Link>

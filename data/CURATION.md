@@ -1,6 +1,6 @@
 # 큐레이션 노트 (Agent A)
 
-검증일: 2026-11-27 · 강사 19명 · 강의 65개 (영상 51 · 재생목록 14, 한국어 13개) — 2차 보강 + 사실 검증(2026-11-27) 반영
+검증일: 2026-11-27 · 강사 19명 · 강의 70개 (영상 56 · 재생목록 14, 한국어 13개) — 2차 보강 + 사실 검증 + 3차 정비(2026-11-27) 반영
 
 > **사실 검증 반영**: 아래 표·기록은 검증 전 작성본이라 일부가 옛 내용이에요(예: 제거된 강의, 「앤드루 응」 표기). 최신 판단은 [`VERIFICATION.md`](./VERIFICATION.md)를 따르세요.
 
@@ -28,7 +28,7 @@
 | moon-il-chul | professor | KAIST 공식 MOOC(KOOC) 채널의 「인공지능 및 기계학습 개론1」 |
 | snu-ai-institute | professor, official_channel | 서울대학교 AI연구원 공식 채널, 서울대 교수진 강의 |
 | google-for-developers | official_channel | (2차) Google 공식 개발자 채널(@GoogleDevelopers). ADK·AI Studio 제작팀 영상 |
-| google-workspace | official_channel | (2차) Google Workspace 공식 채널(@googleworkspace). 비개발자용 Gems·Workspace Studio 레슨이라 개발자 채널과 따로 둠 |
+| google-workspace | official_channel | (2차) Google Workspace 공식 채널(@googleworkspace). 비개발자용 Gemini·Workspace Studio 레슨이라 개발자 채널과 따로 둠 (3차: Gems 레슨 제거, 「Gemini at Work」 6강·마케팅 레슨 추가) |
 | microsoft | official_channel | (2차) Microsoft Developer(@MicrosoftDeveloper) 본 채널 + Microsoft 공식 제품 시연 채널 Microsoft Mechanics(@MSFTMechanics, `check-links` 허용 목록에 추가) |
 | naver-d2 | official_channel | (2차) 네이버 공식 기술 채널(@naver_d2). NAVER ENGINEERING DAY 등 사내 기술 행사 발표 |
 | kakao-tech | official_channel | (2차) 카카오 공식 기술 채널(@kakaotech). if(kakao) 개발자 콘퍼런스 세션 |
@@ -57,6 +57,8 @@
   - `PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv` (AI Fluency Course, 70분): 코스형 목록이라 영상이 다 보이지 않았어요. 레슨당 4~12분, 14개 안팎으로 보고 추정했어요.
   - `d95J8yzvjbQ` (The Thinking Game, 84분): 다큐멘터리 공개 상영 시간을 바탕으로 추정했어요.
   - `PLLHTzKZzVU9eaEyErdV26ikyolxOsz6mq` (2470분), `PLpIPLT0Pf7IoTxTCi2MEQ94MZnHaxrP0j` (1970분): 첫 페이지 합계라 실제는 더 길 수 있어요.
+- **3차 정비 추가분 6개**: 공식 채널 `/search` 결과에 표시된 재생 시간을 분 단위로 반올림했어요(추정값 없음) — `uDr0xdA_E_A` 8:32→9 · `YkCDVn3_wiw` 20:16→20 · `R-KJgjIrh24` 2:51→3 · `_jjSS0qGFbI` 3:44→4 · `6Mmevs1877A` 15:47→16 · `IJsp9AC-n7Q` 8:05→8.
+- 3차 정비 때 AI Fluency 재생목록(`PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv`)의 레슨 12개(예고편 포함) 길이를 재생목록 페이지에서 합해 보니 약 71분이라 데이터의 70분 추정과 거의 같았어요.
 
 ## 자막(hasKoreanSubtitle)
 - 한국어 강의 14개는 모두 `true`예요.
@@ -64,17 +66,17 @@
 - 나머지 영어 강의는 공식 한국어 자막을 확인하지 못해 `false`로 했어요. 자동 번역 자막은 치지 않았어요.
 
 ## 커버리지 (level × goal, 강의 수)
-2차 보강 후 값이에요 (`npm run report -- --summary`로 다시 계산할 수 있어요). 괄호 안은 보강 전(태그 보정 후) 값이에요.
+3차 정비 후 값이에요 (`npm run report -- --summary`로 다시 계산할 수 있어요). 괄호 안은 3차 정비 전(사실 검증 후, 65개) 값이에요.
 
 | | understand | use_tools | build_agents | build_products |
 |---|---|---|---|---|
-| beginner | 10 (10) | 12 (9) | **5 (0)** | **4 (1)** |
-| user | 15 (15) | 16 (13) | **8 (0)** | 8 (4) |
-| practitioner | 18 (16) | 8 (9) | 11 (4) | 10 (10) |
-| developer | 12 (10) | 5 (5) | 16 (6) | 10 (9) |
+| beginner | 10 (10) | 14 (12) | 5 (5) | 4 (4) |
+| user | 16 (15) | 20 (16) | 8 (8) | 8 (8) |
+| practitioner | 20 (18) | 10 (8) | 11 (11) | 11 (10) |
+| developer | 13 (12) | 5 (5) | 16 (16) | 11 (10) |
 
-분야별: automation 38 (25) · coding 33 (24) · data 28 (24) · education 14 (14) · marketing 18 (14) · startup 24 (20)
-한국어 친화 강의 14개 (9개) — 사실 검증 후 값(`npm run report -- --summary`)
+모든 칸이 2 이상이에요(최저 4). 분야별: automation 40 (38) · coding 34 (33) · data 32 (28) · education 16 (14) · marketing 21 (18) · startup 29 (24)
+한국어 친화 강의 14개 (14개). 2차 보강 전후 값은 git 기록과 [`VERIFICATION.md`](./VERIFICATION.md) 3장을 보세요.
 
 ## 태그 보정 기록 (Agent E, 2026-11-27)
 `npm run report`(수준 4 × 목표 4 × 분야 조합 9 × 한국어 선호 2 = 288개 페르소나)로 로드맵을 훑어보고, 강의 내용과 대상이 태그와 어긋난 곳을 고쳤어요. 재생목록은 목록 페이지의 실제 레슨 제목을 보고 판단했어요. 링크·제목·요약·takeaways는 바꾸지 않았어요.
@@ -122,7 +124,7 @@ QA가 찾은 콘텐츠 공백을 채우려고 23개를 추가했어요. 모두 �
 | 강의 | 강사 | 수준 | 비고 |
 |---|---|---|---|
 | Build custom AI agents in Workspace Studio… (`AkUUeePtbe4`) | google-workspace | beginner,user | 노코드 에이전트 |
-| Gemini at Work 5강: Gmail·Custom Gems (`qtO940hejdE`) | google-workspace | beginner,user | use_tools + build_agents |
+| ~~Gemini at Work 5강: Gmail·Custom Gems (`qtO940hejdE`)~~ — 3차 정비에서 제거(Gems 종료·전환) | google-workspace | beginner,user | use_tools + build_agents |
 | Create agents fast with Agent Builder in Copilot (`dlS2meHJWAk`) | microsoft (Mechanics) | beginner,user | 노코드 |
 | Build Hour: Workspace agents in ChatGPT (`kktBVmjA19A`) | openai | user,practitioner | 팀 공유 에이전트 |
 | What are skills? (`bjdBVZa66oU`) | anthropic (@claude) | beginner,user | |
@@ -180,3 +182,62 @@ QA가 찾은 콘텐츠 공백을 채우려고 23개를 추가했어요. 모두 �
 - 강사 19명: ✅ 7 · ⚠️ 수정 12 · ❌ 제외 0
 - 강의: 3개 제거(DeepLearning.AI 코스 2개는 앤드루 응이 강사가 아님, MABC 웨비나는 종료된 챌린지용), 63개의 요약·takeaways를 제목·공식 정보 기준으로 보수적으로 재작성
 - 요약문은 영상을 직접 시청해 확인한 것이 아니에요.
+
+## 3차 정비 (2026-11-27)
+종료되거나 바뀌는 중인 기능을 다루는 강의를 정리하고, 스킬 공백(data/SKILLS_RESEARCH.md)의 후보 강의를 넣었어요. **영상은 이번에도 시청하지 않았어요.** 새 강의의 요약·takeaways는 oEmbed 제목과 공식 채널 검색 결과에 보이는 설명 첫 줄만 근거로 보수적으로 썼어요. 강의 65개 → **70개** (제거 1 · 추가 6 · 문구 갱신 2).
+
+### 공식 문서로 다시 확인한 사실 (curl로 원문 확인)
+- **OpenAI 맞춤 GPT 종료** — [Custom GPT retirement and migration FAQ](https://help.openai.com/en/articles/20001519-custom-gpt-retirement-and-migration-faq): "Custom GPTs are scheduled to retire on Dec 11, 2026." FedRAMP·유예 승인 Enterprise 워크스페이스는 2027-02-28. 해당 Enterprise 워크스페이스는 2026-10-26부터 새 GPT 생성 중단. GPT는 플러그인으로 옮기고(지시문 → 플러그인 안의 스킬), 계속 쓰는 작업은 프로젝트로 대신할 수 있다고 안내해요.
+- **Gemini Gems → 스킬 전환** — [About the transition from Gems to skills](https://support.google.com/gemini/answer/18560919): "Starting in November 2026, Gems will transition to skills in Gemini Apps for personal Google Accounts, and in 2027, for work and school accounts." 개인 계정은 "before December 17, 2026"까지 Gem 파일을 내려받을 수 있고, 그 뒤에는 Gems를 쓸 수 없어요(자동으로 스킬로 다시 만들어 줌).
+- **OpenAI Agent Builder** — 2차 보강 때 이미 종료 공지(2026-06-03)로 후보에서 뺐어요. 지금 데이터에는 없어요.
+- **유지 판단에 쓴 확인**: Microsoft Learn [Agent Builder overview](https://learn.microsoft.com/en-us/plugins/agent-builder)(현재 문서, 스킬 추가 기능까지 안내) · OpenAI Help [ChatGPT Workspace Agents for Enterprise and Business](https://help.openai.com/en/articles/20001143-chatgpt-workspace-agents-for-enterprise-and-business)(현재 기능, 맞춤 GPT 종료와 별개) · Claude Help 리서치·커넥터 문서, OpenAI·Gemini 딥 리서치 도움말(모두 200 응답, 현재 기능) · Google Cloud [Gemini Enterprise](https://cloud.google.com/gemini-enterprise)(현재 제품).
+
+### 전수 점검 결과 (65개 강의의 제목·요약·takeaways·용어·실습 미션)
+맞춤 GPT·Gems·Agent Builder·Assistants·플러그인·Canvas·Projects 같은 낱말로 훑고, 제품 사용법 영상은 공식 채널 검색 결과의 공개 시점을 확인했어요.
+
+| 강의 | 결정 | 이유 |
+|---|---|---|
+| `qtO940hejdE` Gmail Help Me Write·AI 요약·**Custom Gems** (Gemini at Work 5강) | **제거** | 제목의 절반이 Gems 만들기예요. 개인 계정은 2026-12-17 이후 Gems를 쓸 수 없고 업무·학교 계정도 2027년에 스킬로 바뀌어요. 핵심 실습(Gem 만들기 화면)이 곧 맞지 않게 돼요. 지시문 쓰는 요령은 이미 `bjdBVZa66oU`(What are skills?)·Claude Code Skills 재생목록이 다뤄요. 실습 미션·`reusable-skills.lectureIds`에서도 뺐어요. **대체**: 같은 시리즈 6강 `uDr0xdA_E_A`(아래) |
+| `dlS2meHJWAk` Create agents fast with Agent Builder in Copilot | 유지 | OpenAI Agent Builder와 다른 Microsoft 365 Copilot 기능이고, Microsoft Learn에 현재 문서가 있어요. 영상도 약 2개월 전 공개 |
+| `kktBVmjA19A` Build Hour: Workspace agents in ChatGPT | 유지 | 워크스페이스 에이전트는 현재 기능(도움말 문서 최근 갱신)이고 맞춤 GPT 종료 대상이 아니에요 |
+| `EWvNQjAaOHw` 카파시 How I use LLMs | 유지 | 일부에서 당시 ChatGPT 기능을 보여 줄 수 있지만 주제는 LLM 활용 전반이에요. 요약에 이미 "2025년 2월 공개, 도구 화면은 달라졌을 수 있어요"가 있어요 |
+| `OfUn6HjwXhI` Behind the prompt: Prompting tips for Claude.ai | **유지 + 문구 갱신** | 채널 검색 기준 약 3년 전 영상이라 화면이 낡았어요. 핵심(요청 요령)은 그대로 통해서 남기고, 요약에 "몇 년 전 공개라 화면은 지금과 달라요"를 넣었어요 |
+| `ycAnRjyYC6o` 챗지피티 A to Z (김성훈) | **유지 + 문구 갱신** | 약 3년 전 강연. 개념·활용 아이디어 중심이라 남기고, 요약에 "2023년 무렵 강연이라 서비스 화면·기능은 지금과 달라요"를 넣었어요 |
+| `7dsaxBUZPII` Gemini Canvas 마케팅 앱 | 유지 | 약 1년 전 영상이지만 Canvas는 현재 기능이에요 |
+| 그 밖의 제품 영상(ChatGPT Work 재생목록 3개, Claude Cowork·Skills, ChatGPT 웹앱, AI Studio 2개, Copilot Studio, Workspace Studio 등) | 유지 | 공개 1년 이내이고 종료·전환 공지를 찾지 못했어요 |
+
+실습 미션 점검: Gem·GPT를 직접 쓰게 하는 미션은 `qtO940hejdE` 하나였고(강의와 함께 제거) 나머지는 모두 도구에 묶이지 않은 미션이에요.
+
+### 추가한 강의 6개 (모두 oEmbed로 제목·업로드 채널 재확인, `hasKoreanSubtitle: false`)
+| 강의 | 강사(채널) | 수준 · 목표 | 연결 스킬 | 근거 |
+|---|---|---|---|---|
+| `uDr0xdA_E_A` How to Use Agentic AI for Business with Gemini Enterprise \| Gemini at Work - Lesson 6 | google-workspace (@googleworkspace) | beginner·user · use_tools, build_agents | delegate-to-agents | 제거한 5강의 대체. 같은 공식 시리즈, 약 7개월 전 공개. Gemini Enterprise는 현재 제품 |
+| `YkCDVn3_wiw` Introduction to Deep Research | openai (@OpenAI) | user·practitioner · use_tools, understand | deep-research | 채널 검색 설명: "Mark Chen, Josh Tobin, Neel Ajjarapu, and Isa Fulford introduce and demo deep research from Tokyo." 2025년 2월 출시 발표라 요약에 "지금 화면·모델과는 달라요"를 넣었어요 |
+| `R-KJgjIrh24` Getting started with research in Claude.ai | anthropic (@anthropic-ai) | beginner·user · use_tools | deep-research | 설명 첫 줄 "See how Claude's Research feature transforms how you find and analyze information." |
+| `_jjSS0qGFbI` Getting started with connectors in Claude.ai | anthropic (@anthropic-ai) | user·practitioner · use_tools | connect-tools-and-data | 설명 첫 줄 "Learn how to supercharge Claude by connecting the tools you already use." 활용(user) 수준 공백을 메워요 |
+| `6Mmevs1877A` How AI jailbreaks work and what stops them. (… feat. Mark Russinovich) | microsoft (@MSFTMechanics, 기존 허용 채널) | practitioner·developer · understand, build_products | agent-safety | 설명 첫 줄 "What are prompt injection attacks and how do you stop them?" 1년 이상 된 영상이라 요약에 "제품 이름은 바뀌었을 수 있어요"를 넣었어요. 개념(탈옥·인젝션·방어 갈래)은 지금도 유효 |
+| `IJsp9AC-n7Q` How to use AI for Marketing with NotebookLM & Gemini Deep Research \| Lesson 1 | google-workspace (@googleworkspace) | beginner·user · use_tools | deep-research | 마케팅 팀용 AI Boost Bootcamp 레슨(설명 첫 줄), 약 5개월 전 공개. 아래 @Google 데모 대신 넣었어요 |
+
+실습 미션도 6개 추가했어요(모두 `needsTool: "chat"`, 도구 이름에 묶이지 않음, 자리표시자 최대 1개, 강의 내용을 단정하지 않음). 숨은 지시 미션(`6Mmevs1877A`)은 가짜 메일로만 연습하고 남의 서비스를 시험하지 말라는 주의를 달았어요.
+
+### 넣지 않은 후보와 이유
+- **`jv-lpIsnLOo` "Introduction to Deep Research"** — oEmbed로는 OpenAI 채널·같은 제목이 확인되지만, 채널 검색·일반 검색 어디에도 목록으로 나오지 않아 길이·설명을 확인할 수 없었어요(일부 공개나 중복 업로드로 보여요). 같은 제목으로 채널에 공개돼 있고 설명·길이를 확인할 수 있는 `YkCDVn3_wiw`를 대신 넣었어요.
+- **`Y0KidGr9Z2Y` AI Fluency 8강(Discernment) · `QbLf2zb3oPc` 10강(Diligence)** — AI Fluency 재생목록 페이지에서 두 레슨 모두 이미 연결한 `PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv` 안에 들어 있는 것을 확인했어요(예고편 포함 12개). 따로 넣으면 같은 내용이 두 번 추천돼서 넣지 않았어요. (`W4Ua6XFfX9w` 2B강도 같은 재생목록 안에 있어요.)
+- **`buwMJxvW7wI` Gemini Deep Research Demo (@Google)** — @Google은 Google 공식 채널이 맞지만(oEmbed author_url `@Google`), 1년도 더 된 짧은 데모라 화면이 낡았고, 넣으려면 허용 채널을 새로 추가해야 해요. 이미 등록된 @googleworkspace의 더 최근 딥 리서치 레슨(`IJsp9AC-n7Q`)으로 대신했어요. 그래서 `THIRD_PARTY_CHANNELS`는 바꾸지 않았어요.
+- **`LCEmiRjPEtQ` 카파시 "Software Is Changing (Again)" (@ycombinator)** — 1차 큐레이션 때 투자사 채널이라 뺀 영상이고, 내용도 시청으로 확인하지 못했어요. 그대로 제외했어요.
+
+### 스킬 강의 연결 변경 (data/skills.json `lectureIds`, 앞쪽이 더 잘 맞음)
+| 스킬 | 전 | 후 |
+|---|---|---|
+| delegate-to-agents | tYOI-WoLS_o, PLOjSa4kyvo_M, PLHiXJG-Lqz-s | + **uDr0xdA_E_A** (4번째) |
+| reusable-skills | bjdBVZa66oU, PLmWCw…, dlS2meHJWAk, qtO940hejdE | bjdBVZa66oU, PLmWCw…, dlS2meHJWAk (**qtO940hejdE 제거**) |
+| connect-tools-and-data | PLyCki2K0Lg, 2v6zhEFh3HI, DRghWwm3dt8 | **_jjSS0qGFbI**, PLyCki2K0Lg, 2v6zhEFh3HI, DRghWwm3dt8 |
+| deep-research | EWvNQjAaOHw, t2Zo3YAJdj4 | **R-KJgjIrh24, YkCDVn3_wiw, IJsp9AC-n7Q**, EWvNQjAaOHw (t2Zo3YAJdj4는 조사 전용이 아니라 뺌) |
+| agent-safety | PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO, 2v6zhEFh3HI | **6Mmevs1877A**, PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO, 2v6zhEFh3HI |
+| 나머지 6개 | 그대로 | 그대로 (verify-ai-output은 AI Fluency 재생목록이 분별 레슨을 이미 포함) |
+
+모든 스킬이 강의 3~4개를 가져요. 커버리지는 위 표(모든 칸 ≥ 4). `npm run report -- --summary`: FEW 0 · WEAK 7(정비 전과 같은 수).
+
+### 다시 볼 것
+- 2026-12-11(맞춤 GPT 종료), 2026-12-17(개인 계정 Gems 종료) 뒤에 OpenAI·Google 도움말을 다시 확인하세요. 업무·학교 계정 Gems 전환(2027)도 일정이 바뀔 수 있어요.
+- `YkCDVn3_wiw`·`6Mmevs1877A`·`OfUn6HjwXhI`·`ycAnRjyYC6o`는 오래된 영상이라 더 새 공식 영상이 나오면 바꾸는 것이 좋아요.

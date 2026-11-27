@@ -91,7 +91,7 @@ describe("selectTheory (실제 데이터)", () => {
   for (const level of LEVELS) {
     for (const goal of GOALS) {
       it(`${level} × ${goal}: 같은 수준 3개, core 먼저, 서로 다름`, () => {
-        const picked = selectTheory({ level, goal }, theory);
+        const picked = selectTheory({ level, goals: [goal] }, theory);
         expect(picked).toHaveLength(3);
         expect(picked[0].core).toBe(true);
         expect(new Set(picked.map((c) => c.id)).size).toBe(3);
@@ -106,20 +106,36 @@ describe("selectTheory (실제 데이터)", () => {
 
   it("입문자 안전 개념: 업무 도구는 '개인정보', 그 외 목표는 '할루시네이션'을 본다", () => {
     for (const goal of GOALS) {
-      const ids = selectTheory({ level: "beginner", goal }, theory).map((c) => c.id);
+      const ids = selectTheory({ level: "beginner", goals: [goal] }, theory).map((c) => c.id);
       expect(ids).toContain(goal === "use_tools" ? "do-not-share-sensitive-info" : "ai-can-be-wrong");
     }
   });
 
   it("실무자 에이전트 목표는 '가드레일과 사람 검토'를 본다", () => {
-    expect(selectTheory({ level: "practitioner", goal: "build_agents" }, theory).map((c) => c.id)).toContain(
+    expect(selectTheory({ level: "practitioner", goals: ["build_agents"] }, theory).map((c) => c.id)).toContain(
       "guardrails-and-human-review",
     );
   });
 
+  it("목표 여러 개: core + 목표 우선순위 순서로 돌아가며, 항상 같은 수준 3개", () => {
+    const combos = [["use_tools", "build_agents"], ["build_agents", "use_tools"], ["understand", "build_products"], [...GOALS]] as Goal[][];
+    for (const level of LEVELS) {
+      for (const goals of combos) {
+        const picked = selectTheory({ level, goals }, theory);
+        expect(picked).toHaveLength(3);
+        expect(picked[0].core).toBe(true);
+        expect(new Set(picked.map((c) => c.id)).size).toBe(3);
+        for (const c of picked) expect(c.level).toBe(level);
+        // 1순위 목표에 맞는 개념이 있으면 2번은 그 개념
+        const firstMatch = theory.find((c) => c.level === level && !c.core && c.goals.includes(goals[0]));
+        if (firstMatch) expect(picked[1].id, `${level}/${goals}`).toBe(firstMatch.id);
+      }
+    }
+  });
+
   it("결과가 결정적이다 (같은 입력 → 같은 출력)", () => {
-    const a = selectTheory({ level: "user", goal: "understand" }, theory).map((c) => c.id);
-    const b = selectTheory({ level: "user", goal: "understand" }, theory).map((c) => c.id);
+    const a = selectTheory({ level: "user", goals: ["understand"] }, theory).map((c) => c.id);
+    const b = selectTheory({ level: "user", goals: ["understand"] }, theory).map((c) => c.id);
     expect(a).toEqual(b);
   });
 });
@@ -136,7 +152,7 @@ describe("selectTheory (작은 데이터)", () => {
   ];
 
   it("core 먼저, 목표 일치는 목록 순서, 최대 3개", () => {
-    expect(selectTheory({ level: "beginner", goal: "use_tools" }, data).map((c) => c.id)).toEqual([
+    expect(selectTheory({ level: "beginner", goals: ["use_tools"] }, data).map((c) => c.id)).toEqual([
       "b-core",
       "b-tools-1",
       "b-tools-2",
@@ -144,16 +160,36 @@ describe("selectTheory (작은 데이터)", () => {
   });
 
   it("목표 일치가 모자라면 같은 수준으로 목록 순서대로 채운다", () => {
-    expect(selectTheory({ level: "beginner", goal: "build_agents" }, data).map((c) => c.id)).toEqual([
+    expect(selectTheory({ level: "beginner", goals: ["build_agents"] }, data).map((c) => c.id)).toEqual([
       "b-core",
       "b-other",
       "b-tools-1",
     ]);
   });
 
+  it("목표 여러 개는 돌아가며 하나씩 (1순위 → 2순위), 중복 없이", () => {
+    const mixed = [
+      concept("b-core", "beginner", ["understand"], true),
+      concept("b-tools-1", "beginner", ["use_tools"]),
+      concept("b-tools-2", "beginner", ["use_tools"]),
+      concept("b-both", "beginner", ["use_tools", "build_agents"]),
+      concept("b-agents", "beginner", ["build_agents"]),
+    ];
+    expect(selectTheory({ level: "beginner", goals: ["build_agents", "use_tools"] }, mixed).map((c) => c.id)).toEqual([
+      "b-core",
+      "b-both",
+      "b-tools-1",
+    ]);
+    expect(selectTheory({ level: "beginner", goals: ["use_tools", "build_agents"] }, mixed).map((c) => c.id)).toEqual([
+      "b-core",
+      "b-tools-1",
+      "b-both",
+    ]);
+  });
+
   it("다른 수준 개념은 섞지 않는다 (데이터가 모자라면 3개 미만)", () => {
-    expect(selectTheory({ level: "user", goal: "understand" }, data).map((c) => c.id)).toEqual(["u-core", "u-tools"]);
-    expect(selectTheory({ level: "developer", goal: "understand" }, data)).toEqual([]);
+    expect(selectTheory({ level: "user", goals: ["understand"] }, data).map((c) => c.id)).toEqual(["u-core", "u-tools"]);
+    expect(selectTheory({ level: "developer", goals: ["understand"] }, data)).toEqual([]);
   });
 });
 
@@ -188,7 +224,7 @@ describe("lecturesForConcept", () => {
   });
 
   it("실제 로드맵: 로드맵에 있는 강의는 inRoadmap=true", () => {
-    const diagnosis: DiagnosisResult = { level: "developer", domains: ["coding"], goal: "build_agents", preferKorean: false };
+    const diagnosis: DiagnosisResult = { level: "developer", domains: ["coding"], goals: ["build_agents"], preferKorean: false };
     const roadmap = buildRoadmap(diagnosis, videos, instructors);
     const rv = roadmap.steps.flatMap((s) => s.items.map((i) => i.video));
     const rvIds = new Set(rv.map((v) => v.id));

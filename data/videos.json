@@ -58,7 +58,7 @@
     "goals": [
       "use_tools"
     ],
-    "summary": "Claude.ai에서 쓸 수 있는 프롬프트 요령을 Anthropic이 직접 소개하는 짧은 공식 영상이에요.",
+    "summary": "Claude.ai에서 쓸 수 있는 프롬프트 요령을 Anthropic이 직접 소개하는 짧은 공식 영상이에요(몇 년 전 공개라 화면은 지금과 달라요. 요청 요령은 그대로 통해요).",
     "takeaways": [
       "Claude에게 더 잘 요청하는 기본 요령을 알 수 있어요",
       "Anthropic이 권하는 프롬프트 습관을 엿볼 수 있어요",
@@ -1222,7 +1222,7 @@
       "understand",
       "use_tools"
     ],
-    "summary": "업스테이지 김성훈 대표가 챗GPT를 A to Z로 소개하는 한국어 강연이에요(제주창조경제혁신센터 채널).",
+    "summary": "업스테이지 김성훈 대표가 챗GPT를 A to Z로 소개하는 한국어 강연이에요(제주창조경제혁신센터 채널, 2023년 무렵 강연이라 서비스 화면·기능은 지금과 달라요).",
     "takeaways": [
       "챗GPT가 무엇인지 쉬운 말로 이해할 수 있어요",
       "일상과 업무에서 챗GPT를 활용하는 아이디어를 얻을 수 있어요",
@@ -1492,40 +1492,6 @@
       "ai-agent",
       "no-code-automation",
       "workflow"
-    ]
-  },
-  {
-    "id": "qtO940hejdE",
-    "kind": "video",
-    "url": "https://www.youtube.com/watch?v=qtO940hejdE",
-    "title": "How to Use Gmail for Help Me Write, AI Summaries & Build Custom Gems | Gemini at Work - Lesson 5",
-    "instructorId": "google-workspace",
-    "language": "en",
-    "hasKoreanSubtitle": false,
-    "durationMin": 10,
-    "levels": [
-      "beginner",
-      "user"
-    ],
-    "domains": [
-      "automation",
-      "marketing"
-    ],
-    "goals": [
-      "use_tools",
-      "build_agents"
-    ],
-    "summary": "Google 공식 「Gemini at Work」 5강으로, Gmail의 Help me write·AI 요약과 맞춤 Gem 만들기를 다뤄요.",
-    "takeaways": [
-      "Gmail에서 Help me write와 AI 요약을 쓰는 법을 알 수 있어요",
-      "나만의 Gem(맞춤 AI 비서)을 만드는 흐름을 살펴볼 수 있어요",
-      "반복 업무에 Gem을 활용할 아이디어를 얻을 수 있어요"
-    ],
-    "verifiedAt": "2026-11-27",
-    "terms": [
-      "custom-assistant",
-      "system-prompt",
-      "prompt"
     ]
   },
   {
@@ -2180,6 +2146,211 @@
       "vibe-coding",
       "ai-agent",
       "streaming"
+    ]
+  },
+  {
+    "id": "uDr0xdA_E_A",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=uDr0xdA_E_A",
+    "title": "How to Use Agentic AI for Business with Gemini Enterprise | Gemini at Work - Lesson 6",
+    "instructorId": "google-workspace",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 9,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "automation",
+      "startup"
+    ],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
+    "summary": "Google 공식 「Gemini at Work」 6강으로, 업무용 Gemini Enterprise에서 에이전트형 AI를 활용하는 방법을 다뤄요.",
+    "takeaways": [
+      "Gemini Enterprise가 어떤 업무용 AI인지 알 수 있어요",
+      "에이전트를 업무에 활용하는 흐름을 살펴볼 수 있어요",
+      "내 업무에서 AI에게 맡길 일을 떠올려 볼 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "workflow"
+    ]
+  },
+  {
+    "id": "YkCDVn3_wiw",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=YkCDVn3_wiw",
+    "title": "Introduction to Deep Research",
+    "instructorId": "openai",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 20,
+    "levels": [
+      "user",
+      "practitioner"
+    ],
+    "domains": [
+      "marketing",
+      "data",
+      "education",
+      "startup"
+    ],
+    "goals": [
+      "use_tools",
+      "understand"
+    ],
+    "summary": "OpenAI 연구진이 ChatGPT 딥 리서치를 처음 공개하며 소개·시연한 공식 영상이에요(2025년 2월 출시 발표라 지금 화면·모델과는 달라요).",
+    "takeaways": [
+      "딥 리서치가 어떤 일을 하는 기능인지 알 수 있어요",
+      "여러 자료를 찾아 보고서로 정리하는 흐름을 살펴볼 수 있어요",
+      "긴 조사를 AI에게 맡길 때 출처를 확인할 필요를 생각해 볼 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "web-search",
+      "ai-agent",
+      "hallucination"
+    ]
+  },
+  {
+    "id": "R-KJgjIrh24",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=R-KJgjIrh24",
+    "title": "Getting started with research in Claude.ai",
+    "instructorId": "anthropic",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 3,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "marketing",
+      "data",
+      "education",
+      "startup"
+    ],
+    "goals": [
+      "use_tools"
+    ],
+    "summary": "Claude의 리서치(Research) 기능으로 정보를 찾고 분석하는 방법을 보여 주는 Anthropic 공식 짧은 튜토리얼이에요.",
+    "takeaways": [
+      "Claude 리서치 기능을 쓰는 기본 흐름을 알 수 있어요",
+      "여러 번 검색해 정리하는 조사 기능의 쓰임을 파악할 수 있어요",
+      "조사 결과의 출처를 확인하는 습관을 생각해 볼 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "web-search",
+      "hallucination"
+    ]
+  },
+  {
+    "id": "_jjSS0qGFbI",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=_jjSS0qGFbI",
+    "title": "Getting started with connectors in Claude.ai",
+    "instructorId": "anthropic",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 4,
+    "levels": [
+      "user",
+      "practitioner"
+    ],
+    "domains": [
+      "automation",
+      "marketing",
+      "data",
+      "startup"
+    ],
+    "goals": [
+      "use_tools"
+    ],
+    "summary": "평소 쓰는 업무 도구를 커넥터로 Claude.ai에 연결하는 방법을 보여 주는 Anthropic 공식 짧은 튜토리얼이에요.",
+    "takeaways": [
+      "커넥터가 무엇인지 알 수 있어요",
+      "Claude에 업무 도구를 연결하는 기본 흐름을 살펴볼 수 있어요",
+      "연결할 때 권한과 개인정보를 점검할 필요를 생각해 볼 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "mcp",
+      "tool-use",
+      "privacy-security"
+    ]
+  },
+  {
+    "id": "6Mmevs1877A",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=6Mmevs1877A",
+    "title": "How AI jailbreaks work and what stops them. (GPT, DeepSeek, Llama feat. Mark Russinovich)",
+    "instructorId": "microsoft",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 16,
+    "levels": [
+      "practitioner",
+      "developer"
+    ],
+    "domains": [
+      "automation",
+      "coding",
+      "data",
+      "startup"
+    ],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
+    "summary": "Microsoft의 마크 러시노비치가 출연해 AI 탈옥(jailbreak)과 프롬프트 인젝션이 어떻게 일어나고 무엇으로 막는지 다루는 Microsoft Mechanics 공식 영상이에요(공개된 지 1년이 넘어 제품 이름은 바뀌었을 수 있어요).",
+    "takeaways": [
+      "AI 탈옥과 프롬프트 인젝션이 무엇인지 설명할 수 있어요",
+      "AI 앱을 공격에서 지키는 방어 방법의 큰 갈래를 알 수 있어요",
+      "내 AI 활용·개발에서 조심할 점을 점검해 볼 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "guardrails",
+      "ai-safety"
+    ]
+  },
+  {
+    "id": "IJsp9AC-n7Q",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=IJsp9AC-n7Q",
+    "title": "How to use AI for Marketing with NotebookLM & Gemini Deep Research | Lesson 1",
+    "instructorId": "google-workspace",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 8,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "marketing"
+    ],
+    "goals": [
+      "use_tools"
+    ],
+    "summary": "마케팅 팀을 위한 Google Workspace 공식 레슨으로, NotebookLM과 Gemini 딥 리서치를 마케팅 조사에 쓰는 방법을 다뤄요.",
+    "takeaways": [
+      "마케팅 조사에 Gemini 딥 리서치를 쓰는 흐름을 살펴볼 수 있어요",
+      "NotebookLM으로 자료를 모아 정리하는 쓰임을 알 수 있어요",
+      "내 마케팅 업무에 적용할 조사 아이디어를 얻을 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "web-search",
+      "project-knowledge",
+      "file-analysis"
     ]
   }
 ]

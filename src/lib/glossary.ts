@@ -5,7 +5,7 @@
  *
  * 고르는 규칙
  *  - 후보: 사용자 수준과 한 단계 아래 수준의 용어 (입문자는 입문 용어만)
- *  - 점수: 목표 일치 3점
+ *  - 점수: 고른 목표 중 하나라도 일치 3점
  *        + 로드맵 강의 `terms`에 나온 횟수 × 1점 (최대 2점)
  *        + 현재 수준 용어 2점
  *        + 꼭 알아야 할 안전 용어(ESSENTIAL_TERM_IDS) 3점
@@ -96,7 +96,7 @@ export function starterScore(
 ): number {
   const W = STARTER_WEIGHTS;
   let s = 0;
-  if (term.goals.includes(diagnosis.goal)) s += W.goal;
+  if (diagnosis.goals.some((g) => term.goals.includes(g))) s += W.goal;
   s += W.roadmap * Math.min(counts.get(term.id) ?? 0, W.roadmapCap);
   if (term.level === diagnosis.level) s += W.currentLevel;
   if (ESSENTIAL_TERM_IDS.includes(term.id)) s += W.essential;
@@ -145,7 +145,7 @@ export function selectStarterTerms(
       (s) =>
         levelIndex(s.term.level) === cur + 1 &&
         (counts.get(s.term.id) ?? 0) > 0 &&
-        s.term.goals.includes(diagnosis.goal),
+        diagnosis.goals.some((g) => s.term.goals.includes(g)),
     )
     .sort(byScore)
     .slice(0, STARTER_NEXT_MAX);

@@ -1,0 +1,303 @@
+[
+  {
+    "id": "delegate-to-agents",
+    "name": "AI에게 일 맡기기",
+    "tagline": "한 번에 묻고 끝내지 말고, 여러 단계 일을 통째로 맡겨요",
+    "whyNow": "Anthropic 경제 지수(2026년 1월 보고서)에 따르면 Claude.ai에서 일을 통째로 맡기는 '지시형' 대화가 2025년 1월 27%에서 8월 39%로 늘었어요(11월에는 32%). Microsoft 업무 동향 지수(2025)는 에이전트에게 일을 맡기고 관리하는 '에이전트 보스'를 모두의 새 역할로 꼽았어요. ChatGPT Work, Claude Cowork처럼 여러 단계 작업을 맡기는 기능도 주요 서비스에 자리 잡았어요.",
+    "whatYouCanDo": [
+      "자료 조사부터 정리 문서까지 이어지는 일을 한 번에 맡길 수 있어요",
+      "목표·조건·완료 기준을 정해 AI가 중간에 헤매지 않게 할 수 있어요",
+      "AI가 확인을 요청할 때 무엇을 보고 승인할지 판단할 수 있어요"
+    ],
+    "levels": ["user", "practitioner", "developer"],
+    "goals": ["use_tools", "build_agents"],
+    "domains": ["automation", "data", "marketing"],
+    "lectureIds": ["tYOI-WoLS_o", "PLOjSa4kyvo_M", "PLHiXJG-Lqz-s", "uDr0xdA_E_A"],
+    "termIds": ["ai-agent", "human-in-the-loop"],
+    "theoryIds": ["from-chatbot-to-agent", "guardrails-and-human-review"],
+    "firstStep": {
+      "label": "일 맡기기 전에 작업 계획부터 받아 보기",
+      "prompt": "너는 꼼꼼한 업무 비서야. 나는 '이번 달 팀 회의록 5건을 읽고 결정 사항과 할 일을 표로 정리하는 일'을 맡기려고 해. 바로 시작하지 말고 먼저 1) 네가 진행할 단계 목록 2) 나에게 필요한 자료나 확인할 질문 3) 일이 끝났다고 볼 기준을 짧은 목록으로 알려 줘. 내가 계획을 승인하면 그때 시작해 줘."
+    },
+    "sources": [
+      { "title": "Economic Index report: Economic primitives (January 2026)", "url": "https://www.anthropic.com/research/anthropic-economic-index-january-2026-report", "publisher": "Anthropic", "checked": "원문 확인" },
+      { "title": "2025: The Year the Frontier Firm Is Born (Work Trend Index)", "url": "https://www.microsoft.com/en-us/worklab/work-trend-index/2025-the-year-the-frontier-firm-is-born", "publisher": "Microsoft WorkLab", "checked": "검색 확인" },
+      { "title": "ChatGPT Work and Codex", "url": "https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex", "publisher": "OpenAI Help Center", "checked": "원문 확인" },
+      { "title": "Get started with Claude Cowork", "url": "https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork", "publisher": "Claude Help Center", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "reusable-skills",
+    "name": "나만의 AI 스킬 만들기",
+    "tagline": "자주 하는 일의 요령을 한 번 적어 두고 계속 다시 써요",
+    "whyNow": "주요 AI 서비스가 '다시 쓰는 지시문'을 스킬 형태로 모으고 있어요. Google은 2026년 11월부터 개인 계정의 Gems를 스킬로 바꾸고, OpenAI는 맞춤 GPT를 다시 쓰는 지시문·참고 파일·연결 앱을 묶은 플러그인으로 옮기고 있어요. Anthropic은 2026년 10월, 자사가 공개한 Agent Skills 표준을 ChatGPT·GitHub Copilot 등 70곳이 넘는 에이전트 플랫폼이 도입했다고 밝혔어요.",
+    "whatYouCanDo": [
+      "보고서 양식·말투·점검 순서를 스킬로 저장해 매번 같은 품질을 낼 수 있어요",
+      "팀의 일하는 방식을 스킬로 나눠 동료와 함께 쓸 수 있어요",
+      "길게 붙여 넣던 지시문을 짧은 호출 한 번으로 바꿀 수 있어요"
+    ],
+    "levels": ["user", "practitioner", "developer"],
+    "goals": ["use_tools", "build_agents"],
+    "domains": ["automation", "marketing", "education"],
+    "lectureIds": ["bjdBVZa66oU", "PLmWCw1CzcFim_hkruZSlABOUOAAQ5JMyo", "dlS2meHJWAk"],
+    "termIds": ["skills", "custom-assistant", "instruction-file"],
+    "theoryIds": ["give-your-own-materials", "context-is-working-memory"],
+    "firstStep": {
+      "label": "내 반복 업무를 스킬 초안으로 바꾸기",
+      "prompt": "너는 업무 매뉴얼을 잘 쓰는 동료야. 나는 매주 '고객 문의 메일에 답장 초안 쓰기'를 반복해. 이 일을 AI가 매번 같은 방식으로 하도록 다시 쓸 지시문(스킬) 초안을 만들어 줘. 형식: 이름, 언제 쓰는지 한 줄, 단계별 절차, 말투 규칙, 하지 말 것, 마지막 점검 목록. 모르는 부분은 나에게 먼저 질문해 줘."
+    },
+    "sources": [
+      { "title": "Donating Agent Skills to the Agentic AI Foundation", "url": "https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation", "publisher": "Anthropic", "checked": "원문 확인" },
+      { "title": "About the transition from Gems to skills", "url": "https://support.google.com/gemini/answer/18560919", "publisher": "Gemini Apps Help", "checked": "원문 확인" },
+      { "title": "Custom GPT retirement and migration FAQ", "url": "https://help.openai.com/en/articles/20001519-custom-gpt-retirement-and-migration-faq", "publisher": "OpenAI Help Center", "checked": "원문 확인" },
+      { "title": "The state of enterprise AI: 2025 report", "url": "https://cdn.openai.com/pdf/7ef17d82-96bf-4dd1-9df2-228f7f377a29/the-state-of-enterprise-ai_2025-report.pdf", "publisher": "OpenAI", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "connect-tools-and-data",
+    "name": "AI에 도구·자료 연결하기",
+    "tagline": "메일·문서·업무 도구를 연결해 AI가 내 일의 맥락을 알게 해요",
+    "whyNow": "MCP(Model Context Protocol)는 AI 앱을 외부 시스템에 잇는 오픈소스 표준이에요. Anthropic은 2025년 12월 MCP를 리눅스 재단 산하 Agentic AI Foundation에 기부하면서 ChatGPT, Gemini, Microsoft Copilot 등이 MCP를 도입했다고 밝혔어요. 이제 '커넥터'로 메일·캘린더·문서를 AI에 연결하는 일이 일반 사용자에게도 흔해졌어요.",
+    "whatYouCanDo": [
+      "내 문서·메일을 근거로 AI에게 요약이나 초안을 부탁할 수 있어요",
+      "어떤 커넥터가 읽기만 하는지, 수정까지 하는지 구분해 연결할 수 있어요",
+      "필요하면 사내 시스템을 MCP 서버로 열어 에이전트가 쓰게 할 수 있어요"
+    ],
+    "levels": ["user", "practitioner", "developer"],
+    "goals": ["build_agents", "use_tools"],
+    "domains": ["automation", "data", "coding"],
+    "lectureIds": ["_jjSS0qGFbI", "PLyCki2K0Lg", "2v6zhEFh3HI", "DRghWwm3dt8"],
+    "termIds": ["mcp", "tool-use", "api"],
+    "theoryIds": ["tool-use-and-mcp", "rag-search-then-answer"],
+    "firstStep": {
+      "label": "연결할 도구 목록과 위험부터 정리하기",
+      "prompt": "너는 업무 도구 연결을 돕는 IT 도우미야. 나는 AI에 업무 도구를 연결해 쓰려고 해. 내가 매일 쓰는 도구는 메일, 캘린더, 공유 문서야. 각 도구를 연결하면 AI가 할 수 있게 되는 일, 읽기만 허용할지 수정까지 허용할지, 연결 전에 확인할 점을 표로 정리해 줘. 마지막에 처음 연결하기에 가장 안전한 한 가지를 추천해 줘."
+    },
+    "sources": [
+      { "title": "What is the Model Context Protocol (MCP)?", "url": "https://modelcontextprotocol.io/docs/getting-started/intro", "publisher": "Model Context Protocol", "checked": "원문 확인" },
+      { "title": "Donating the Model Context Protocol and establishing the Agentic AI Foundation", "url": "https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation", "publisher": "Anthropic", "checked": "원문 확인" },
+      { "title": "Use connectors to extend Claude's capabilities", "url": "https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities", "publisher": "Claude Help Center", "checked": "원문 확인" },
+      { "title": "Extend your agent with Model Context Protocol", "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp", "publisher": "Microsoft Learn", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "vibe-coding",
+    "name": "말로 작은 도구 만들기",
+    "tagline": "코딩을 몰라도 설명만으로 업무용 작은 앱을 만들어요",
+    "whyNow": "'바이브 코딩'은 안드레이 카파시가 2025년 초 처음 쓴 말로, 코드를 직접 쓰는 대신 AI에게 말로 설명해 앱을 만들고 고치는 방식이에요(Google Cloud). OpenAI의 2025년 기업 보고서는 개발·IT·연구 이외 부서에서 코딩 관련 메시지가 최근 6개월 동안 평균 36% 늘었다고 밝혔어요. 다만 Google Cloud는 만든 결과를 사람이 검토하고 테스트해야 한다고 강조해요.",
+    "whatYouCanDo": [
+      "계산기·체크리스트·신청 양식 같은 작은 도구를 직접 만들 수 있어요",
+      "원하는 기능을 단계별로 설명하고 고쳐 달라고 요청할 수 있어요",
+      "만든 도구를 공개하기 전에 확인할 점(개인정보·오류)을 점검할 수 있어요"
+    ],
+    "levels": ["user", "practitioner"],
+    "goals": ["build_products"],
+    "domains": ["startup", "marketing", "education"],
+    "lectureIds": ["gJYZE9UXiHk", "8zH_O74hZBw", "ff3j4olCUig", "KiJcZlqJKuE"],
+    "termIds": ["vibe-coding", "prompt"],
+    "theoryIds": ["no-code-ai-tools", "evaluate-if-it-works"],
+    "firstStep": {
+      "label": "만들고 싶은 도구를 기획서로 먼저 정리하기",
+      "prompt": "너는 친절한 앱 기획자야. 나는 코딩을 잘 모르지만 '팀 점심 메뉴 투표' 같은 작은 웹 도구를 AI로 만들어 보고 싶어. 바로 코드를 쓰지 말고 1) 꼭 필요한 기능 3가지 2) 화면 구성 3) 넣으면 안 되는 정보(개인정보 등) 4) 다 만든 뒤 내가 직접 해 볼 확인 목록을 정리해 줘. 그다음 첫 번째 버전을 만들어 달라고 할 때 쓸 요청문도 써 줘."
+    },
+    "sources": [
+      { "title": "Vibe Coding Explained: Tools and Guides", "url": "https://cloud.google.com/discover/what-is-vibe-coding", "publisher": "Google Cloud", "checked": "원문 확인" },
+      { "title": "The state of enterprise AI: 2025 report", "url": "https://cdn.openai.com/pdf/7ef17d82-96bf-4dd1-9df2-228f7f377a29/the-state-of-enterprise-ai_2025-report.pdf", "publisher": "OpenAI", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "context-engineering",
+    "name": "AI에게 맥락 설계해 주기",
+    "tagline": "무엇을 보여 주고 무엇을 뺄지 정하는 것이 프롬프트 다음 단계예요",
+    "whyNow": "Anthropic은 컨텍스트 엔지니어링을 '프롬프트 엔지니어링의 자연스러운 다음 단계'로 보고, 컨텍스트를 한정된 자원으로 다뤄야 한다고 설명해요(2025년 9월). Google의 2025 DORA 보고서도 AI를 조직 내부의 맥락과 연결하는 것을 도입 첫걸음 중 하나로 꼽았어요. Claude Code 공식 문서 역시 'AI가 볼 수 없는 것을 알려 주라'고 권해요.",
+    "whatYouCanDo": [
+      "AI에게 줄 자료·지시·예시를 골라 꼭 필요한 것만 담을 수 있어요",
+      "긴 작업에서 대화가 길어져 품질이 떨어질 때 정리하고 새로 시작할 수 있어요",
+      "에이전트가 참고할 지침 파일과 도구 설명을 짧고 분명하게 쓸 수 있어요"
+    ],
+    "levels": ["practitioner", "developer"],
+    "goals": ["build_agents", "build_products", "use_tools"],
+    "domains": ["coding", "automation", "data"],
+    "lectureIds": ["8Aoq6mJeAXI", "UjvgpPG1XTU", "T9aRN5JkmL8"],
+    "termIds": ["context-engineering", "context-window", "system-prompt"],
+    "theoryIds": ["context-engineering", "context-is-working-memory"],
+    "firstStep": {
+      "label": "AI에게 줄 맥락을 점검표로 정리하기",
+      "prompt": "너는 AI 활용 코치야. 나는 AI에게 '신제품 소개 문서 초안'을 맡기려고 해. 시작 전에 AI가 알아야 할 맥락을 빠짐없이, 하지만 꼭 필요한 것만 정리하고 싶어. 1) 목적과 읽는 사람 2) 꼭 줄 자료 3) 빼도 되는 자료 4) 지켜야 할 규칙 5) 좋은 결과의 예시를 칸으로 만든 빈 양식을 표로 만들어 주고, 각 칸에 쓸 질문을 하나씩 달아 줘."
+    },
+    "sources": [
+      { "title": "Effective context engineering for AI agents", "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "publisher": "Anthropic", "checked": "원문 확인" },
+      { "title": "Announcing the 2025 DORA Report: State of AI-Assisted Software Development", "url": "https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report", "publisher": "Google Cloud Blog", "checked": "원문 확인" },
+      { "title": "Best practices for Claude Code", "url": "https://code.claude.com/docs/en/best-practices", "publisher": "Anthropic (Claude Code Docs)", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "verify-ai-output",
+    "name": "AI 결과 검증하기",
+    "tagline": "그럴듯한 답일수록 근거를 확인하는 습관을 들여요",
+    "whyNow": "OpenAI는 언어 모델이 모를 때도 추측하도록 학습·평가되기 때문에 그럴듯한 오답(할루시네이션)이 계속 나온다고 설명해요(2025년 9월). Google의 2025 DORA 보고서에서는 응답자 90%가 업무에 AI를 쓰지만, 30%는 AI가 만든 코드를 거의 또는 전혀 믿지 않는다고 답했어요. AI를 많이 쓸수록 결과를 확인하는 능력이 더 중요해져요.",
+    "whatYouCanDo": [
+      "AI 답에서 확인이 필요한 주장(숫자·날짜·인용)을 골라낼 수 있어요",
+      "근거 문장을 그대로 인용하게 하거나 '모르면 모른다'고 답하게 할 수 있어요",
+      "중요한 결과는 원문이나 다른 출처로 교차 확인할 수 있어요"
+    ],
+    "levels": ["user", "practitioner", "developer"],
+    "goals": ["use_tools", "understand", "build_products"],
+    "domains": ["data", "education", "marketing"],
+    "lectureIds": ["PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv", "T9aRN5JkmL8", "jDCkirAz4-E"],
+    "termIds": ["hallucination", "evals"],
+    "theoryIds": ["ai-can-be-wrong", "evaluate-if-it-works"],
+    "firstStep": {
+      "label": "AI 답을 스스로 점검하게 하기",
+      "prompt": "너는 깐깐한 사실 확인 담당자야. 아래에 붙여 넣는 AI 답변(개인정보는 지웠어)을 검토해 줘. 1) 사실 확인이 필요한 주장을 모두 골라 표로 정리하고 2) 각 주장에 대해 확실함·불확실·근거 없음 중 하나로 표시하고 3) 내가 직접 확인할 방법(어떤 공식 자료를 볼지)을 적어 줘. 모르는 것은 추측하지 말고 모른다고 써 줘.\n[여기에 답변 붙여 넣기]"
+    },
+    "sources": [
+      { "title": "Why language models hallucinate", "url": "https://openai.com/index/why-language-models-hallucinate/", "publisher": "OpenAI", "checked": "원문 확인" },
+      { "title": "Reduce hallucinations", "url": "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations", "publisher": "Claude Docs (Anthropic)", "checked": "원문 확인" },
+      { "title": "Announcing the 2025 DORA Report: State of AI-Assisted Software Development", "url": "https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report", "publisher": "Google Cloud Blog", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "deep-research",
+    "name": "AI로 깊이 조사하기",
+    "tagline": "여러 출처를 찾아 읽는 조사를 맡기고, 출처는 직접 확인해요",
+    "whyNow": "ChatGPT, Gemini, Claude 모두 여러 번 검색하며 자료를 모아 보고서로 정리하는 심층 조사 기능을 제공해요. OpenAI는 이 기능이 인용이나 출처 링크가 달린 보고서를 주므로 직접 확인할 수 있다고 안내해요. Anthropic 경제 지수(2025년 9월)에서도 인터넷 조사 같은 정보 탐색 업무의 비중이 늘었어요.",
+    "whatYouCanDo": [
+      "조사 계획을 먼저 받아 범위와 출처를 조정한 뒤 시작할 수 있어요",
+      "시장·정책·기술 동향을 출처가 달린 보고서로 받아 볼 수 있어요",
+      "보고서의 핵심 주장을 원문 링크로 하나씩 확인할 수 있어요"
+    ],
+    "levels": ["user", "practitioner"],
+    "goals": ["use_tools", "understand"],
+    "domains": ["data", "marketing", "education", "startup"],
+    "lectureIds": ["R-KJgjIrh24", "YkCDVn3_wiw", "IJsp9AC-n7Q", "EWvNQjAaOHw"],
+    "termIds": ["web-search", "hallucination"],
+    "theoryIds": ["ai-can-be-wrong", "rag-search-then-answer"],
+    "firstStep": {
+      "label": "조사 계획과 출처 기준 먼저 정하기",
+      "prompt": "너는 신중한 리서치 담당자야. 나는 '국내 중소기업의 AI 도입 현황'을 조사하려고 해. 바로 조사하지 말고 먼저 1) 핵심 질문 3~5개 2) 우선 볼 출처 종류(정부 통계, 공식 보고서 등)와 피할 출처 3) 보고서 목차를 제안해 줘. 조사할 때는 모든 주장에 출처 링크를 달고, 확인하지 못한 내용은 따로 표시해 줘."
+    },
+    "sources": [
+      { "title": "Deep research in ChatGPT", "url": "https://help.openai.com/en/articles/10500283-deep-research-in-chatgpt", "publisher": "OpenAI Help Center", "checked": "원문 확인" },
+      { "title": "Use Deep Research in Gemini Apps", "url": "https://support.google.com/gemini/answer/15719111", "publisher": "Gemini Apps Help", "checked": "원문 확인" },
+      { "title": "Use research on Claude", "url": "https://support.claude.com/en/articles/11088861-use-research-on-claude", "publisher": "Claude Help Center", "checked": "원문 확인" },
+      { "title": "Economic Index: Uneven AI adoption (September 2025)", "url": "https://www.anthropic.com/research/anthropic-economic-index-september-2025-report", "publisher": "Anthropic", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "workflow-automation",
+    "name": "반복 업무 자동화하기",
+    "tagline": "정해진 순서로 반복되는 일을 AI 자동화 흐름으로 바꿔요",
+    "whyNow": "Microsoft Copilot Studio의 '에이전트 플로'처럼, 정해진 규칙대로 실행되는 자동화를 AI의 도움으로 만드는 도구가 늘었어요. Google Workspace Studio는 코딩 없이 Gemini에게 말로 설명해 Workspace 업무를 자동화하게 해 줘요. Anthropic 경제 지수(2026년 1월)는 기업들이 이메일 관리·문서 처리 같은 반복 사무를 AI로 자동화하는 경향이 커지고 있다고 분석했어요.",
+    "whatYouCanDo": [
+      "'새 메일이 오면 요약해 정리'처럼 시작 조건과 동작을 나눠 설계할 수 있어요",
+      "사람이 꼭 확인할 단계를 자동화 흐름 안에 넣을 수 있어요",
+      "자동화할 일과 사람이 할 일을 구분해 시간을 아낄 수 있어요"
+    ],
+    "levels": ["user", "practitioner"],
+    "goals": ["use_tools", "build_agents"],
+    "domains": ["automation", "data", "marketing"],
+    "lectureIds": ["AkUUeePtbe4", "k4V44dn_TQo", "tYOI-WoLS_o"],
+    "termIds": ["workflow-automation", "no-code-automation", "workflow"],
+    "theoryIds": ["no-code-ai-tools", "guardrails-and-human-review"],
+    "firstStep": {
+      "label": "내 반복 업무를 자동화 설계도로 바꾸기",
+      "prompt": "너는 업무 자동화 설계자야. 나는 매주 월요일 '지난주 문의 메일을 모아 유형별로 세고 팀에 요약을 공유하는 일'을 해. 이 일을 자동화한다면 1) 시작 조건 2) 단계별 동작 3) 사람이 꼭 확인할 단계 4) 실패하면 어떻게 알릴지를 순서도처럼 번호 목록으로 정리해 줘. 특정 도구 이름 없이 설명하고, 자동화하지 않는 게 나은 부분도 알려 줘."
+    },
+    "sources": [
+      { "title": "Agent flows overview - Microsoft Copilot Studio", "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/flows-overview", "publisher": "Microsoft Learn", "checked": "원문 확인" },
+      { "title": "Google Workspace Studio training and help", "url": "https://support.google.com/a/users/answer/16275487", "publisher": "Google Workspace Learning Center", "checked": "원문 확인" },
+      { "title": "Economic Index report: Economic primitives (January 2026)", "url": "https://www.anthropic.com/research/anthropic-economic-index-january-2026-report", "publisher": "Anthropic", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "coding-agents",
+    "name": "코딩 에이전트와 일하기",
+    "tagline": "코드 작성을 맡기고, 테스트로 결과를 확인하게 해요",
+    "whyNow": "Google의 2025 DORA 보고서에 따르면 기술 직군 응답자 90%가 업무에 AI를 쓰고, AI는 팀의 강점과 약점을 함께 키우는 '증폭기'라고 해요. OpenAI는 Codex를, Anthropic은 Claude Code를 소프트웨어 개발용 에이전트로 제공해요. Claude Code 공식 문서는 에이전트에게 '돌려 볼 검사'(테스트 등)를 주라고 강조해요.",
+    "whatYouCanDo": [
+      "기능 추가·버그 수정을 에이전트에게 맡기고 변경 내용을 검토할 수 있어요",
+      "프로젝트 규칙을 지침 파일에 적어 에이전트가 지키게 할 수 있어요",
+      "테스트와 타입 검사로 에이전트가 스스로 결과를 확인하게 할 수 있어요"
+    ],
+    "levels": ["practitioner", "developer"],
+    "goals": ["build_products", "use_tools"],
+    "domains": ["coding"],
+    "lectureIds": ["6eBSHbLKuN0", "PLmWCw1CzcFilebjK89WLb5cAvM8K0cLB3", "wo0Rsh9hlTo", "dRsjO-88nBs"],
+    "termIds": ["coding-agent", "instruction-file", "spec-driven-development"],
+    "theoryIds": ["agent-loop", "evaluate-if-it-works"],
+    "firstStep": {
+      "label": "코딩 에이전트에게 줄 작업 지시서 쓰기",
+      "prompt": "너는 경험 많은 개발 리드야. 나는 코딩 에이전트에게 '회원가입 폼에 이메일 형식 검사를 추가하는 일'을 맡기려고 해. 에이전트에게 줄 작업 지시서를 써 줘. 형식: 목표, 바꿔도 되는 범위와 건드리면 안 되는 곳, 완료 조건(통과해야 할 테스트), 작업 순서, 끝나고 보고할 내용. 비밀번호나 키 같은 비밀 정보는 넣지 않게 해 줘."
+    },
+    "sources": [
+      { "title": "Announcing the 2025 DORA Report: State of AI-Assisted Software Development", "url": "https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report", "publisher": "Google Cloud Blog", "checked": "원문 확인" },
+      { "title": "Best practices for Claude Code", "url": "https://code.claude.com/docs/en/best-practices", "publisher": "Anthropic (Claude Code Docs)", "checked": "원문 확인" },
+      { "title": "ChatGPT Work and Codex", "url": "https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex", "publisher": "OpenAI Help Center", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "agent-safety",
+    "name": "에이전트 시대 보안 습관",
+    "tagline": "AI가 내 계정으로 일할수록 권한과 확인을 꼼꼼히 챙겨요",
+    "whyNow": "AI가 웹을 읽고 내 계정으로 일하면서, 콘텐츠 속에 숨긴 악의적 지시로 AI를 속이는 '프롬프트 인젝션'이 새 위험이 됐어요. Anthropic은 이 문제가 아직 해결되지 않았다고 밝혔고, OpenAI는 민감한 데이터 접근을 제한하고 AI의 확인 요청을 꼼꼼히 보라고 권해요. Claude 도움말도 커넥터는 내 계정 권한만큼 접근하니 믿을 수 있고 필요한 서비스만 연결하라고 안내해요.",
+    "whatYouCanDo": [
+      "AI에게 맡겨도 되는 정보와 넣으면 안 되는 정보를 구분할 수 있어요",
+      "커넥터·에이전트에 꼭 필요한 권한만 주고 나머지는 끌 수 있어요",
+      "AI가 결제·전송·삭제처럼 되돌리기 어려운 일을 하기 전에 멈춰 확인할 수 있어요"
+    ],
+    "levels": ["user", "practitioner", "developer"],
+    "goals": ["use_tools", "build_agents"],
+    "domains": ["automation", "data"],
+    "lectureIds": ["6Mmevs1877A", "PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO", "2v6zhEFh3HI"],
+    "termIds": ["privacy-security", "guardrails", "ai-safety"],
+    "theoryIds": ["do-not-share-sensitive-info", "guardrails-and-human-review"],
+    "firstStep": {
+      "label": "내 AI 사용 습관 보안 점검받기",
+      "prompt": "너는 회사 정보보안 담당자야. 나는 AI 챗봇과 에이전트 기능을 업무에 써. 내가 점검해야 할 보안 습관을 체크리스트로 만들어 줘. 1) AI에 넣으면 안 되는 정보 종류 2) 커넥터·앱 연결 권한 점검법 3) 웹 페이지나 문서 속 숨은 지시(프롬프트 인젝션)를 조심하는 법 4) AI가 확인을 요청할 때 볼 것. 각 항목은 한 줄로, 예/아니오로 답할 수 있게 써 줘."
+    },
+    "sources": [
+      { "title": "Mitigating prompt injections in browser use", "url": "https://www.anthropic.com/research/prompt-injection-defenses", "publisher": "Anthropic", "checked": "원문 확인" },
+      { "title": "Understanding prompt injections: a frontier security challenge", "url": "https://openai.com/index/prompt-injections/", "publisher": "OpenAI", "checked": "원문 확인" },
+      { "title": "Use connectors to extend Claude's capabilities", "url": "https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities", "publisher": "Claude Help Center", "checked": "원문 확인" },
+      { "title": "Data controls in ChatGPT", "url": "https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt", "publisher": "OpenAI Help Center", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
+  },
+  {
+    "id": "agent-design",
+    "name": "에이전트 직접 설계하기",
+    "tagline": "도구·지시·안전장치를 갖춘 에이전트를 단순하게 설계해요",
+    "whyNow": "OpenAI는 에이전트를 '사용자를 대신해 스스로 일을 해내는 시스템'으로 정의하고 설계 가이드를 공개했어요. Anthropic은 가장 단순한 방법부터 시작해 필요할 때만 복잡도를 높이라고 권해요. Microsoft 업무 동향 지수(2026)는 가장 앞선 사용자들이 에이전트로 여러 단계 업무를 돌리고 여러 에이전트를 엮어 쓴다고 밝혔어요.",
+    "whatYouCanDo": [
+      "모델·도구·지시문이라는 에이전트의 기본 구성을 설계할 수 있어요",
+      "단순한 워크플로로 충분한지, 에이전트가 필요한지 판단할 수 있어요",
+      "가드레일과 평가로 에이전트가 안전하게 일하는지 확인할 수 있어요"
+    ],
+    "levels": ["practitioner", "developer"],
+    "goals": ["build_agents", "build_products"],
+    "domains": ["coding", "automation", "startup"],
+    "lectureIds": ["LP5OCa20Zpg", "XSZP9GhhuAc", "OhI005_aJkA", "tK32trvj_b4"],
+    "termIds": ["agent-loop", "tool-use", "multi-agent"],
+    "theoryIds": ["agent-loop", "observability-eval-pipeline", "from-chatbot-to-agent"],
+    "firstStep": {
+      "label": "에이전트 설계 한 장 요약 만들기",
+      "prompt": "너는 AI 에이전트 설계 전문가야. 나는 '사내 FAQ를 찾아 직원 질문에 답하고, 모르면 담당자에게 넘기는 에이전트'를 만들려고 해. 1) 에이전트 없이 단순한 흐름으로도 되는지 먼저 판단하고 2) 필요한 도구 목록 3) 지시문 핵심 규칙 4) 사람에게 넘길 조건 5) 잘 되는지 확인할 평가 질문 5개를 한 장 요약 표로 써 줘."
+    },
+    "sources": [
+      { "title": "A practical guide to building agents", "url": "https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf", "publisher": "OpenAI", "checked": "원문 확인" },
+      { "title": "Building effective AI agents", "url": "https://www.anthropic.com/engineering/building-effective-agents", "publisher": "Anthropic", "checked": "원문 확인" },
+      { "title": "2026 Work Trend Index Annual Report: Agents, human agency, and the opportunity for every organization", "url": "https://microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization", "publisher": "Microsoft WorkLab", "checked": "검색 확인" }
+    ],
+    "asOf": "2026-11"
+  }
+]

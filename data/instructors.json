@@ -183,7 +183,7 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "Google Workspace 공식 채널이에요. Gemini·Gems·Workspace Studio로 업무를 자동화하는 방법을 짧은 영상으로 보여 줘요. 비개발자 대상이라 개발자 채널(Google for Developers)과 따로 묶었어요.",
+    "credentialNote": "Google Workspace 공식 채널이에요. Gemini·NotebookLM·Workspace Studio를 업무에 쓰는 방법을 짧은 영상과 레슨(「Gemini at Work」 등)으로 보여 줘요. 비개발자 대상이라 개발자 채널(Google for Developers)과 따로 묶었어요.",
     "channelUrl": "https://www.youtube.com/@googleworkspace"
   },
   {
@@ -194,7 +194,7 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "Microsoft가 운영하는 공식 채널들이에요. 개발자 채널(Microsoft Developer)의 무료 강좌 「AI Agents for Beginners」와, Microsoft 제품 시연 채널 Microsoft Mechanics의 Copilot 에이전트 영상을 골랐어요.",
+    "credentialNote": "Microsoft가 운영하는 공식 채널들이에요. 개발자 채널(Microsoft Developer)의 무료 강좌 「AI Agents for Beginners」와, Microsoft 제품 시연 채널 Microsoft Mechanics의 Copilot 에이전트·AI 보안 영상을 골랐어요.",
     "channelUrl": "https://www.youtube.com/@MicrosoftDeveloper"
   },
   {

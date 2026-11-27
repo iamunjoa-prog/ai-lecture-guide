@@ -4,7 +4,8 @@
  * 고르는 규칙 (`selectTheory`)
  *  - 사용자 수준의 개념만 쓴다. 다른 수준 개념은 절대 섞지 않는다.
  *  - 1번: 그 수준의 core 개념
- *  - 2~3번: 목표(goal)가 맞는 개념을 theory.json 순서대로
+ *  - 2~3번: 고른 목표(goals)에 맞는 개념. 목표 우선순위 순서로 돌아가며(round-robin)
+ *    목표마다 theory.json 순서상 다음 개념을 하나씩 담는다 (중복 제외)
  *  - 모자라면 같은 수준의 나머지 개념을 theory.json 순서대로 채운다
  *  → 데이터가 충분하면 항상 THEORY_COUNT(3)개, 결과는 결정적이다.
  *
@@ -27,7 +28,7 @@ export const THEORY_LEVEL_TITLES: Record<Level, string> = {
 };
 
 export function selectTheory(
-  diagnosis: Pick<DiagnosisResult, "level" | "goal">,
+  diagnosis: Pick<DiagnosisResult, "level" | "goals">,
   concepts: readonly TheoryConcept[],
   count: number = THEORY_COUNT,
 ): TheoryConcept[] {
@@ -37,7 +38,13 @@ export function selectTheory(
     if (c && picked.length < count && !picked.includes(c)) picked.push(c);
   };
   push(same.find((c) => c.core));
-  for (const c of same) if (!c.core && c.goals.includes(diagnosis.goal)) push(c);
+  const queues = diagnosis.goals.map((g) => same.filter((c) => !c.core && c.goals.includes(g)));
+  for (let round = 0; picked.length < count && queues.some((q) => q.length > round); round++) {
+    for (const q of queues) {
+      // 이 목표의 다음 후보 중 아직 안 담긴 첫 개념
+      push(q.slice(round).find((c) => !picked.includes(c)));
+    }
+  }
   for (const c of same) push(c);
   return picked;
 }
