@@ -51,7 +51,7 @@ export const videos: Video[] = [
 export const diag = (d: Partial<DiagnosisResult> = {}): DiagnosisResult => ({
   level: "user",
   domains: ["marketing"],
-  goal: "use_tools",
+  goals: ["use_tools"],
   preferKorean: false,
   ...d,
 });

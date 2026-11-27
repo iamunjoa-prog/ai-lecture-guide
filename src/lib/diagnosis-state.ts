@@ -1,18 +1,19 @@
 /**
  * 진단 결과 ↔ URL 쿼리 변환 (B 담당).
  *
- * 형식: `l=user&d=marketing,coding&g=use_tools&ko=1`
+ * 형식: `l=user&d=marketing,coding&g=use_tools,build_agents&ko=1`
  *  - l  : Level (필수)
  *  - d  : Domain 0~3개, 쉼표 구분 (중복은 하나로 합침).
  *         분야 미정이면 빈 값 `d=`로 쓴다. 파라미터 자체가 없으면 잘못된 링크로 본다.
- *  - g  : Goal (필수)
+ *  - g  : Goal 1~4개, 쉼표 구분, 앞쪽이 우선순위 (필수). 중복은 처음 것만 남긴다.
+ *         예전 단일 목표 링크(`g=use_tools`)도 그대로 읽힌다.
  *  - ko : "1" | "0" (없으면 false)
  * 하나라도 잘못되면 decode 결과는 null.
  */
-import type { DiagnosisResult, Domain } from "../types";
-import { isDomain, isGoal, isLevel, MAX_DOMAINS } from "./questions";
+import type { DiagnosisResult, Domain, Goal } from "../types";
+import { isDomain, isGoal, isLevel, MAX_DOMAINS, MAX_GOALS } from "./questions";
 
-export const PARAM_KEYS = { level: "l", domains: "d", goal: "g", preferKorean: "ko" } as const;
+export const PARAM_KEYS = { level: "l", domains: "d", goals: "g", preferKorean: "ko" } as const;
 
 /** sessionStorage 키 */
 export const DIAGNOSIS_STORAGE_KEY = "ai-lecture-guide:diagnosis";
@@ -24,12 +25,12 @@ export function toSearchParams(d: DiagnosisResult): URLSearchParams {
   const p = new URLSearchParams();
   p.set(PARAM_KEYS.level, d.level);
   p.set(PARAM_KEYS.domains, d.domains.join(","));
-  p.set(PARAM_KEYS.goal, d.goal);
+  p.set(PARAM_KEYS.goals, d.goals.join(","));
   p.set(PARAM_KEYS.preferKorean, d.preferKorean ? "1" : "0");
   return p;
 }
 
-/** "l=user&d=marketing%2Ccoding&g=use_tools&ko=1" (앞의 "?" 없음) */
+/** "l=user&d=marketing%2Ccoding&g=use_tools%2Cbuild_agents&ko=1" (앞의 "?" 없음) */
 export function encodeDiagnosis(d: DiagnosisResult): string {
   return toSearchParams(d).toString();
 }
@@ -65,8 +66,12 @@ export function decodeDiagnosis(
   const level = get(PARAM_KEYS.level);
   if (!isLevel(level)) return null;
 
-  const goal = get(PARAM_KEYS.goal);
-  if (!isGoal(goal)) return null;
+  const rawGoals = get(PARAM_KEYS.goals);
+  if (rawGoals === undefined) return null;
+  const goalParts = rawGoals.split(",").map((s) => s.trim());
+  if (!goalParts.every(isGoal)) return null; // 빈 값·끝 쉼표·모르는 목표
+  const goals = [...new Set(goalParts)] as Goal[];
+  if (goals.length < 1 || goals.length > MAX_GOALS) return null;
 
   const rawDomains = get(PARAM_KEYS.domains);
   if (rawDomains === undefined) return null; // d 자체가 없음(빈 값 `d=`과 구분)
@@ -81,7 +86,7 @@ export function decodeDiagnosis(
   const ko = get(PARAM_KEYS.preferKorean);
   if (ko !== undefined && ko !== "0" && ko !== "1") return null;
 
-  return { level, domains, goal, preferKorean: ko === "1" };
+  return { level, domains, goals, preferKorean: ko === "1" };
 }
 
 /** sessionStorage에 저장 (브라우저가 아니거나 저장이 막혀 있으면 조용히 무시) */

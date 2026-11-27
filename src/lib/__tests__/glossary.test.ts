@@ -25,7 +25,7 @@ const instructors = realInstructors as Instructor[];
 const lvl = (l: Level) => LEVELS.indexOf(l);
 const diag = (level: Level, goal: Goal, domains: DiagnosisResult["domains"] = ["automation"]): DiagnosisResult => ({
   level,
-  goal,
+  goals: [goal],
   domains,
   preferKorean: false,
 });
@@ -207,6 +207,16 @@ describe("selectStarterTerms", () => {
       const out = selectStarterTerms(diag("user", "use_tools"), g);
       expect(out.filter((t) => t.level === "beginner").length).toBeLessThanOrEqual(STARTER_BELOW_MAX);
       expect(out.length).toBe(6);
+    });
+
+    it("목표 여러 개: 고른 목표 모두의 용어가 점수를 받는다", () => {
+      const both: DiagnosisResult = { ...diag("user", "use_tools"), goals: ["use_tools", "build_agents"] };
+      const out = ids(both);
+      expect(out).toContain("u-agents-1");
+      expect(out.some((id) => id.startsWith("u-tools"))).toBe(true);
+      expect(out).not.toContain("u-understand");
+      // 다음 수준 용어도 고른 목표 중 하나만 맞으면 된다
+      expect(ids(both, rvWith("p-agents", "p-tools"))).toEqual(expect.arrayContaining(["p-agents", "p-tools"]));
     });
 
     it("후보가 모자라면 최소 개수를 채운다", () => {

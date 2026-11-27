@@ -2,20 +2,22 @@
  * 규칙 기반 추천 (SPEC.md §4). 순수 함수만 있고 I/O는 없다.
  *
  * score = 4·[level ∈ video.levels]
- *       + 2·|domains ∩ video.domains|
- *       + 3·[goal ∈ video.goals]
+ *       + 분야: 첫 일치 2 + 이후 일치마다 1
+ *       + 목표: 1순위 목표 일치 4, (1순위는 아니고) 다른 고른 목표 일치 3,
+ *               고른 목표 2개 이상 일치 시 +1 (최대 +1)
  *       + 1·[preferKorean && (language=ko || hasKoreanSubtitle)]
  *
  * 로드맵 구성 규칙
  *  - 단계: "기초 다지기"(현재 수준보다 낮은 수준) → "실전 활용"(현재 수준) → "한 단계 더"(다음 수준)
  *  - 입문자(beginner)는 아래 수준이 없으므로 예외로 처리한다:
  *      "기초 다지기" = beginner 강의, "실전 활용" = user 강의. ("한 단계 더"는 두지 않는다.)
- *    입문자에게 beginner 강의를 "실전 활용"이라고 부르면 어색하고,
- *    practitioner 강의는 너무 멀기 때문에 이렇게 정했다.
  *  - developer는 다음 수준이 없으므로 "한 단계 더"를 두지 않는다.
- *  - 단계당 최대 개수: 기초 2(입문자는 3) · 실전 3 · 한 단계 더 2. 빈 단계는 뺀다.
+ *  - 단계당 최대 개수: 기초 2(입문자는 3) · 실전 3(목표 3개 이상이면 4) · 한 단계 더 2. 빈 단계는 뺀다.
  *  - 고르는 순서: 실전 → 기초 → 한 단계 더 (입문자는 기초 → 실전).
  *    앞 단계에서 고른 강의는 뒤 단계에서 다시 쓰지 않는다.
+ *  - 기초 다지기: 고른 목표 중 하나라도 맞는 기초 강의를 먼저, 모자라면 나머지 기초 강의.
+ *  - 실전 활용: 고른 목표마다 그 목표에 맞는 강의가 하나 이상 들어가도록 우선순위 순서로
+ *    돌아가며(round-robin) 먼저 채우고, 남은 자리는 점수 순. 단계 안은 점수 순으로 다시 정렬한다.
  *  - 전체가 MIN_TOTAL(3)개 미만이면 남은 강의 중 점수 높은 순으로 "실전 활용"에 채운다.
  *  - 정렬: 점수 내림차순 → 짧은 강의 우선 → id (결정적 결과를 위해)
  *  - 한 강사당 로드맵 전체에서 최대 2개, 같은 강의는 한 번만.
@@ -30,13 +32,24 @@ import type {
   Roadmap,
   Video,
 } from "../types";
-import { DOMAIN_LABELS, LEVEL_LABELS, LEVELS } from "./questions";
+import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_LABELS, LEVELS } from "./questions";
 
 /**
  * 분야는 첫 일치 2점, 그 다음부터 일치마다 1점. 분야를 여러 개 고른 사람에게
  * 범용 강의가 목표에 맞는 강의를 이기지 않도록 목표(4점)보다 커지기 어렵게 한다.
  */
-export const WEIGHTS = { level: 4, domain: 2, domainExtra: 1, goal: 4, korean: 1 } as const;
+export const WEIGHTS = {
+  level: 4,
+  domain: 2,
+  domainExtra: 1,
+  /** 1순위 목표 일치 */
+  goal: 4,
+  /** 1순위가 아닌 다른 고른 목표 일치 */
+  goalSecondary: 3,
+  /** 고른 목표 2개 이상 일치 보너스 (최대 1번) */
+  goalExtra: 1,
+  korean: 1,
+} as const;
 export const MAX_PER_INSTRUCTOR = 2;
 export const MIN_TOTAL = 3;
 
@@ -54,6 +67,10 @@ export const STEP_LIMITS: Record<StepKind, number> = {
   next: 2,
 };
 
+/** 목표를 이만큼 이상 고르면 실전 활용 단계를 1칸 늘린다 (목표마다 강의 하나씩 담기 위해) */
+export const MANY_GOALS = 3;
+export const PRACTICE_LIMIT_MANY_GOALS = 4;
+
 const STEP_ORDER: StepKind[] = ["foundation", "practice", "next"];
 
 // ---------------------------------------------------------------------------
@@ -64,7 +81,12 @@ export interface ScoreBreakdown {
   total: number;
   levelMatch: boolean;
   matchedDomains: Domain[];
+  /** 고른 목표 중 하나라도 맞음 */
   goalMatch: boolean;
+  /** 1순위 목표가 맞음 */
+  primaryGoalMatch: boolean;
+  /** 맞은 목표 (우선순위 순) */
+  matchedGoals: Goal[];
   koreanMatch: boolean;
 }
 
@@ -75,14 +97,19 @@ export function isKoreanFriendly(video: Video): boolean {
 export function scoreBreakdown(diagnosis: DiagnosisResult, video: Video): ScoreBreakdown {
   const levelMatch = video.levels.includes(diagnosis.level);
   const matchedDomains = diagnosis.domains.filter((d) => video.domains.includes(d));
-  const goalMatch = video.goals.includes(diagnosis.goal);
+  const matchedGoals = diagnosis.goals.filter((g) => video.goals.includes(g));
+  const goalMatch = matchedGoals.length > 0;
+  const primaryGoalMatch = diagnosis.goals.length > 0 && video.goals.includes(diagnosis.goals[0]);
   const koreanMatch = diagnosis.preferKorean && isKoreanFriendly(video);
+  const goalPoints = !goalMatch
+    ? 0
+    : (primaryGoalMatch ? WEIGHTS.goal : WEIGHTS.goalSecondary) + (matchedGoals.length >= 2 ? WEIGHTS.goalExtra : 0);
   const total =
     (levelMatch ? WEIGHTS.level : 0) +
     (matchedDomains.length > 0 ? WEIGHTS.domain + WEIGHTS.domainExtra * (matchedDomains.length - 1) : 0) +
-    (goalMatch ? WEIGHTS.goal : 0) +
+    goalPoints +
     (koreanMatch ? WEIGHTS.korean : 0);
-  return { total, levelMatch, matchedDomains, goalMatch, koreanMatch };
+  return { total, levelMatch, matchedDomains, goalMatch, primaryGoalMatch, matchedGoals, koreanMatch };
 }
 
 export function scoreVideo(diagnosis: DiagnosisResult, video: Video): number {
@@ -122,6 +149,16 @@ function joinDomains(domains: Domain[]): string {
   return `${head.join(", ")} ${labels[labels.length - 1]}`;
 }
 
+/** "'업무 도구로 쓰기'와 '나만의 에이전트 만들기'", 3개면 "'A', 'B'와 'C'" */
+function joinGoals(goals: Goal[]): string {
+  const labels = goals.map((g) => GOAL_LABELS[g]);
+  const q = (l: string) => `'${l}'`;
+  if (labels.length <= 1) return labels.map(q).join("");
+  const last = labels[labels.length - 1];
+  const head = labels.slice(0, -1).map((l, i, arr) => (i === arr.length - 1 ? q(l) + (hasBatchim(l) ? "과" : "와") : q(l)));
+  return `${head.join(", ")} ${q(last)}`;
+}
+
 /** "~하고 싶은" 형태의 목표 수식어 */
 const GOAL_PHRASES: Record<Goal, string> = {
   understand: "AI 개념을 제대로 이해하고 싶은",
@@ -150,26 +187,29 @@ export function buildReason(
   const s = scoreBreakdown(diagnosis, video);
   const level = LEVEL_LABELS[diagnosis.level];
   const sentences: string[] = [];
+  // 맞은 목표 중 우선순위가 가장 높은 것
+  const topGoal = s.matchedGoals[0];
 
   // 첫 문장: 단계 + 분야/목표
   const domainPart = s.matchedDomains.length > 0 ? `${joinDomains(s.matchedDomains)}에 AI를 적용하려는` : "";
   if (step === "foundation") {
     if (domainPart) sentences.push(`${domainPart} ${josa(level, "이", "가")} 기초를 탄탄히 다지기 좋은 강의예요.`);
-    else if (s.goalMatch) sentences.push(`${GOAL_PHRASES[diagnosis.goal]} ${josa(level, "이", "가")} 먼저 들어 두면 좋은 강의예요.`);
+    else if (s.goalMatch) sentences.push(`${GOAL_PHRASES[topGoal]} ${josa(level, "이", "가")} 먼저 들어 두면 좋은 강의예요.`);
     else sentences.push("본격적으로 시작하기 전에 기본기를 채워 주는 강의예요.");
   } else if (step === "next") {
     if (domainPart) sentences.push(`${domainPart} ${josa(level, "이", "가")} 한 단계 더 성장하기 좋은 강의예요.`);
-    else if (s.goalMatch) sentences.push(`${GOAL_PHRASES[diagnosis.goal]} ${josa(level, "이", "가")} 다음으로 도전해 볼 만한 강의예요.`);
+    else if (s.goalMatch) sentences.push(`${GOAL_PHRASES[topGoal]} ${josa(level, "이", "가")} 다음으로 도전해 볼 만한 강의예요.`);
     else sentences.push("조금 더 깊이 들어가고 싶을 때 도전해 볼 만한 강의예요.");
   } else {
     if (domainPart) sentences.push(`${domainPart} ${level}에게 딱 맞는 강의예요.`);
-    else if (s.goalMatch) sentences.push(`${GOAL_PHRASES[diagnosis.goal]} ${level}에게 추천하는 강의예요.`);
+    else if (s.goalMatch) sentences.push(`${GOAL_PHRASES[topGoal]} ${level}에게 추천하는 강의예요.`);
     else if (s.levelMatch) sentences.push(`지금 ${level} 단계에서 듣기 좋은 강의예요.`);
     else sentences.push("AI를 넓게 이해하는 데 도움이 되는 강의예요.");
   }
 
-  // 두 번째 문장: 첫 문장에 목표를 쓰지 않았고 목표가 맞으면 효용을 덧붙인다
-  if (s.goalMatch && domainPart) sentences.push(GOAL_BENEFITS[diagnosis.goal]);
+  // 두 번째 문장: 고른 목표 여러 개에 맞으면 그 목표들을, 하나만 맞고 첫 문장에 목표를 쓰지 않았으면 효용을 덧붙인다
+  if (s.matchedGoals.length >= 2) sentences.push(`고르신 목표 중 ${joinGoals(s.matchedGoals)}에 함께 도움이 돼요.`);
+  else if (s.goalMatch && domainPart) sentences.push(GOAL_BENEFITS[topGoal]);
 
   // 세 번째 문장: 한국어 선호
   if (s.koreanMatch) {
@@ -254,7 +294,12 @@ export function buildRoadmap(
   const hasAny = (levels: Level[]) => (s: Scored) => s.video.levels.some((l) => levels.includes(l));
   const picked: Record<StepKind, Scored[]> = { foundation: [], practice: [], next: [] };
   // 입문자에게는 기초(beginner)가 핵심 단계라 3개까지 허용한다.
-  const limitOf = (k: StepKind) => (k === "foundation" && isBeginner ? 3 : STEP_LIMITS[k]);
+  // 목표를 3개 이상 고르면 목표마다 하나씩 담을 수 있게 실전 활용을 4개까지 허용한다.
+  const limitOf = (k: StepKind) => {
+    if (k === "foundation" && isBeginner) return 3;
+    if (k === "practice" && diagnosis.goals.length >= MANY_GOALS) return PRACTICE_LIMIT_MANY_GOALS;
+    return STEP_LIMITS[k];
+  };
 
   // 기초·심화 단계는 분야가 하나라도 맞는 강의를 우선한다. 목표만 맞는 강의는
   // 분야 일치 강의가 하나도 없을 때만 쓴다 (예: 개발자 기초에 비개발자용 강의가 끼는 것 방지).
@@ -264,21 +309,42 @@ export function buildRoadmap(
     return first.length > 0 ? first : pick(filter, limit);
   };
 
+  // 기초 다지기: 고른 목표 중 하나라도 맞는 기초 강의를 먼저 담고, 모자라면 나머지 기초 강의로 채운다.
+  const goalRelated = (s: Scored) => s.score.goalMatch;
+  const pickFoundationFrom = (filter: (s: Scored) => boolean, relevant: typeof pick): Scored[] => {
+    const limit = limitOf("foundation");
+    const first = relevant((s) => filter(s) && goalRelated(s), limit);
+    if (first.length >= limit) return first;
+    return [...first, ...relevant(filter, limit - first.length)].sort(compareScored);
+  };
+
   const pickFoundation = () => {
     if (!plan.foundation) return;
     const { strict, loose } = plan.foundation;
     if (isBeginner) {
-      picked.foundation = pick(hasAny(strict), limitOf("foundation"));
+      picked.foundation = pickFoundationFrom(hasAny(strict), pick);
       return;
     }
     // 현재 수준이 섞이지 않은 강의(아래 수준 전용) 우선, 없으면 현재 수준 포함 강의도 허용
-    picked.foundation = pickRelevant((s) => s.video.levels.every((l) => strict.includes(l)), limitOf("foundation"));
+    picked.foundation = pickFoundationFrom((s) => s.video.levels.every((l) => strict.includes(l)), pickRelevant);
     if (picked.foundation.length === 0 && loose) {
-      picked.foundation = pickRelevant(hasAny(loose), limitOf("foundation"));
+      picked.foundation = pickFoundationFrom(hasAny(loose), pickRelevant);
     }
   };
+
+  // 실전 활용: 고른 목표마다 하나씩(우선순위 순서로 돌아가며) 먼저 담고, 남은 자리는 점수 순
   const pickPractice = () => {
-    if (plan.practice) picked.practice = pick(hasAny(plan.practice.strict), limitOf("practice"));
+    if (!plan.practice) return;
+    const inLevel = hasAny(plan.practice.strict);
+    const limit = limitOf("practice");
+    const out: Scored[] = [];
+    for (const g of diagnosis.goals) {
+      if (out.length >= limit) break;
+      if (out.some((s) => s.video.goals.includes(g))) continue; // 이미 담긴 강의가 이 목표도 다룬다
+      out.push(...pick((s) => inLevel(s) && s.video.goals.includes(g), 1));
+    }
+    out.push(...pick(inLevel, limit - out.length));
+    picked.practice = out.sort(compareScored);
   };
 
   // 고르는 순서 = 중요도 순서. 입문자는 기초가, 나머지는 실전이 가장 중요하다.

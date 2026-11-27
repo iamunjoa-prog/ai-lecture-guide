@@ -20,7 +20,7 @@ function checkInvariants(r: Roadmap) {
   per.forEach((n) => expect(n).toBeLessThanOrEqual(MAX_PER_INSTRUCTOR));
   r.steps.forEach((s) => {
     expect(s.items.length).toBeGreaterThanOrEqual(1);
-    expect(s.items.length).toBeLessThanOrEqual(3);
+    expect(s.items.length).toBeLessThanOrEqual(4);
   });
   items.forEach((i) => {
     expect(i.reason.length).toBeGreaterThan(0);
@@ -37,13 +37,13 @@ describe("점수", () => {
     expect(scoreVideo(diag({ domains: ["marketing", "data"], preferKorean: true }), v)).toBe(12);
   });
   it("요소별 가중치", () => {
-    expect(scoreVideo(diag({ level: "developer", domains: ["startup"], goal: "understand" }), v)).toBe(0);
-    expect(scoreVideo(diag({ domains: ["startup"], goal: "understand" }), v)).toBe(4); // 수준
-    expect(scoreVideo(diag({ level: "developer", domains: ["marketing", "data", "coding"], goal: "understand" }), v)).toBe(4); // 분야 3개: 2 + 1 + 1
+    expect(scoreVideo(diag({ level: "developer", domains: ["startup"], goals: ["understand"] }), v)).toBe(0);
+    expect(scoreVideo(diag({ domains: ["startup"], goals: ["understand"] }), v)).toBe(4); // 수준
+    expect(scoreVideo(diag({ level: "developer", domains: ["marketing", "data", "coding"], goals: ["understand"] }), v)).toBe(4); // 분야 3개: 2 + 1 + 1
     expect(scoreVideo(diag({ level: "developer", domains: ["startup"] }), v)).toBe(4); // 목표
   });
   it("한국어 가점: 선호할 때만, ko 강의 또는 한국어 자막", () => {
-    const d = diag({ level: "developer", domains: ["startup"], goal: "understand", preferKorean: true });
+    const d = diag({ level: "developer", domains: ["startup"], goals: ["understand"], preferKorean: true });
     expect(scoreVideo(d, v)).toBe(1);
     expect(scoreVideo({ ...d, preferKorean: false }, v)).toBe(0);
     expect(scoreVideo(d, { ...v, hasKoreanSubtitle: false })).toBe(0);
@@ -174,7 +174,7 @@ describe("buildRoadmap — 빈/희소 데이터", () => {
 describe("buildRoadmap — 분야 미정", () => {
   for (const level of ["beginner", "user", "practitioner", "developer"] as const) {
     it(`${level}: 분야가 비어도 3개 이상, 불변식 유지`, () => {
-      const r = buildRoadmap(diag({ level, domains: [], goal: "understand" }), videos, instructors);
+      const r = buildRoadmap(diag({ level, domains: [], goals: ["understand"] }), videos, instructors);
       checkInvariants(r);
       expect(all(r).length).toBeGreaterThanOrEqual(3);
       all(r).forEach((i) => expect(i.reason).not.toContain("에 AI를 적용하려는"));
@@ -183,7 +183,7 @@ describe("buildRoadmap — 분야 미정", () => {
   it("실제 데이터로 모든 수준·목표에서 3개 이상 나온다", () => {
     for (const level of ["beginner", "user", "practitioner", "developer"] as const) {
       for (const goal of ["understand", "use_tools", "build_agents", "build_products"] as const) {
-        const r = buildRoadmap(diag({ level, domains: [], goal }), realVideos as Video[], realInstructors as Instructor[]);
+        const r = buildRoadmap(diag({ level, domains: [], goals: [goal] }), realVideos as Video[], realInstructors as Instructor[]);
         checkInvariants(r);
         expect(all(r).length).toBeGreaterThanOrEqual(3);
       }
@@ -212,7 +212,7 @@ describe("추천 사유", () => {
     expect(r).not.toContain("에 AI를 적용하려는");
     const foundation = buildReason(diag({ domains: [] }), videos.find((x) => x.id === "B1")!, "foundation");
     expect(foundation).toBe("본격적으로 시작하기 전에 기본기를 채워 주는 강의예요.");
-    expect(buildReason(diag({ domains: [], level: "beginner", goal: "understand" }), videos.find((x) => x.id === "B1")!)).toContain("AI 개념을 제대로 이해하고 싶은 입문자에게");
+    expect(buildReason(diag({ domains: [], level: "beginner", goals: ["understand"] }), videos.find((x) => x.id === "B1")!)).toContain("AI 개념을 제대로 이해하고 싶은 입문자에게");
   });
   it("한국어 강의 / 한국어 자막 문장", () => {
     const ko = videos.find((x) => x.id === "U1")!;
@@ -230,5 +230,108 @@ describe("추천 사유", () => {
     expect(josa("입문자", "이", "가")).toBe("입문자가");
     expect(josa("코딩", "과", "와")).toBe("코딩과");
     expect(josa("AI", "이", "가")).toBe("AI가");
+  });
+});
+
+describe("다중 목표", () => {
+  const v = makeVideo({ id: "M1", instructorId: "inst-a", levels: ["user"], domains: ["marketing"], goals: ["use_tools"] });
+  const both = makeVideo({ id: "M2", instructorId: "inst-a", levels: ["user"], domains: ["marketing"], goals: ["use_tools", "build_agents"] });
+  const three = makeVideo({ id: "M3", instructorId: "inst-a", levels: ["user"], domains: ["marketing"], goals: ["understand", "use_tools", "build_agents"] });
+
+  it("점수: 1순위 목표 4 · 다른 고른 목표 3 · 2개 이상 일치 +1 (최대 1번)", () => {
+    expect(scoreVideo(diag({ goals: ["use_tools"] }), v)).toBe(4 + 2 + 4);
+    expect(scoreVideo(diag({ goals: ["build_agents", "use_tools"] }), v)).toBe(4 + 2 + 3);
+    expect(scoreVideo(diag({ goals: ["use_tools", "build_agents"] }), both)).toBe(4 + 2 + 4 + 1);
+    expect(scoreVideo(diag({ goals: ["understand", "build_agents"] }), both)).toBe(4 + 2 + 3);
+    expect(scoreVideo(diag({ goals: ["understand", "use_tools", "build_agents"] }), both)).toBe(4 + 2 + 3 + 1);
+    expect(scoreVideo(diag({ goals: ["understand", "use_tools", "build_agents"] }), three)).toBe(4 + 2 + 4 + 1); // +1은 한 번만
+    expect(scoreVideo(diag({ goals: ["build_products", "understand"] }), v)).toBe(4 + 2);
+  });
+
+  it("breakdown: 맞은 목표를 우선순위 순서로, 1순위 일치 여부", () => {
+    const b = scoreBreakdown(diag({ goals: ["build_agents", "understand", "use_tools"] }), three);
+    expect(b.matchedGoals).toEqual(["build_agents", "understand", "use_tools"]);
+    expect(b.primaryGoalMatch).toBe(true);
+    expect(scoreBreakdown(diag({ goals: ["build_products", "use_tools"] }), v)).toMatchObject({
+      goalMatch: true, primaryGoalMatch: false, matchedGoals: ["use_tools"],
+    });
+  });
+
+  it("실전 활용에 고른 목표마다 강의가 하나 이상 들어간다 (픽스처)", () => {
+    // 활용자 + 마케팅: 점수만 보면 use_tools 강의가 실전을 채우지만, build_agents(U3)도 담긴다
+    const single = buildRoadmap(diag({ goals: ["use_tools"] }), videos, instructors);
+    const practiceSingle = single.steps.find((s) => s.label === STEP_LABELS.practice)!.items.map((i) => i.video.id);
+    expect(practiceSingle).not.toContain("U3");
+    const multi = buildRoadmap(diag({ goals: ["use_tools", "build_agents"] }), videos, instructors);
+    checkInvariants(multi);
+    const practice = multi.steps.find((s) => s.label === STEP_LABELS.practice)!.items;
+    expect(practice.some((i) => i.video.goals.includes("use_tools"))).toBe(true);
+    expect(practice.some((i) => i.video.goals.includes("build_agents"))).toBe(true);
+    // 단계 안은 점수 순
+    const scores = practice.map((i) => i.score);
+    expect([...scores].sort((a, b) => b - a)).toEqual(scores);
+  });
+
+  it("목표 3개 이상이면 실전 활용은 최대 4개", () => {
+    const r = buildRoadmap(diag({ level: "practitioner", domains: [], goals: ["use_tools", "build_agents", "build_products"] }), realVideos as Video[], realInstructors as Instructor[]);
+    checkInvariants(r);
+    const practice = r.steps.find((s) => s.label === STEP_LABELS.practice)!.items;
+    expect(practice.length).toBeLessThanOrEqual(4);
+    expect(practice.length).toBeGreaterThanOrEqual(3);
+    const two = buildRoadmap(diag({ level: "practitioner", domains: [], goals: ["use_tools", "build_agents"] }), realVideos as Video[], realInstructors as Instructor[]);
+    expect(two.steps.find((s) => s.label === STEP_LABELS.practice)!.items.length).toBeLessThanOrEqual(3);
+  });
+
+  it("실제 데이터: 고른 목표에 맞는 현재 수준 강의가 있으면 실전 활용에 반드시 담긴다, 기초는 고른 목표와 관련", () => {
+    const vs = realVideos as Video[];
+    const combos = [
+      ["use_tools", "build_agents"],
+      ["build_agents", "use_tools"],
+      ["understand", "use_tools"],
+      ["build_products", "build_agents"],
+      ["use_tools", "build_agents", "build_products"],
+      ["understand", "use_tools", "build_agents", "build_products"],
+    ] as const;
+    for (const level of ["beginner", "user", "practitioner", "developer"] as const) {
+      for (const goals of combos) {
+        for (const domains of [[], ["marketing"], ["coding", "startup"], ["automation", "data"]] as const) {
+          const d = diag({ level, goals: [...goals], domains: [...domains] });
+          const r = buildRoadmap(d, vs, realInstructors as Instructor[]);
+          checkInvariants(r);
+          expect(all(r).length).toBeGreaterThanOrEqual(3);
+          const practice = r.steps.find((s) => s.label === STEP_LABELS.practice)?.items ?? [];
+          const practiceLevel = level === "beginner" ? "user" : level;
+          for (const g of goals) {
+            if (vs.some((x) => x.levels.includes(practiceLevel) && x.goals.includes(g))) {
+              expect(practice.some((i) => i.video.goals.includes(g)), `${level}/${goals}/${domains}: ${g}`).toBe(true);
+            }
+          }
+          const foundation = r.steps.find((s) => s.label === STEP_LABELS.foundation)?.items ?? [];
+          if (foundation.length > 0) {
+            expect(foundation.some((i) => goals.some((g) => i.video.goals.includes(g))), `${level}/${goals}/${domains} 기초`).toBe(true);
+          }
+        }
+      }
+    }
+  });
+
+  it("추천 사유: 고른 목표 여러 개에 맞으면 그 목표들을 함께 말한다", () => {
+    const b3 = videos.find((x) => x.id === "B3")!;
+    expect(buildReason(diag({ level: "beginner", goals: ["use_tools", "understand"] }), b3)).toBe(
+      "마케팅·콘텐츠에 AI를 적용하려는 입문자에게 딱 맞는 강의예요. 고르신 목표 중 '업무 도구로 쓰기'와 '개념 이해'에 함께 도움이 돼요.",
+    );
+    expect(buildReason(diag({ goals: ["understand", "use_tools", "build_agents"] }), three)).toContain(
+      "고르신 목표 중 '개념 이해', '업무 도구로 쓰기'와 '나만의 에이전트 만들기'에 함께 도움이 돼요.",
+    );
+  });
+
+  it("추천 사유: 1순위가 아닌 목표 하나만 맞으면 그 목표로 말한다", () => {
+    const u3 = videos.find((x) => x.id === "U3")!;
+    expect(buildReason(diag({ domains: ["coding"], goals: ["use_tools", "build_agents"] }), u3)).toBe(
+      "나만의 에이전트를 만들고 싶은 활용자에게 추천하는 강의예요.",
+    );
+    expect(buildReason(diag({ goals: ["build_agents", "use_tools"] }), videos.find((x) => x.id === "U1")!)).toBe(
+      "마케팅·콘텐츠에 AI를 적용하려는 활용자에게 딱 맞는 강의예요. 바로 업무에 써먹을 수 있어요.",
+    );
   });
 });
