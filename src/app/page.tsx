@@ -1,103 +1,93 @@
-import Image from "next/image";
+import { AppShell, BottomCTA } from "@/components/ui";
+import { CriteriaSheet } from "@/components/CriteriaSheet";
+import { InstructorMarquee } from "@/components/InstructorMarquee";
+import { instructors, videos } from "@/components/catalog";
+
+const VALUE_POINTS = [
+  {
+    icon: "⏱️",
+    title: "1분 진단",
+    desc: "질문 8개에 답하면 지금 수준과 관심 분야를 알려 드려요.",
+  },
+  {
+    icon: "🧑‍🔬",
+    title: "AI를 만든 사람들의 강의만",
+    desc: "AI 기업 창업자, 핵심 연구자, 대학 교수, 공식 채널만 골랐어요.",
+  },
+  {
+    icon: "🎁",
+    title: "무료 유튜브 강의",
+    desc: "돈 들이지 않고 지금 바로 들을 수 있는 강의로만 짜 드려요.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <AppShell>
+      <header className="flex h-14 items-center">
+        <p className="flex items-center gap-1.5 text-[15px] font-bold text-fg">
+          <span aria-hidden="true">🧭</span>
+          AI 강의 길잡이
+        </p>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <section className="animate-fade-up pt-8 pb-10">
+        <p className="mb-3 inline-flex rounded-full bg-primary-soft px-3 py-1 text-sm font-bold text-primary-soft-fg">
+          검증된 강사 {instructors.length}명 · 강의 {videos.length}개
+        </p>
+        <h1 className="text-[30px] leading-[1.3] font-bold tracking-[-0.03em] text-balance text-fg">
+          수많은 AI 강의,
+          <br />
+          뭐부터 들어야 할지 <span className="text-primary">막막하셨죠?</span>
+        </h1>
+        <p className="mt-4 text-[17px] leading-relaxed text-fg-muted">
+          간단한 진단만 하면 내 수준에 딱 맞는 강의를 순서대로 정리해 드릴게요.
+        </p>
+      </section>
+
+      <section aria-labelledby="value-title" className="pb-10">
+        <h2 id="value-title" className="sr-only">
+          AI 강의 길잡이의 특징
+        </h2>
+        <ul className="flex flex-col gap-3">
+          {VALUE_POINTS.map((v, i) => (
+            <li
+              key={v.title}
+              className="flex animate-fade-up items-start gap-4 rounded-lg border border-border bg-surface p-4 shadow-sm"
+              style={{ animationDelay: `${120 + i * 80}ms` }}
+            >
+              <span
+                aria-hidden="true"
+                className="flex size-12 shrink-0 items-center justify-center rounded-md bg-surface-2 text-[26px] leading-none"
+              >
+                {v.icon}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[17px] font-bold text-fg">{v.title}</span>
+                <span className="mt-0.5 block text-[15px] leading-relaxed text-fg-muted">{v.desc}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="instructors-title" className="pb-6">
+        <h2 id="instructors-title" className="mb-1 text-lg font-bold text-fg">
+          이런 분들의 강의를 추천해요
+        </h2>
+        <p className="mb-4 text-sm text-fg-muted">AI를 직접 만들고 가르치는 사람들이에요.</p>
+        <InstructorMarquee instructors={instructors} />
+        <div className="mt-3 flex justify-center">
+          <CriteriaSheet />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      <BottomCTA
+        label="1분 진단 시작하기"
+        href="/diagnosis"
+        trailingIcon="→"
+        helperText="회원가입 없이 바로 시작해요"
+      />
+    </AppShell>
   );
 }

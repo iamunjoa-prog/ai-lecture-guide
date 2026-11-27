@@ -1,19 +1,5 @@
 @import "tailwindcss";
 
-/* Pretendard Variable (CDN).
-   주의: Next가 next/font CSS와 합쳐 번들하므로 @import url()은 파일 중간에 놓여 무시된다.
-   그래서 @font-face로 직접 선언. 더 가벼운 dynamic-subset을 쓰려면 layout.tsx <head>에
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-   를 넣고 아래 @font-face는 지우면 된다. */
-@font-face {
-  font-family: "Pretendard Variable";
-  font-weight: 45 920;
-  font-style: normal;
-  font-display: swap;
-  src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2")
-    format("woff2-variations");
-}
-
 /* =========================================================
    AI 강의 길잡이 — 디자인 토큰
    팔레트: "Iris"(비비드 인디고-바이올렛) + "Apricot"(따뜻한 살구 주황)
