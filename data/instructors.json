@@ -1,0 +1,178 @@
+[
+  {
+    "id": "anthropic",
+    "name": "Anthropic 공식 채널",
+    "nameEn": "Anthropic",
+    "title": "Claude를 만든 AI 안전 연구 기업 · 다리오·다니엘라 아모데이 공동창업",
+    "credentials": [
+      "official_channel",
+      "founder"
+    ],
+    "credentialNote": "Claude 개발사 Anthropic의 공식 유튜브 채널이에요. 공동창업자 다리오·다니엘라 아모데이가 직접 출연하는 대담과, 사내 연구자·엔지니어가 진행하는 프롬프트·에이전트 강의가 올라와요.",
+    "channelUrl": "https://www.youtube.com/@anthropic-ai"
+  },
+  {
+    "id": "claude",
+    "name": "Claude 공식 채널",
+    "nameEn": "Claude (by Anthropic)",
+    "title": "Anthropic이 운영하는 Claude 제품·활용법 공식 채널",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "Anthropic이 Claude 사용법과 Claude Code 강좌를 모아 운영하는 공식 채널이에요. Claude 공식 사이트(claude.com)의 영상 자료실이 이 채널 영상으로 연결돼요.",
+    "channelUrl": "https://www.youtube.com/@claude"
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI 공식 채널",
+    "nameEn": "OpenAI",
+    "title": "ChatGPT를 만든 AI 연구 기업",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "ChatGPT 개발사 OpenAI의 공식 채널이에요. ChatGPT Work 같은 업무 도구 사용법을 짧은 튜토리얼 재생목록으로 제공해요.",
+    "channelUrl": "https://www.youtube.com/@OpenAI"
+  },
+  {
+    "id": "google-cloud-tech",
+    "name": "Google Cloud Tech",
+    "nameEn": "Google Cloud Tech",
+    "title": "Google Cloud 공식 기술 교육 채널",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "Google이 운영하는 공식 기술 채널로, Google Cloud Skills Boost의 생성형 AI 입문 강의를 무료로 공개하고 있어요.",
+    "channelUrl": "https://www.youtube.com/@googlecloudtech"
+  },
+  {
+    "id": "google-deepmind",
+    "name": "Google DeepMind",
+    "nameEn": "Google DeepMind",
+    "title": "알파고·알파폴드를 만든 AI 연구소 · 데미스 허사비스 공동창업",
+    "credentials": [
+      "official_channel",
+      "founder"
+    ],
+    "credentialNote": "Google DeepMind 공식 채널이에요. 공동창업자이자 CEO인 데미스 허사비스(2024 노벨화학상)가 직접 출연하는 인터뷰와 다큐멘터리를 볼 수 있어요.",
+    "channelUrl": "https://www.youtube.com/@googledeepmind"
+  },
+  {
+    "id": "andrej-karpathy",
+    "name": "안드레이 카파시",
+    "nameEn": "Andrej Karpathy",
+    "title": "OpenAI 공동창업자 · 전 테슬라 AI 총괄 · Eureka Labs 창업자",
+    "credentials": [
+      "founder",
+      "core_researcher"
+    ],
+    "credentialNote": "OpenAI 창립 멤버이자 테슬라 오토파일럿 AI를 이끈 연구자예요. 스탠퍼드 CS231n 강의를 처음 만든 사람 중 한 명이기도 하고, 본인 채널에서 LLM 원리를 가장 쉽게 풀어 주기로 유명해요.",
+    "channelUrl": "https://www.youtube.com/@AndrejKarpathy"
+  },
+  {
+    "id": "andrew-ng",
+    "name": "앤드류 응",
+    "nameEn": "Andrew Ng",
+    "title": "DeepLearning.AI·Coursera 창업자 · 스탠퍼드 겸임교수 · 전 구글 브레인 공동설립",
+    "credentials": [
+      "founder",
+      "professor",
+      "core_researcher"
+    ],
+    "credentialNote": "구글 브레인을 공동 설립하고 Coursera·DeepLearning.AI·Landing AI를 창업했어요. 스탠퍼드 CS229·CS230 정규 강의를 맡아 온 교수로, 전 세계에서 가장 많은 사람이 들은 AI 강의를 만든 분이에요. 영상은 DeepLearning.AI 공식 채널과 Stanford Online 채널에서 가져왔어요.",
+    "channelUrl": "https://www.youtube.com/@Deeplearningai"
+  },
+  {
+    "id": "geoffrey-hinton",
+    "name": "제프리 힌턴",
+    "nameEn": "Geoffrey Hinton",
+    "title": "딥러닝의 대부 · 2024 노벨물리학상 · 토론토대 명예교수",
+    "credentials": [
+      "core_researcher",
+      "professor"
+    ],
+    "credentialNote": "역전파·딥러닝 연구를 이끈 핵심 연구자로 튜링상과 노벨물리학상을 받았어요. 개인 채널이 없어 옥스퍼드대학교 공식 채널에 올라온 공개 강연을 골랐어요.",
+    "channelUrl": "https://www.youtube.com/@oxforduniversity"
+  },
+  {
+    "id": "fei-fei-li",
+    "name": "페이페이 리",
+    "nameEn": "Fei-Fei Li",
+    "title": "스탠퍼드대 컴퓨터과학 교수 · ImageNet 창시자 · World Labs 창업자",
+    "credentials": [
+      "professor",
+      "core_researcher",
+      "founder"
+    ],
+    "credentialNote": "컴퓨터 비전 혁명을 연 ImageNet을 만든 스탠퍼드 교수예요. 개인 채널이 없어 TED 공식 채널의 본인 강연을 연결했어요.",
+    "channelUrl": "https://www.youtube.com/@TED"
+  },
+  {
+    "id": "yann-lecun",
+    "name": "얀 르쿤",
+    "nameEn": "Yann LeCun",
+    "title": "합성곱 신경망(CNN) 창시자 · 튜링상 수상 · 뉴욕대 교수",
+    "credentials": [
+      "core_researcher",
+      "professor"
+    ],
+    "credentialNote": "CNN을 고안한 딥러닝 3대 거장 중 한 명이에요. 뉴욕대(NYU) 정규 딥러닝 강의를 공동 강사 알프레도 칸지아니 교수가 공식 공개한 채널에서 볼 수 있어요.",
+    "channelUrl": "https://www.youtube.com/@alfcnz"
+  },
+  {
+    "id": "sung-kim",
+    "name": "김성훈",
+    "nameEn": "Sung Kim",
+    "title": "업스테이지 공동창업자·CEO · 전 홍콩과기대 교수 · 「모두를 위한 딥러닝」",
+    "credentials": [
+      "founder",
+      "professor"
+    ],
+    "credentialNote": "한국 AI 기업 업스테이지를 창업했고, 홍콩과기대 교수 시절 만든 무료 강좌 「모두를 위한 딥러닝」으로 국내 AI 입문의 표준을 만든 분이에요. 본인 채널 강좌와 함께, 공공기관·재단 공식 채널에 올라온 본인 강연도 포함했어요.",
+    "channelUrl": "https://www.youtube.com/@hunkims"
+  },
+  {
+    "id": "upstage",
+    "name": "업스테이지 공식 채널",
+    "nameEn": "Upstage",
+    "title": "한국 LLM 'Solar'를 만든 AI 기업",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "국내 대표 AI 기업 업스테이지의 공식 채널이에요. 한국어로 진행하는 실전 활용 웨비나와 고객 사례가 올라와요.",
+    "channelUrl": "https://www.youtube.com/@upstageai"
+  },
+  {
+    "id": "kim-seongbeom",
+    "name": "김성범 교수",
+    "nameEn": "Seoung Bum Kim",
+    "title": "고려대학교 산업경영공학부 교수",
+    "credentials": [
+      "professor"
+    ],
+    "credentialNote": "고려대 산업경영공학부에서 머신러닝·데이터마이닝을 가르치는 교수예요. 정규 강의 내용을 정리한 「핵심 머신러닝」 시리즈를 직접 운영하는 채널에 공개하고 있어요.",
+    "channelUrl": "https://www.youtube.com/@%EA%B9%80%EC%84%B1%EB%B2%94%EA%B5%90%EC%88%98%EC%82%B0%EC%97%85%EA%B2%BD%EC%98%81%EA%B3%B5"
+  },
+  {
+    "id": "moon-il-chul",
+    "name": "문일철 교수",
+    "nameEn": "Il-Chul Moon",
+    "title": "KAIST 산업및시스템공학과 교수",
+    "credentials": [
+      "professor"
+    ],
+    "credentialNote": "KAIST에서 인공지능·기계학습을 가르치는 교수로, KAIST 공식 온라인 강좌(KOOC)로 「인공지능 및 기계학습 개론」을 공개했어요.",
+    "channelUrl": "https://www.youtube.com/@kaistmooc_kooc"
+  },
+  {
+    "id": "snu-ai-institute",
+    "name": "서울대학교 AI연구원",
+    "nameEn": "Seoul National University AI Institute",
+    "title": "서울대 교수진이 직접 강의하는 대학 공식 AI 연구원",
+    "credentials": [
+      "professor",
+      "official_channel"
+    ],
+    "credentialNote": "서울대학교 AI연구원 공식 채널이에요. 장병탁·윤성로·곽노준·전병곤 교수 등 서울대 컴퓨터공학·전기정보공학 교수진의 공개 강의를 올려요.",
+    "channelUrl": "https://www.youtube.com/@AI-xi1ci"
+  }
+]
