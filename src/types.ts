@@ -73,6 +73,21 @@ export interface GlossaryTerm {
   related?: string[]; // 관련 용어 id
 }
 
+/** 진단 후 보여주는 '3분 이론' 개념 (대중 눈높이 설명) */
+export interface TheoryConcept {
+  id: string; // kebab-case
+  level: Level; // 이 개념을 보여줄 수준
+  core: boolean; // 해당 수준의 공통 개념이면 true (수준당 1개)
+  goals: Goal[]; // core가 아닐 때 어떤 목표에 보여줄지
+  title: string; // 짧은 제목, 예: "AI는 '다음 말'을 예측하는 기계예요"
+  summary: string; // 한 줄 요약 (50자 안팎)
+  body: string[]; // 쉬운 설명 문단 3~4개
+  analogy: string; // 일상 비유 한 문단
+  tryIt?: string; // 바로 해볼 수 있는 한 가지 (선택)
+  termIds: string[]; // 관련 GlossaryTerm.id (강의 연결에도 사용)
+  sources: { title: string; url: string; publisher: string }[]; // 근거 출처 2개 이상
+}
+
 /** 진단 결과 */
 export interface DiagnosisResult {
   level: Level;
