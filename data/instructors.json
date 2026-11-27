@@ -1,26 +1,15 @@
 [
   {
     "id": "anthropic",
-    "name": "Anthropic 공식 채널",
-    "nameEn": "Anthropic",
-    "title": "Claude를 만든 AI 안전 연구 기업 · 다리오·다니엘라 아모데이 공동창업",
+    "name": "Anthropic · Claude 공식 채널",
+    "nameEn": "Anthropic / Claude",
+    "title": "Claude를 만든 AI 기업 · 다리오·다니엘라 아모데이 공동창업",
     "credentials": [
       "official_channel",
       "founder"
     ],
-    "credentialNote": "Claude 개발사 Anthropic의 공식 유튜브 채널이에요. 공동창업자 다리오·다니엘라 아모데이가 직접 출연하는 대담과, 사내 연구자·엔지니어가 진행하는 프롬프트·에이전트 강의가 올라와요.",
+    "credentialNote": "Claude 개발사 Anthropic이 운영하는 공식 채널들(@anthropic-ai, @claude)이에요. 공동창업자 다리오·다니엘라 아모데이가 직접 출연하는 대담, 사내 연구자·엔지니어의 프롬프트·에이전트 강의, Claude와 Claude Code 활용법 강좌가 올라와요.",
     "channelUrl": "https://www.youtube.com/@anthropic-ai"
-  },
-  {
-    "id": "claude",
-    "name": "Claude 공식 채널",
-    "nameEn": "Claude (by Anthropic)",
-    "title": "Anthropic이 운영하는 Claude 제품·활용법 공식 채널",
-    "credentials": [
-      "official_channel"
-    ],
-    "credentialNote": "Anthropic이 Claude 사용법과 Claude Code 강좌를 모아 운영하는 공식 채널이에요. Claude 공식 사이트(claude.com)의 영상 자료실이 이 채널 영상으로 연결돼요.",
-    "channelUrl": "https://www.youtube.com/@claude"
   },
   {
     "id": "openai",

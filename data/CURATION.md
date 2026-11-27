@@ -11,7 +11,7 @@
 | id | 기준 | 근거 / 비고 |
 |---|---|---|
 | anthropic | official_channel, founder | Anthropic 공식 채널(@anthropic-ai). 공동창업자 대담 포함 |
-| claude | official_channel | Anthropic이 운영하는 Claude 제품 채널(@claude). claude.com/resources/videos에서 연결됨 |
+| (anthropic에 통합) | official_channel | Claude 제품 채널(@claude) 영상은 `anthropic` 강사로 묶음 — 같은 회사가 결과에 과하게 반복되지 않도록 (2026-11-27 PM 결정) |
 | openai | official_channel | OpenAI 공식 채널(@OpenAI) |
 | google-cloud-tech | official_channel | Google 공식 기술 교육 채널 |
 | google-deepmind | official_channel, founder | 데미스 허사비스(공동창업자·CEO) 출연 |
