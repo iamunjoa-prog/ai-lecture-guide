@@ -252,6 +252,14 @@ export function buildRoadmap(
   // 입문자에게는 기초(beginner)가 핵심 단계라 3개까지 허용한다.
   const limitOf = (k: StepKind) => (k === "foundation" && isBeginner ? 3 : STEP_LIMITS[k]);
 
+  // 기초·심화 단계는 분야가 하나라도 맞는 강의를 우선한다. 목표만 맞는 강의는
+  // 분야 일치 강의가 하나도 없을 때만 쓴다 (예: 개발자 기초에 비개발자용 강의가 끼는 것 방지).
+  const domainMatch = (s: Scored) => s.video.domains.some((d) => diagnosis.domains.includes(d));
+  const pickRelevant = (filter: (s: Scored) => boolean, limit: number): Scored[] => {
+    const first = pick((s) => filter(s) && domainMatch(s), limit);
+    return first.length > 0 ? first : pick(filter, limit);
+  };
+
   const pickFoundation = () => {
     if (!plan.foundation) return;
     const { strict, loose } = plan.foundation;
@@ -260,9 +268,9 @@ export function buildRoadmap(
       return;
     }
     // 현재 수준이 섞이지 않은 강의(아래 수준 전용) 우선, 없으면 현재 수준 포함 강의도 허용
-    picked.foundation = pick((s) => s.video.levels.every((l) => strict.includes(l)), limitOf("foundation"));
+    picked.foundation = pickRelevant((s) => s.video.levels.every((l) => strict.includes(l)), limitOf("foundation"));
     if (picked.foundation.length === 0 && loose) {
-      picked.foundation = pick(hasAny(loose), limitOf("foundation"));
+      picked.foundation = pickRelevant(hasAny(loose), limitOf("foundation"));
     }
   };
   const pickPractice = () => {
@@ -277,7 +285,7 @@ export function buildRoadmap(
     pickPractice();
     pickFoundation();
   }
-  if (plan.next) picked.next = pick(hasAny(plan.next.strict), limitOf("next"));
+  if (plan.next) picked.next = pickRelevant(hasAny(plan.next.strict), limitOf("next"));
 
   // 전체가 MIN_TOTAL 미만이면 남은 강의 중 점수 높은 순으로 "실전 활용"에 채운다.
   // (전체가 3개 미만이면 실전 단계에는 항상 자리가 있다.)

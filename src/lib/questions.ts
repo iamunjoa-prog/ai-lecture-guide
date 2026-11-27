@@ -367,7 +367,7 @@ export const DOMAIN_QUESTION: DomainQuestion = {
   type: "multi",
   maxSelect: MAX_DOMAINS,
   title: "어떤 분야에 AI를 쓰고 싶으세요?",
-  subtitle: `최대 ${MAX_DOMAINS}개까지 고를 수 있어요.`,
+  subtitle: "관심 있는 분야를 골라 주세요. 여러 개 골라도 좋아요.",
   options: DOMAIN_OPTIONS,
 };
 
