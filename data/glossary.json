@@ -4,670 +4,1123 @@
     "term": "생성형 AI",
     "termEn": "Generative AI",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "글·그림·코드처럼 새 결과물을 만들어 내는 AI",
     "detail": "기존 AI가 주로 '분류'나 '예측'을 했다면, 생성형 AI는 배운 패턴을 바탕으로 새로운 글, 이미지, 음성, 코드를 만들어 냅니다. 수많은 요리를 맛본 요리사가 처음 보는 재료로도 새 요리를 내놓는 것과 비슷합니다.",
     "example": "회의 메모를 주면 생성형 AI가 보고서 초안을 바로 써 줍니다.",
-    "related": ["llm", "ai-model", "multimodal"]
+    "related": [
+      "llm",
+      "ai-model",
+      "multimodal"
+    ]
   },
   {
     "id": "ai-model",
     "term": "AI 모델",
     "termEn": "AI Model",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "데이터로 학습해 답을 내놓는 AI의 '두뇌'",
     "detail": "AI 모델은 많은 데이터를 학습해 입력을 받으면 결과를 내놓도록 만들어진 프로그램입니다. 같은 서비스 안에서도 빠르고 가벼운 모델, 느리지만 깊이 생각하는 모델 등 여러 모델을 골라 쓸 수 있습니다.",
     "example": "간단한 번역은 가벼운 모델로, 복잡한 분석은 고성능 모델로 나눠 맡길 수 있어요.",
-    "related": ["llm", "training-data", "reasoning-model"]
+    "related": [
+      "llm",
+      "training-data",
+      "reasoning-model"
+    ]
   },
   {
     "id": "llm",
     "term": "LLM (대규모 언어 모델)",
     "termEn": "Large Language Model",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "방대한 글을 학습해 사람처럼 글을 쓰는 AI 모델",
     "detail": "LLM은 인터넷 문서, 책 등 엄청난 양의 텍스트를 학습해 '다음에 올 말'을 예측하며 문장을 만들어 냅니다. 휴대폰 자동완성을 아주 크고 똑똑하게 키운 것이라고 생각하면 쉽습니다. ChatGPT, Claude, Gemini 같은 서비스가 LLM을 바탕으로 합니다.",
     "example": "LLM에게 이메일 초안을 부탁하면 문맥에 맞는 문장을 이어서 써 줍니다.",
-    "related": ["token", "pretraining", "transformer"]
+    "related": [
+      "token",
+      "pretraining",
+      "transformer"
+    ]
   },
   {
     "id": "chatbot",
     "term": "챗봇",
     "termEn": "Chatbot",
     "level": "beginner",
-    "goals": ["understand", "use_tools"],
+    "goals": [
+      "understand",
+      "use_tools"
+    ],
     "short": "대화하듯 질문하고 답을 받는 AI 서비스",
     "detail": "챗봇은 메시지를 주고받는 방식으로 AI와 소통하는 서비스입니다. 요즘 AI 챗봇은 LLM을 바탕으로 해서 정해진 답만 하던 예전 챗봇보다 훨씬 자연스럽게 대화합니다.",
     "example": "카카오톡에서 AI 챗봇에게 사진 속 글자를 번역해 달라고 할 수 있어요.",
-    "related": ["llm", "prompt", "ai-agent"]
+    "related": [
+      "llm",
+      "prompt",
+      "ai-agent"
+    ]
   },
   {
     "id": "prompt",
     "term": "프롬프트",
     "termEn": "Prompt",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI에게 건네는 질문이나 지시문",
     "detail": "프롬프트는 AI에게 무엇을 해 달라고 입력하는 글입니다. 새로 온 동료에게 일을 부탁할 때처럼 목적, 배경, 원하는 형식을 구체적으로 알려 줄수록 결과가 좋아집니다.",
     "example": "\"요약해 줘\"보다 \"팀장님 보고용으로 세 줄로 요약해 줘\"가 더 좋은 프롬프트예요.",
-    "related": ["prompt-engineering", "system-prompt", "few-shot"]
+    "related": [
+      "prompt-engineering",
+      "system-prompt",
+      "few-shot"
+    ]
   },
   {
     "id": "hallucination",
     "term": "할루시네이션 (환각)",
     "termEn": "Hallucination",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI가 사실이 아닌 내용을 그럴듯하게 지어내는 현상",
     "detail": "LLM은 '그럴듯한 다음 말'을 만들기 때문에, 모르는 내용도 자신 있게 지어낼 때가 있습니다. 시험에서 모르는 문제를 그럴듯하게 채워 쓰는 것과 비슷합니다. 숫자, 인용, 출처는 꼭 원문으로 확인하는 습관이 필요합니다.",
     "example": "AI가 알려 준 논문 제목을 검색해 보니 실제로는 없는 논문이었어요.",
-    "related": ["llm", "rag", "web-search"]
+    "related": [
+      "llm",
+      "rag",
+      "web-search"
+    ]
   },
   {
     "id": "training-data",
     "term": "학습 데이터",
     "termEn": "Training Data",
     "level": "beginner",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "AI 모델이 배우는 데 쓰는 글·이미지 등의 자료",
     "detail": "AI 모델의 실력과 성향은 무엇을 얼마나 배웠는지에 크게 좌우됩니다. 교과서가 좋아야 학생이 잘 배우듯, 데이터의 양과 질, 치우침이 결과에 그대로 드러납니다. 학습 시점 이후의 일은 따로 검색하지 않으면 모를 수 있습니다.",
     "example": "학습 데이터가 특정 시점까지라서, AI가 최신 소식을 모를 수 있어요.",
-    "related": ["machine-learning", "pretraining", "fine-tuning"]
+    "related": [
+      "machine-learning",
+      "pretraining",
+      "fine-tuning"
+    ]
   },
   {
     "id": "multimodal",
     "term": "멀티모달",
     "termEn": "Multimodal",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_products"
+    ],
     "short": "글뿐 아니라 이미지·음성·영상도 함께 다루는 능력",
     "detail": "멀티모달 AI는 글자만 읽는 것이 아니라 사진을 보고, 말을 듣고, 그림이나 음성으로 답할 수도 있습니다. 눈과 귀가 생긴 AI라고 생각하면 쉽습니다.",
     "example": "냉장고 사진을 찍어 보내면 AI가 재료를 알아보고 요리법을 추천해 줘요.",
-    "related": ["generative-ai", "file-analysis", "computer-vision"]
+    "related": [
+      "generative-ai",
+      "file-analysis",
+      "computer-vision"
+    ]
   },
   {
     "id": "token",
     "term": "토큰",
     "termEn": "Token",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI가 글을 잘게 나눠 처리하는 단위",
     "detail": "AI는 글을 단어보다 작은 조각인 토큰으로 나눠 읽고 씁니다. 한 번에 다룰 수 있는 분량과 API 요금이 보통 토큰 수로 정해집니다. 대략 글자 수가 많을수록 토큰도 많아진다고 생각하면 됩니다.",
     "example": "긴 보고서를 통째로 넣으면 토큰이 많이 들어 요금과 처리 시간이 늘어요.",
-    "related": ["context-window", "latency-cost", "llm"]
+    "related": [
+      "context-window",
+      "latency-cost",
+      "llm"
+    ]
   },
   {
     "id": "privacy-security",
     "term": "개인정보·보안 주의",
     "termEn": "Privacy & Security",
     "level": "beginner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI에 민감한 정보를 넣기 전에 확인할 점",
     "detail": "AI 서비스에 입력한 내용은 서비스 설정이나 약관에 따라 저장되거나 학습에 쓰일 수 있습니다. 주민번호, 고객 명단, 회사 기밀처럼 밖으로 나가면 안 되는 정보는 넣기 전에 회사 정책과 서비스 설정을 꼭 확인하세요.",
     "example": "고객 이름과 연락처는 가린 뒤에 AI에게 상담 기록 요약을 맡겼어요.",
-    "related": ["guardrails", "ai-safety", "api-key"]
+    "related": [
+      "guardrails",
+      "ai-safety",
+      "api-key"
+    ]
   },
   {
     "id": "machine-learning",
     "term": "머신러닝 (기계학습)",
     "termEn": "Machine Learning",
     "level": "beginner",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "규칙을 직접 짜지 않고 데이터에서 배우게 하는 방법",
     "detail": "사람이 모든 규칙을 일일이 코딩하는 대신, 많은 예시를 보여 주고 컴퓨터가 스스로 패턴을 찾게 하는 방법입니다. 스팸 메일 수천 통을 보여 주면 스팸의 특징을 알아서 익히는 식입니다. 인공지능 ⊃ 머신러닝 ⊃ 딥러닝 관계로 이해하면 쉽습니다.",
     "example": "쇼핑몰 추천 기능은 고객 구매 기록을 머신러닝으로 학습해 만들어요.",
-    "related": ["deep-learning", "training-data", "neural-network"]
+    "related": [
+      "deep-learning",
+      "training-data",
+      "neural-network"
+    ]
   },
   {
     "id": "deep-learning",
     "term": "딥러닝",
     "termEn": "Deep Learning",
     "level": "beginner",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "여러 층의 신경망으로 복잡한 패턴을 배우는 머신러닝",
     "detail": "딥러닝은 뇌의 신경 연결에서 아이디어를 얻은 인공 신경망을 여러 층 깊게 쌓아 학습하는 방법입니다. 사진 인식, 음성 인식, 그리고 오늘날의 LLM까지 대부분의 최신 AI가 딥러닝으로 만들어졌습니다.",
     "example": "스마트폰 사진첩이 얼굴별로 사진을 묶어 주는 것도 딥러닝 덕분이에요.",
-    "related": ["machine-learning", "neural-network", "computer-vision"]
+    "related": [
+      "machine-learning",
+      "neural-network",
+      "computer-vision"
+    ]
   },
   {
     "id": "computer-vision",
     "term": "컴퓨터 비전",
     "termEn": "Computer Vision",
     "level": "beginner",
-    "goals": ["understand"],
+    "goals": [
+      "understand"
+    ],
     "short": "컴퓨터가 사진과 영상을 보고 이해하게 하는 분야",
     "detail": "컴퓨터 비전은 이미지 속 사물, 사람, 글자 등을 알아보게 하는 AI 분야입니다. 아이에게 그림책을 보여 주며 '이건 고양이야'를 가르치듯, 이름표가 붙은 사진을 대량으로 학습시키며 발전했습니다.",
     "example": "자율주행차는 컴퓨터 비전으로 신호등과 보행자를 알아봐요.",
-    "related": ["deep-learning", "multimodal", "training-data"]
+    "related": [
+      "deep-learning",
+      "multimodal",
+      "training-data"
+    ]
   },
   {
     "id": "context-window",
     "term": "컨텍스트 윈도우",
     "termEn": "Context Window",
     "level": "user",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI가 한 번에 기억하며 볼 수 있는 대화·자료의 양",
     "detail": "컨텍스트 윈도우는 AI가 한 대화에서 동시에 참고할 수 있는 분량으로, 토큰 수로 표시합니다. 책상 넓이에 비유할 수 있는데, 책상이 넓을수록 자료를 많이 펼쳐 놓을 수 있지만 너무 어지러우면 중요한 것을 놓치기도 합니다.",
     "example": "대화가 너무 길어지자 AI가 앞부분 지시를 잊어서 새 대화를 시작했어요.",
-    "related": ["token", "context-engineering", "project-knowledge"]
+    "related": [
+      "token",
+      "context-engineering",
+      "project-knowledge"
+    ]
   },
   {
     "id": "system-prompt",
     "term": "시스템 프롬프트",
     "termEn": "System Prompt",
     "level": "user",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "대화 전체에 적용되는 AI의 기본 지침",
     "detail": "시스템 프롬프트는 매번 말하지 않아도 AI가 항상 따르는 기본 규칙입니다. 직원에게 주는 업무 매뉴얼처럼 말투, 역할, 하지 말아야 할 일 등을 미리 정해 둡니다. 서비스에서는 '맞춤 지침'이나 '사용자 지정 지침' 같은 이름으로 설정하기도 합니다.",
     "example": "시스템 프롬프트에 \"항상 존댓말로, 표로 정리해 주세요\"라고 적어 두었어요.",
-    "related": ["prompt", "role-prompting", "custom-assistant"]
+    "related": [
+      "prompt",
+      "role-prompting",
+      "custom-assistant"
+    ]
   },
   {
     "id": "prompt-engineering",
     "term": "프롬프트 엔지니어링",
     "termEn": "Prompt Engineering",
     "level": "user",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "원하는 결과가 나오도록 프롬프트를 설계·개선하는 일",
     "detail": "프롬프트 엔지니어링은 목적, 맥락, 예시, 출력 형식을 체계적으로 담고, 결과를 보며 고쳐 나가는 과정입니다. 요리 레시피를 여러 번 만들어 보며 간을 맞추는 것과 비슷합니다.",
     "example": "답이 너무 길어서 \"300자 이내, 핵심 3가지\" 조건을 추가해 다시 물었어요.",
-    "related": ["prompt", "few-shot", "role-prompting"]
+    "related": [
+      "prompt",
+      "few-shot",
+      "role-prompting"
+    ]
   },
   {
     "id": "few-shot",
     "term": "퓨샷 (예시 제공)",
     "termEn": "Few-shot Prompting",
     "level": "user",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "원하는 답의 예시를 몇 개 보여 주고 따라 하게 하는 방법",
     "detail": "말로 길게 설명하는 대신 \"이런 식으로 해 주세요\" 하고 예시 몇 개를 보여 주는 기법입니다. 신입에게 잘 쓴 보고서 샘플을 건네주면 금방 형식을 따라 하는 것과 같습니다.",
     "example": "상품 소개 문구 예시 세 개를 먼저 넣었더니 같은 톤으로 새 문구를 써 줬어요.",
-    "related": ["prompt-engineering", "prompt", "evals"]
+    "related": [
+      "prompt-engineering",
+      "prompt",
+      "evals"
+    ]
   },
   {
     "id": "role-prompting",
     "term": "역할 지정",
     "termEn": "Role Prompting",
     "level": "user",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "AI에게 특정 전문가나 입장을 맡겨 답하게 하는 방법",
     "detail": "\"당신은 10년 차 마케터입니다\"처럼 역할을 정해 주면 AI가 그 관점과 말투에 맞춰 답합니다. 연극에서 배역을 정해 주는 것과 비슷하며, 대상 독자까지 함께 알려 주면 더 효과적입니다.",
     "example": "\"까다로운 투자자 입장에서 이 사업계획서의 약점을 짚어 주세요\"라고 요청했어요.",
-    "related": ["system-prompt", "prompt-engineering", "custom-assistant"]
+    "related": [
+      "system-prompt",
+      "prompt-engineering",
+      "custom-assistant"
+    ]
   },
   {
     "id": "project-knowledge",
     "term": "프로젝트·지식 업로드",
     "termEn": "Projects & Knowledge",
     "level": "user",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "자료와 지침을 한곳에 모아 두고 대화마다 참고하게 하는 기능",
     "detail": "자주 쓰는 문서, 규정, 지침을 프로젝트 공간에 올려 두면 그 안의 대화에서 AI가 매번 그 자료를 바탕으로 답합니다. 업무 폴더를 통째로 AI 책상 위에 올려 두는 것과 비슷합니다.",
     "example": "회사 브랜드 가이드를 프로젝트에 올려 두니 홍보 문구가 항상 규칙에 맞게 나와요.",
-    "related": ["file-analysis", "custom-assistant", "rag"]
+    "related": [
+      "file-analysis",
+      "custom-assistant",
+      "rag"
+    ]
   },
   {
     "id": "custom-assistant",
-    "term": "커스텀 GPT·Gems (맞춤 AI 비서)",
+    "term": "맞춤 AI 비서 (커스텀 어시스턴트)",
     "termEn": "Custom Assistants",
     "level": "user",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "지침과 자료를 담아 특정 일만 하도록 만든 나만의 AI",
-    "detail": "지시문, 참고 자료, 사용할 기능을 미리 설정해 특정 업무 전용 AI 비서를 만드는 기능입니다. 서비스마다 GPTs, Gems 등 이름이 다릅니다. 한 번 만들어 두면 동료와 공유하거나 반복해서 불러 쓸 수 있습니다.",
-    "example": "회의록 정리 전용 Gem을 만들어 회의가 끝날 때마다 녹취록만 붙여 넣어요.",
-    "related": ["system-prompt", "project-knowledge", "ai-agent"]
+    "detail": "지시문, 참고 자료, 사용할 기능을 미리 설정해 특정 업무 전용 AI 비서를 만드는 기능입니다. 서비스마다 부르는 이름이 다르고, 기능 이름과 위치도 자주 바뀌니 쓰는 서비스의 도움말을 확인하세요. 한 번 만들어 두면 반복해서 불러 쓸 수 있습니다.",
+    "example": "회의록 정리 전용 AI 비서를 만들어 두고, 회의가 끝날 때마다 녹취록만 붙여 넣어요.",
+    "related": [
+      "system-prompt",
+      "project-knowledge",
+      "ai-agent"
+    ]
   },
   {
     "id": "skills",
     "term": "스킬",
     "termEn": "Skills",
     "level": "user",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "AI에게 특정 작업 방법을 묶어 가르쳐 두는 꾸러미",
     "detail": "스킬은 작업 절차, 지침, 필요한 파일이나 스크립트를 하나로 묶어 둔 것으로, AI가 관련 일을 할 때 알아서 꺼내 씁니다. 업무 노하우를 담은 매뉴얼 바인더를 AI 책장에 꽂아 두는 것과 비슷합니다. 매번 같은 설명을 반복하지 않아도 됩니다.",
     "example": "우리 팀 보고서 양식을 스킬로 만들어 두니 보고서가 항상 같은 형식으로 나와요.",
-    "related": ["custom-assistant", "instruction-file", "context-engineering"]
+    "related": [
+      "custom-assistant",
+      "instruction-file",
+      "context-engineering"
+    ]
   },
   {
     "id": "file-analysis",
     "term": "파일 분석",
     "termEn": "File Analysis",
     "level": "user",
-    "goals": ["use_tools"],
+    "goals": [
+      "use_tools"
+    ],
     "short": "PDF·엑셀 등 파일을 올려 요약·분석을 맡기는 기능",
     "detail": "문서, 표, 이미지 파일을 올리면 AI가 내용을 읽고 요약하거나 질문에 답하고, 표 데이터는 계산해 차트로 만들기도 합니다. 결과의 숫자는 원본과 한 번 대조해 보는 것이 좋습니다.",
     "example": "월별 매출 엑셀을 올리고 \"전월 대비 가장 많이 떨어진 품목\"을 물었어요.",
-    "related": ["multimodal", "project-knowledge", "hallucination"]
+    "related": [
+      "multimodal",
+      "project-knowledge",
+      "hallucination"
+    ]
   },
   {
     "id": "web-search",
     "term": "웹 검색 연동",
     "termEn": "Web Search",
     "level": "user",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "AI가 인터넷을 검색해 최신 정보를 찾아 답하는 기능",
     "detail": "학습 데이터에 없는 최신 소식도 AI가 직접 검색해 출처와 함께 알려 줍니다. 도서관 책만 보던 사람이 신문도 읽게 된 셈입니다. 출처 링크를 열어 실제 내용과 맞는지 확인하는 습관이 중요합니다.",
     "example": "웹 검색을 켜고 \"이번 주 발표된 AI 규제 소식\"을 출처와 함께 정리해 달라고 했어요.",
-    "related": ["hallucination", "training-data", "tool-use"]
+    "related": [
+      "hallucination",
+      "training-data",
+      "tool-use"
+    ]
   },
   {
     "id": "workflow",
     "term": "워크플로",
     "termEn": "Workflow",
     "level": "user",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "정해진 순서대로 일이 처리되는 업무 흐름",
     "detail": "워크플로는 '메일 도착 → 내용 요약 → 담당자에게 전달'처럼 단계가 미리 정해진 일의 흐름입니다. 단계를 AI가 스스로 정하는 에이전트와 달리, 사람이 짜 둔 순서를 그대로 따르기 때문에 예측하기 쉽습니다.",
     "example": "매주 월요일 지표를 모아 요약하고 팀 채널에 올리는 워크플로를 만들었어요.",
-    "related": ["no-code-automation", "workflow-automation", "ai-agent"]
+    "related": [
+      "no-code-automation",
+      "workflow-automation",
+      "ai-agent"
+    ]
   },
   {
     "id": "no-code-automation",
     "term": "노코드 자동화",
     "termEn": "No-code Automation",
     "level": "user",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "코딩 없이 클릭과 말로 반복 업무를 자동화하는 것",
     "detail": "화면에서 블록을 연결하거나 원하는 일을 말로 설명하는 것만으로 앱 사이의 반복 작업을 자동으로 돌릴 수 있습니다. 예약 작업처럼 정해진 시간에 AI가 알아서 일하게 할 수도 있습니다.",
     "example": "코딩 없이 \"매일 아침 9시에 새 문의 메일을 요약해 줘\"라는 예약 작업을 만들었어요.",
-    "related": ["workflow", "workflow-automation", "ai-agent"]
+    "related": [
+      "workflow",
+      "workflow-automation",
+      "ai-agent"
+    ]
   },
   {
     "id": "ai-agent",
     "term": "AI 에이전트",
     "termEn": "AI Agent",
     "level": "user",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "목표를 받으면 스스로 계획하고 도구를 써서 일을 끝내는 AI",
     "detail": "챗봇이 질문에 답만 한다면, 에이전트는 목표를 받아 필요한 단계를 스스로 정하고 검색, 파일 작성, 앱 조작 같은 도구를 써서 일을 마무리합니다. 할 일을 맡기면 알아서 처리하고 보고하는 비서에 가깝습니다.",
     "example": "에이전트에게 \"다음 주 회의 준비\"를 맡겼더니 자료를 찾아 안건 문서까지 만들어 줬어요.",
-    "related": ["tool-use", "agent-loop", "workflow"]
+    "related": [
+      "tool-use",
+      "agent-loop",
+      "workflow"
+    ]
   },
   {
     "id": "pretraining",
     "term": "사전학습",
     "termEn": "Pre-training",
     "level": "user",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "방대한 데이터로 모델의 기본 실력을 만드는 첫 학습 단계",
     "detail": "사전학습은 인터넷 규모의 글을 읽히며 언어와 세상에 대한 폭넓은 지식을 익히게 하는 단계입니다. 이후 대화 방식과 안전 규칙을 따로 가르치는 후속 학습을 거쳐 우리가 쓰는 AI 비서가 됩니다. 학교 교육을 마친 뒤 직무 교육을 받는 것과 비슷합니다.",
     "example": "사전학습만 마친 모델은 질문에 답하기보다 글을 이어 쓰는 데 가까워요.",
-    "related": ["training-data", "fine-tuning", "reinforcement-learning"]
+    "related": [
+      "training-data",
+      "fine-tuning",
+      "reinforcement-learning"
+    ]
   },
   {
     "id": "ai-safety",
     "term": "AI 안전",
     "termEn": "AI Safety",
     "level": "user",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "AI가 사람에게 해롭지 않고 의도대로 동작하게 하는 연구와 노력",
     "detail": "AI 안전은 AI가 잘못된 정보, 위험한 행동, 악용 없이 사람의 의도와 가치에 맞게 동작하도록 만드는 분야입니다. AI가 강력해질수록 자동차의 브레이크와 안전벨트처럼 중요해집니다.",
     "example": "AI 회사들은 새 모델을 내놓기 전에 위험한 요청을 거절하는지 안전 테스트를 해요.",
-    "related": ["guardrails", "privacy-security", "evals"]
+    "related": [
+      "guardrails",
+      "privacy-security",
+      "evals"
+    ]
   },
   {
     "id": "api",
     "term": "API",
     "termEn": "Application Programming Interface",
     "level": "practitioner",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "프로그램끼리 기능을 주고받는 약속된 창구",
     "detail": "API는 내 프로그램이 AI 모델 같은 외부 서비스에 요청을 보내고 결과를 받는 정해진 방법입니다. 식당에서 주방에 직접 들어가지 않고 웨이터에게 주문서를 건네는 것과 같습니다. 채팅 화면 없이도 AI를 내 서비스나 자동화에 붙일 수 있습니다.",
     "example": "쇼핑몰에 AI API를 연결해 상품 설명을 자동으로 생성했어요.",
-    "related": ["api-key", "sdk", "token"]
+    "related": [
+      "api-key",
+      "sdk",
+      "token"
+    ]
   },
   {
     "id": "api-key",
     "term": "API 키",
     "termEn": "API Key",
     "level": "practitioner",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "API를 쓸 수 있게 해 주는 비밀 열쇠",
     "detail": "API 키는 누가 API를 쓰는지 확인하고 요금을 청구하는 데 쓰이는 비밀 문자열입니다. 집 열쇠처럼 남에게 보이거나 코드에 그대로 올리면 다른 사람이 내 비용으로 쓸 수 있으니 안전하게 보관해야 합니다.",
     "example": "API 키는 코드에 직접 쓰지 않고 환경 변수에 넣어 관리해요.",
-    "related": ["api", "privacy-security", "sdk"]
+    "related": [
+      "api",
+      "privacy-security",
+      "sdk"
+    ]
   },
   {
     "id": "tool-use",
     "term": "도구 사용 (함수 호출)",
     "termEn": "Tool Use / Function Calling",
     "level": "practitioner",
-    "goals": ["understand", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI가 검색·계산·앱 조작 같은 외부 기능을 불러 쓰는 것",
     "detail": "AI 모델은 말만 할 수 있지만, 쓸 수 있는 도구 목록과 사용법을 알려 주면 \"이 도구를 이렇게 실행해 주세요\"라고 요청을 만들어 냅니다. 프로그램이 그 도구를 실행해 결과를 돌려주면 AI가 이어서 판단합니다. 손이 없는 전문가에게 조수를 붙여 주는 것과 비슷합니다.",
     "example": "날씨 조회 도구를 연결하니 AI가 직접 오늘 날씨를 확인해 옷차림을 추천했어요.",
-    "related": ["mcp", "ai-agent", "agent-loop"]
+    "related": [
+      "mcp",
+      "ai-agent",
+      "agent-loop"
+    ]
   },
   {
     "id": "mcp",
     "term": "MCP (모델 컨텍스트 프로토콜)",
     "termEn": "Model Context Protocol",
     "level": "practitioner",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI와 외부 도구·데이터를 잇는 공통 연결 규격",
     "detail": "MCP는 AI 앱이 여러 도구와 데이터 소스에 같은 방식으로 연결되도록 정한 개방형 표준입니다. 기기마다 다르던 충전 단자를 USB-C 하나로 통일한 것과 비슷합니다. 도구 쪽에 MCP 서버를 한 번 만들어 두면 MCP를 지원하는 여러 AI 앱에서 쓸 수 있습니다.",
     "example": "사내 데이터베이스용 MCP 서버를 만들어 AI가 자연어 질문으로 데이터를 조회하게 했어요.",
-    "related": ["tool-use", "api", "a2a"]
+    "related": [
+      "tool-use",
+      "api",
+      "a2a"
+    ]
   },
   {
     "id": "rag",
     "term": "RAG (검색 증강 생성)",
     "termEn": "Retrieval-Augmented Generation",
     "level": "practitioner",
-    "goals": ["understand", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "build_agents",
+      "build_products"
+    ],
     "short": "관련 문서를 먼저 찾아 넣어 주고 답하게 하는 방법",
     "detail": "RAG는 질문이 들어오면 사내 문서 같은 자료에서 관련 부분을 먼저 검색해 AI에게 함께 건네고, 그 내용을 근거로 답하게 하는 방식입니다. 오픈북 시험처럼 책을 펼쳐 보고 답하게 해서 환각을 줄이고 최신·사내 정보를 반영할 수 있습니다.",
     "example": "사내 규정집으로 RAG를 만들어 \"연차는 며칠까지 이월되나요?\"에 근거와 함께 답하게 했어요.",
-    "related": ["embedding", "vector-db", "hallucination"]
+    "related": [
+      "embedding",
+      "vector-db",
+      "hallucination"
+    ]
   },
   {
     "id": "embedding",
     "term": "임베딩",
     "termEn": "Embedding",
     "level": "practitioner",
-    "goals": ["understand", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "build_agents",
+      "build_products"
+    ],
     "short": "글의 의미를 숫자 목록(벡터)으로 바꾼 것",
     "detail": "임베딩은 문장의 뜻을 수백~수천 개의 숫자로 표현한 것으로, 뜻이 비슷한 글은 숫자도 가깝게 나옵니다. 지도 위 좌표처럼 '의미의 위치'를 찍어 두는 셈이라 단어가 달라도 비슷한 내용을 찾아낼 수 있습니다.",
     "example": "\"환불 방법\"을 검색해도 임베딩 덕분에 \"반품 절차\" 문서가 함께 찾아져요.",
-    "related": ["vector-db", "rag", "neural-network"]
+    "related": [
+      "vector-db",
+      "rag",
+      "neural-network"
+    ]
   },
   {
     "id": "vector-db",
     "term": "벡터 DB",
     "termEn": "Vector Database",
     "level": "practitioner",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "임베딩을 저장하고 의미가 비슷한 것을 빠르게 찾는 데이터베이스",
     "detail": "벡터 DB는 문서 조각의 임베딩을 모아 두고, 질문과 의미가 가까운 조각을 빠르게 골라 주는 저장소입니다. 키워드가 아니라 뜻으로 찾는 도서관 색인이라고 생각하면 쉽습니다. RAG를 만들 때 자주 쓰입니다.",
     "example": "고객 상담 기록 10만 건을 벡터 DB에 넣어 비슷한 문의를 바로 찾게 했어요.",
-    "related": ["embedding", "rag", "api"]
+    "related": [
+      "embedding",
+      "rag",
+      "api"
+    ]
   },
   {
     "id": "workflow-automation",
     "term": "워크플로 자동화 (트리거·액션)",
     "termEn": "Workflow Automation",
     "level": "practitioner",
-    "goals": ["use_tools", "build_agents"],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
     "short": "조건이 생기면 정해진 작업이 자동으로 이어지게 묶는 것",
     "detail": "'새 메일이 오면(트리거) → AI가 분류하고 → 시트에 기록(액션)'처럼 사건을 계기로 여러 앱의 작업을 연결합니다. 중간에 AI 단계, 조건 분기, 사람 승인 단계를 넣어 실무에 맞게 설계할 수 있습니다. 도미노를 한 번 세워 두면 첫 조각만 쓰러뜨려도 끝까지 이어지는 것과 비슷합니다.",
     "example": "설문 응답이 들어오면 AI가 요약해 담당 팀 채널로 보내는 자동화를 만들었어요.",
-    "related": ["workflow", "no-code-automation", "human-in-the-loop"]
+    "related": [
+      "workflow",
+      "no-code-automation",
+      "human-in-the-loop"
+    ]
   },
   {
     "id": "evals",
     "term": "평가 (Evals)",
     "termEn": "Evaluations",
     "level": "practitioner",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI 결과물이 기준에 맞는지 체계적으로 시험하는 것",
     "detail": "Evals는 대표 질문과 기대 답을 모은 시험지를 만들어 프롬프트나 모델을 바꿀 때마다 성능을 점수로 확인하는 방법입니다. 감으로 '좋아진 것 같다'고 판단하지 않고, 정기 시험처럼 같은 문제로 비교할 수 있게 해 줍니다.",
     "example": "고객 문의 50개로 평가 세트를 만들어 프롬프트를 고칠 때마다 정답률을 비교해요.",
-    "related": ["guardrails", "observability", "prompt-engineering"]
+    "related": [
+      "guardrails",
+      "observability",
+      "prompt-engineering"
+    ]
   },
   {
     "id": "guardrails",
     "term": "가드레일",
     "termEn": "Guardrails",
     "level": "practitioner",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI가 정해진 범위를 벗어나지 않게 막는 안전장치",
     "detail": "가드레일은 부적절한 답변, 개인정보 노출, 허용되지 않은 행동을 막기 위해 입력과 출력을 검사하거나 권한을 제한하는 장치입니다. 도로의 가드레일처럼 평소에는 눈에 띄지 않지만 벗어나려 할 때 붙잡아 줍니다.",
     "example": "고객 상담 봇에 가드레일을 두어 환불 금액 약속이나 개인정보 안내는 하지 못하게 했어요.",
-    "related": ["ai-safety", "evals", "human-in-the-loop"]
+    "related": [
+      "ai-safety",
+      "evals",
+      "human-in-the-loop"
+    ]
   },
   {
     "id": "human-in-the-loop",
     "term": "사람 확인 단계",
     "termEn": "Human-in-the-loop",
     "level": "practitioner",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "중요한 순간에 사람이 검토·승인하도록 끼워 넣는 단계",
     "detail": "AI에게 일을 맡기더라도 메일 발송, 결제, 삭제처럼 되돌리기 어려운 작업 앞에서는 사람이 확인하도록 설계합니다. 신입 직원의 결재를 팀장이 확인하는 것과 같습니다. 자동화의 속도와 안전을 함께 챙길 수 있습니다.",
     "example": "AI가 쓴 고객 답장은 담당자가 '보내기'를 눌러야 발송되도록 했어요.",
-    "related": ["guardrails", "workflow-automation", "ai-agent"]
+    "related": [
+      "guardrails",
+      "workflow-automation",
+      "ai-agent"
+    ]
   },
   {
     "id": "vibe-coding",
     "term": "바이브 코딩",
     "termEn": "Vibe Coding",
     "level": "practitioner",
-    "goals": ["use_tools", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_products"
+    ],
     "short": "코드를 직접 쓰기보다 말로 설명해 AI가 앱을 만들게 하는 방식",
     "detail": "바이브 코딩은 만들고 싶은 것을 자연어로 설명하고, AI가 만든 결과를 써 보며 \"버튼을 더 크게\"처럼 말로 고쳐 나가는 개발 방식입니다. 시제품을 아주 빨리 만들 수 있지만, 실제 서비스로 쓰려면 보안과 품질을 따로 점검해야 합니다.",
     "example": "\"팀 점심 메뉴 투표 앱을 만들어 줘\"라고 말해 10분 만에 동작하는 앱을 만들었어요.",
-    "related": ["coding-agent", "spec-driven-development", "multimodal"]
+    "related": [
+      "coding-agent",
+      "spec-driven-development",
+      "multimodal"
+    ]
   },
   {
     "id": "coding-agent",
     "term": "코딩 에이전트",
     "termEn": "Coding Agent",
     "level": "practitioner",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "코드를 읽고 고치고 실행까지 하며 개발을 돕는 AI 에이전트",
     "detail": "코딩 에이전트는 프로젝트 파일을 탐색하고, 코드를 수정하고, 테스트를 돌려 결과를 확인하는 일을 스스로 반복합니다. 옆자리에서 함께 일하는 개발자 동료와 비슷하며, 무엇을 바꿨는지 사람이 검토하는 과정이 중요합니다.",
     "example": "코딩 에이전트에게 \"로그인 오류를 고치고 테스트까지 통과시켜 줘\"라고 맡겼어요.",
-    "related": ["vibe-coding", "instruction-file", "agent-loop"]
+    "related": [
+      "vibe-coding",
+      "instruction-file",
+      "agent-loop"
+    ]
   },
   {
     "id": "spec-driven-development",
     "term": "명세 기반 개발",
     "termEn": "Spec-driven Development",
     "level": "practitioner",
-    "goals": ["build_products"],
+    "goals": [
+      "build_products"
+    ],
     "short": "만들 것을 명세서로 먼저 정리하고 AI에게 구현을 맡기는 방식",
     "detail": "기능, 화면, 예외 상황을 명세서에 먼저 적어 두고 코딩 에이전트가 그 기준대로 구현·검증하게 하는 개발 방식입니다. 집을 짓기 전에 설계도를 그리는 것처럼, 즉흥적으로 고치는 것보다 결과가 일관되고 검토가 쉬워집니다.",
     "example": "회원가입 화면의 입력 규칙을 명세서로 정리한 뒤 에이전트에게 구현을 맡겼어요.",
-    "related": ["coding-agent", "vibe-coding", "evals"]
+    "related": [
+      "coding-agent",
+      "vibe-coding",
+      "evals"
+    ]
   },
   {
     "id": "instruction-file",
     "term": "프로젝트 지침 파일",
     "termEn": "Instruction File (CLAUDE.md, AGENTS.md)",
     "level": "practitioner",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI가 작업 전에 읽는 프로젝트 규칙·맥락 문서",
     "detail": "CLAUDE.md, AGENTS.md 같은 파일에 프로젝트 구조, 코드 규칙, 자주 쓰는 명령을 적어 두면 코딩 에이전트가 작업을 시작할 때 이를 먼저 읽고 따릅니다. 새 팀원에게 건네는 온보딩 문서와 같은 역할입니다.",
     "example": "지침 파일에 \"테스트는 npm test로 실행\"이라고 적어 두니 에이전트가 매번 테스트를 돌려요.",
-    "related": ["coding-agent", "system-prompt", "context-engineering"]
+    "related": [
+      "coding-agent",
+      "system-prompt",
+      "context-engineering"
+    ]
   },
   {
     "id": "sdk",
     "term": "SDK",
     "termEn": "Software Development Kit",
     "level": "developer",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "API를 코드에서 쉽게 쓰도록 묶어 둔 개발 도구 모음",
     "detail": "SDK는 API 호출, 인증, 재시도, 응답 처리 같은 반복 작업을 함수로 정리해 둔 라이브러리입니다. 조립 설명서와 공구가 함께 든 가구 키트처럼, 바닥부터 만들지 않고 바로 개발을 시작하게 해 줍니다. 에이전트 전용 SDK는 도구 실행과 에이전트 루프까지 대신 처리해 줍니다.",
     "example": "파이썬 SDK를 설치하고 몇 줄만으로 모델에 첫 요청을 보냈어요.",
-    "related": ["api", "agent-loop", "api-key"]
+    "related": [
+      "api",
+      "agent-loop",
+      "api-key"
+    ]
   },
   {
     "id": "agent-loop",
     "term": "에이전트 루프",
     "termEn": "Agent Loop",
     "level": "developer",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "생각→도구 실행→결과 확인을 목표 달성까지 반복하는 구조",
     "detail": "에이전트는 모델이 다음 행동을 정하고, 프로그램이 도구를 실행해 결과를 돌려주고, 모델이 다시 판단하는 과정을 일이 끝날 때까지 반복합니다. 길을 찾을 때 지도를 보고, 걷고, 다시 확인하는 것과 같습니다. 무한 반복을 막는 종료 조건과 단계 제한이 중요합니다.",
     "example": "에이전트 루프에 최대 20단계 제한을 두어 같은 검색을 끝없이 반복하지 않게 했어요.",
-    "related": ["tool-use", "ai-agent", "agent-harness"]
+    "related": [
+      "tool-use",
+      "ai-agent",
+      "agent-harness"
+    ]
   },
   {
     "id": "agent-harness",
     "term": "에이전트 하네스",
     "termEn": "Agent Harness",
     "level": "developer",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "모델이 에이전트로 일하도록 루프·도구·환경을 감싸 주는 실행 틀",
     "detail": "하네스는 모델 바깥에서 에이전트 루프를 돌리고, 도구와 파일 시스템, 권한, 기록, 테스트 환경을 제공하는 소프트웨어입니다. 말에 채우는 마구(harness)처럼, 같은 모델이라도 하네스가 좋아야 힘을 제대로 쓸 수 있습니다.",
     "example": "에이전트 하네스에 E2E 테스트를 붙여, 에이전트가 고친 코드를 자동으로 검증하게 했어요.",
-    "related": ["agent-loop", "sdk", "observability"]
+    "related": [
+      "agent-loop",
+      "sdk",
+      "observability"
+    ]
   },
   {
     "id": "multi-agent",
     "term": "멀티 에이전트",
     "termEn": "Multi-agent System",
     "level": "developer",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "역할이 다른 여러 에이전트가 나눠 맡아 협업하는 구조",
     "detail": "하나의 만능 에이전트 대신 조사, 작성, 검토처럼 역할별 전문 에이전트를 두고 서로 결과를 주고받게 합니다. 회사가 부서를 나누는 것처럼 각자 짧은 맥락에 집중할 수 있지만, 조율 비용과 비용·지연이 늘어날 수 있습니다.",
     "example": "조사 에이전트가 자료를 모으면 작성 에이전트가 보고서를, 검토 에이전트가 사실 확인을 맡아요.",
-    "related": ["orchestration", "a2a", "ai-agent"]
+    "related": [
+      "orchestration",
+      "a2a",
+      "ai-agent"
+    ]
   },
   {
     "id": "orchestration",
     "term": "오케스트레이션",
     "termEn": "Orchestration",
     "level": "developer",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "여러 모델·에이전트·도구의 실행 순서와 역할을 조율하는 일",
     "detail": "오케스트레이션은 어떤 작업을 누가, 어떤 순서로, 병렬로 할지 정하고 결과를 모아 다음 단계로 넘기는 설계입니다. 지휘자가 여러 악기의 연주 타이밍을 맞추는 것과 같습니다. 보통 총괄 에이전트가 하위 에이전트에게 일을 나눠 주는 형태로 구현합니다.",
     "example": "총괄 에이전트가 질문을 세 갈래로 나눠 하위 에이전트에 동시에 맡기고 답을 합쳤어요.",
-    "related": ["multi-agent", "workflow", "agent-loop"]
+    "related": [
+      "multi-agent",
+      "workflow",
+      "agent-loop"
+    ]
   },
   {
     "id": "a2a",
     "term": "A2A (에이전트 간 프로토콜)",
     "termEn": "Agent2Agent Protocol",
     "level": "developer",
-    "goals": ["build_agents"],
+    "goals": [
+      "build_agents"
+    ],
     "short": "서로 다른 에이전트끼리 일을 주고받게 하는 통신 규격",
     "detail": "A2A는 서로 다른 팀이나 회사가 만든 에이전트가 자신의 능력을 소개하고 작업을 맡기거나 결과를 돌려받을 수 있게 하는 개방형 프로토콜입니다. MCP가 AI와 도구를 잇는다면, A2A는 에이전트와 에이전트를 잇는 쪽에 가깝습니다.",
     "example": "사내 비서 에이전트가 A2A로 인사팀 에이전트에게 휴가 규정 질문을 넘겼어요.",
-    "related": ["multi-agent", "mcp", "orchestration"]
+    "related": [
+      "multi-agent",
+      "mcp",
+      "orchestration"
+    ]
   },
   {
     "id": "context-engineering",
     "term": "컨텍스트 엔지니어링",
     "termEn": "Context Engineering",
     "level": "developer",
-    "goals": ["use_tools", "build_agents", "build_products"],
+    "goals": [
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "모델에게 줄 정보를 골라 담고 정리하는 설계",
     "detail": "프롬프트 문장 하나를 넘어, 지침, 도구 설명, 검색 결과, 대화 기록, 메모리 중 무엇을 얼마나 컨텍스트 윈도우에 넣을지 설계하는 일입니다. 출장 가방을 쌀 때 꼭 필요한 것만 골라 넣는 것처럼, 많이 넣을수록 좋은 것이 아니라 필요한 것을 제때 넣는 것이 핵심입니다.",
     "example": "오래된 도구 실행 결과는 요약본으로 바꿔 넣어 긴 작업에서도 에이전트가 길을 잃지 않게 했어요.",
-    "related": ["context-window", "prompt-caching", "rag"]
+    "related": [
+      "context-window",
+      "prompt-caching",
+      "rag"
+    ]
   },
   {
     "id": "prompt-caching",
     "term": "프롬프트 캐싱",
     "termEn": "Prompt Caching",
     "level": "developer",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "반복되는 프롬프트 앞부분을 저장해 비용·속도를 아끼는 기능",
     "detail": "긴 시스템 프롬프트나 문서처럼 매 요청마다 똑같이 들어가는 앞부분을 서버가 잠시 저장해 두고 재사용하게 하는 기능입니다. 자주 쓰는 재료를 미리 손질해 두는 것처럼, 같은 부분을 다시 처리하지 않아 응답이 빨라지고 비용이 줄어듭니다. 바뀌지 않는 내용을 앞쪽에 두는 것이 요령입니다.",
     "example": "100쪽 매뉴얼을 캐싱해 두니 같은 매뉴얼에 대한 질문의 응답 속도가 빨라졌어요.",
-    "related": ["latency-cost", "context-engineering", "token"]
+    "related": [
+      "latency-cost",
+      "context-engineering",
+      "token"
+    ]
   },
   {
     "id": "streaming",
     "term": "스트리밍",
     "termEn": "Streaming",
     "level": "developer",
-    "goals": ["build_products"],
+    "goals": [
+      "build_products"
+    ],
     "short": "답변을 다 만들기 전에 생성되는 대로 조금씩 보내 주는 방식",
     "detail": "스트리밍을 쓰면 모델이 만든 글자가 실시간으로 화면에 나타나 사용자가 기다리는 느낌이 줄어듭니다. 택배를 한꺼번에 받는 대신 준비되는 대로 하나씩 받는 것과 비슷합니다. 긴 답변이나 음성 대화 서비스에서 특히 중요합니다.",
     "example": "스트리밍을 적용하니 첫 글자가 1초 안에 보여 사용자가 덜 답답해했어요.",
-    "related": ["latency-cost", "api", "sdk"]
+    "related": [
+      "latency-cost",
+      "api",
+      "sdk"
+    ]
   },
   {
     "id": "fine-tuning",
     "term": "파인튜닝 (미세조정)",
     "termEn": "Fine-tuning",
     "level": "developer",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "이미 학습된 모델을 내 데이터로 추가 학습시키는 것",
     "detail": "파인튜닝은 범용 모델에 특정 분야의 예시 데이터를 더 학습시켜 말투나 작업 방식을 맞추는 방법입니다. 경력직을 뽑아 우리 회사 방식으로 교육하는 것과 비슷합니다. 비용과 관리 부담이 있어서 보통 프롬프트와 RAG로 먼저 해결해 보고 부족할 때 고려합니다.",
     "example": "상담 기록으로 파인튜닝해 우리 회사 상담 말투를 일관되게 따르게 했어요.",
-    "related": ["pretraining", "training-data", "rag"]
+    "related": [
+      "pretraining",
+      "training-data",
+      "rag"
+    ]
   },
   {
     "id": "reasoning-model",
     "term": "추론 모델",
     "termEn": "Reasoning Model",
     "level": "developer",
-    "goals": ["understand", "use_tools", "build_agents", "build_products"],
+    "goals": [
+      "understand",
+      "use_tools",
+      "build_agents",
+      "build_products"
+    ],
     "short": "답하기 전에 단계별로 오래 생각하도록 학습된 모델",
     "detail": "추론 모델은 바로 답하지 않고 내부적으로 문제를 쪼개 검토하는 '생각' 과정을 거친 뒤 답합니다. 수학, 코딩, 복잡한 분석에 강하지만 그만큼 시간과 토큰이 더 듭니다. 서비스에서는 '생각 모드'나 '확장 사고'처럼 켜고 끌 수 있기도 합니다.",
     "example": "복잡한 일정 최적화 문제는 추론 모델에, 간단한 요약은 빠른 모델에 맡겼어요.",
-    "related": ["reinforcement-learning", "latency-cost", "ai-model"]
+    "related": [
+      "reinforcement-learning",
+      "latency-cost",
+      "ai-model"
+    ]
   },
   {
     "id": "reinforcement-learning",
     "term": "강화학습",
     "termEn": "Reinforcement Learning",
     "level": "developer",
-    "goals": ["understand"],
+    "goals": [
+      "understand"
+    ],
     "short": "시도하고 보상을 받으며 더 나은 행동을 배우는 학습 방법",
     "detail": "강화학습은 정답을 직접 알려 주는 대신, 좋은 결과에는 보상을 주고 나쁜 결과에는 벌점을 주며 스스로 전략을 찾게 하는 방법입니다. 강아지가 간식을 받으며 훈련되는 것과 비슷합니다. 알파고와 최신 추론 모델의 학습에도 중요한 역할을 합니다.",
     "example": "수학 문제를 맞힐 때마다 보상을 주는 강화학습으로 모델의 풀이 능력이 좋아졌어요.",
-    "related": ["reasoning-model", "pretraining", "neural-network"]
+    "related": [
+      "reasoning-model",
+      "pretraining",
+      "neural-network"
+    ]
   },
   {
     "id": "latency-cost",
     "term": "지연시간·비용",
     "termEn": "Latency & Cost",
     "level": "developer",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "응답 속도와 토큰 요금, AI 제품 설계의 현실적 제약",
     "detail": "AI 제품은 모델 크기, 입력·출력 토큰 수, 도구 호출 횟수에 따라 응답이 느려지고 비용이 늘어납니다. 서버와 GPU를 얼마나 효율적으로 쓰는지도 영향을 줍니다. 작업 난이도에 맞는 모델 선택, 캐싱, 스트리밍, 출력 길이 조절로 균형을 잡습니다.",
     "example": "간단한 분류는 작은 모델로 바꿔 응답 시간을 절반으로, 비용을 10분의 1로 줄였어요.",
-    "related": ["token", "prompt-caching", "streaming"]
+    "related": [
+      "token",
+      "prompt-caching",
+      "streaming"
+    ]
   },
   {
     "id": "observability",
     "term": "관측성",
     "termEn": "Observability",
     "level": "developer",
-    "goals": ["build_agents", "build_products"],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
     "short": "AI가 실제로 무엇을 했는지 기록하고 들여다보는 능력",
     "detail": "관측성은 프롬프트, 모델 응답, 도구 호출, 소요 시간, 비용 같은 실행 기록(트레이스)을 남겨 문제를 찾고 개선할 수 있게 하는 것입니다. 비행기의 블랙박스처럼, 에이전트가 왜 엉뚱한 결정을 했는지 나중에 되짚어 볼 수 있게 해 줍니다.",
     "example": "트레이스를 보니 에이전트가 잘못된 검색어로 세 번이나 같은 도구를 부르고 있었어요.",
-    "related": ["evals", "agent-harness", "latency-cost"]
+    "related": [
+      "evals",
+      "agent-harness",
+      "latency-cost"
+    ]
   },
   {
     "id": "neural-network",
     "term": "신경망",
     "termEn": "Neural Network",
     "level": "developer",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "숫자를 주고받는 수많은 노드를 층층이 연결한 학습 모델",
     "detail": "신경망은 입력 숫자에 가중치를 곱해 더하고 다음 층으로 넘기는 단순한 계산을 여러 층에 걸쳐 반복하는 구조입니다. 수많은 볼륨 손잡이가 달린 기계라고 생각하면, 학습은 원하는 출력이 나오도록 손잡이를 조금씩 돌리는 과정입니다.",
     "example": "손글씨 숫자 이미지를 넣으면 신경망이 0부터 9 중 하나로 맞히도록 학습시켰어요.",
-    "related": ["backpropagation", "deep-learning", "transformer"]
+    "related": [
+      "backpropagation",
+      "deep-learning",
+      "transformer"
+    ]
   },
   {
     "id": "backpropagation",
     "term": "역전파",
     "termEn": "Backpropagation",
     "level": "developer",
-    "goals": ["understand"],
+    "goals": [
+      "understand"
+    ],
     "short": "오차를 거꾸로 전달해 신경망의 가중치를 고치는 학습 방법",
     "detail": "역전파는 신경망이 낸 답과 정답의 차이(오차)를 출력층에서 입력층 방향으로 거슬러 올라가며, 각 가중치가 오차에 얼마나 책임이 있는지 계산해 조금씩 고치는 방법입니다. 단체 줄넘기에서 누가 박자를 놓쳤는지 거꾸로 짚어 보며 고치는 것과 비슷합니다.",
     "example": "역전파를 직접 구현해 보면 딥러닝 프레임워크가 내부에서 무엇을 하는지 이해할 수 있어요.",
-    "related": ["neural-network", "deep-learning", "training-data"]
+    "related": [
+      "neural-network",
+      "deep-learning",
+      "training-data"
+    ]
   },
   {
     "id": "transformer",
     "term": "트랜스포머",
     "termEn": "Transformer",
     "level": "developer",
-    "goals": ["understand", "build_products"],
+    "goals": [
+      "understand",
+      "build_products"
+    ],
     "short": "오늘날 LLM 대부분의 바탕이 되는 신경망 구조",
     "detail": "트랜스포머는 2017년에 발표된 신경망 구조로, 문장 속 모든 단어의 관계를 어텐션으로 한꺼번에 계산해 긴 글의 맥락을 잘 파악합니다. 병렬 계산에 유리해 아주 큰 모델을 학습시킬 수 있게 되면서 GPT 같은 LLM의 기반이 되었습니다.",
     "example": "GPT의 'T'가 바로 트랜스포머(Transformer)를 뜻해요.",
-    "related": ["attention", "llm", "neural-network"]
+    "related": [
+      "attention",
+      "llm",
+      "neural-network"
+    ]
   },
   {
     "id": "attention",
     "term": "어텐션",
     "termEn": "Attention",
     "level": "developer",
-    "goals": ["understand"],
+    "goals": [
+      "understand"
+    ],
     "short": "문장에서 지금 중요한 단어에 더 집중하게 하는 계산 방식",
     "detail": "어텐션은 각 단어가 문장 속 다른 단어들을 얼마나 참고해야 하는지 가중치를 계산하는 방법입니다. 시끄러운 파티에서도 내 이름이 들리면 그쪽에 귀가 쏠리는 것처럼, 모델이 맥락상 중요한 부분에 집중하게 해 줍니다.",
     "example": "\"그 사과는 빨갛다\"에서 어텐션 덕분에 모델은 '그'가 '사과'를 가리킨다는 것을 파악해요.",
-    "related": ["transformer", "neural-network", "context-window"]
+    "related": [
+      "transformer",
+      "neural-network",
+      "context-window"
+    ]
   }
 ]
