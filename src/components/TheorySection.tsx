@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Instructor, TheoryConcept, Video } from "@/types";
-import { IconArrowRight, IconChevronDown, Slide } from "@/components/ui";
+import { IconArrowRight, Slide } from "@/components/ui";
 import { lectureAnchorId, lecturesForConcept } from "@/lib/theory";
 import { TheoryConceptCard, type TheoryLectureLink } from "./TheoryConceptCard";
 
@@ -69,7 +69,7 @@ export function TheorySection({
           className="inline-flex min-h-11 items-center gap-1.5 rounded-full text-[15px] font-semibold text-fg underline underline-offset-4"
         >
           이론은 나중에, 추천 강의 바로 보기
-          <IconChevronDown size={16} />
+          <IconArrowRight size={16} strokeWidth={2} />
         </a>
       </div>
     </Slide>
