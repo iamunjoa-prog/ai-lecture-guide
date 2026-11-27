@@ -2,11 +2,10 @@ import Link from "next/link";
 import type { GlossaryTerm, Instructor, Video } from "@/types";
 import { IconArrowRight } from "@/components/ui";
 import type { TrendingSkill } from "@/lib/skills";
-import { formatAsOf, latestAsOf, SkillCard, skillLectureLinks } from "./SkillCard";
+import { SkillCard } from "./SkillCard";
+import { formatAsOf, latestAsOf, skillLectureLinks, skillTerms } from "./skill-links";
 
-export function skillTerms(skill: TrendingSkill, byId: Record<string, GlossaryTerm>) {
-  return skill.termIds.map((id) => byId[id]).filter(Boolean).map((t) => ({ id: t.id, term: t.term }));
-}
+export { skillTerms } from "./skill-links";
 
 /** 결과 화면: 요즘 주목받는 AI 스킬 (입문자는 한 줄 안내만) */
 export function SkillsSection({
