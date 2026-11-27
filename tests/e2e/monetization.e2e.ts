@@ -23,8 +23,8 @@ test.describe("기본 빌드: 광고 없음", () => {
     await page.goto(`/result?${RESULT_QUERY}`);
     await expect(page.getByText("제휴 링크")).toHaveCount(0);
     const gap = await page.evaluate(() => {
-      // 광고 자리는 '추천 강의' 탭의 마지막 로드맵 단계 바로 아래 (스킬은 '다음 스킬' 탭으로 옮겼다)
-      const items = document.querySelectorAll("#roadmap ol:not([aria-label]) > li");
+      // 광고 자리는 '강의' 탭의 마지막 로드맵 단계 바로 아래
+      const items = document.querySelectorAll('[data-testid="roadmap-step"]');
       const last = items[items.length - 1].getBoundingClientRect();
       const sel = [...document.querySelectorAll("#roadmap section")].find((s) => s.textContent?.includes("Selection"))!.getBoundingClientRect();
       return sel.top - last.bottom;

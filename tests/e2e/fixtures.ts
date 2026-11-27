@@ -91,3 +91,11 @@ export const chipLabels = (texts: string[]) => texts.map((t) => t.replace(/^1순
 
 /** 내 학습함 저장 키 (src/lib/saved.ts와 같다) */
 export const SAVED_KEY = "aig:saved:v1";
+
+/** 결과 히어로의 요약 한 줄을 눌러 진단 요약 칩(수준·분야·목표·언어)을 펼친다 */
+export async function openSummary(page: Page) {
+  const toggle = page.getByTestId("summary-toggle");
+  if ((await toggle.getAttribute("aria-expanded")) !== "true") await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  return page.getByRole("group", { name: "진단 요약" });
+}

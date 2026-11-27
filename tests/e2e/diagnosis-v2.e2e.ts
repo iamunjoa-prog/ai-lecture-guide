@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { answerLevelQuestionsLow, chipLabels, chooseGoals, chooseSingle, expect, LEVEL_TITLES, test } from "./fixtures";
+import { answerLevelQuestionsLow, chipLabels, chooseGoals, chooseSingle, expect, LEVEL_TITLES, openSummary, test } from "./fixtures";
 
 /** 진단 v2: 용어 한 입 · 세분화된 수준 질문 · 목표 다중 선택 · 진단 결론 */
 
@@ -102,7 +102,7 @@ test.describe("목표 다중 선택", () => {
     expect(new URL(page.url()).searchParams.get("g")).toBe("build_products,build_agents");
 
     // 결과: 목표마다 칩 하나, 고른 순서대로
-    const texts = await page.getByRole("group", { name: "진단 요약" }).getByRole("listitem").allInnerTexts().then(chipLabels);
+    const texts = await (await openSummary(page)).getByRole("listitem").allInnerTexts().then(chipLabels);
     expect(texts.indexOf("AI 제품 만들기")).toBeGreaterThan(-1);
     expect(texts.indexOf("AI 제품 만들기")).toBeLessThan(texts.indexOf("나만의 에이전트 만들기"));
   });
@@ -125,7 +125,9 @@ test.describe("목표 다중 선택", () => {
     await expect(conclusion).toBeVisible();
     await expect(conclusion).toContainText("AI를 업무에 꾸준히 쓰고 계세요.");
     await expect(conclusion).toContainText("다음 단계는 자주 하는 일을 AI에게 맡기는 흐름을 만들어 보는 거예요.");
-    const summary = page.getByRole("group", { name: "진단 요약" });
+    // 요약은 한 줄로 접혀 있고, 누르면 칩이 펼쳐진다
+    await expect(page.getByTestId("summary-toggle")).toHaveText(/실무자 · 업무 자동화 · 목표 2개/);
+    const summary = await openSummary(page);
     await expect(summary).toContainText("업무 도구로 쓰기");
     await expect(summary).toContainText("나만의 에이전트 만들기");
     expect(await page.locator("article").count()).toBeGreaterThanOrEqual(3);
@@ -137,7 +139,7 @@ test.describe("결과 링크 하위 호환 · 결론", () => {
   test("예전 단일 목표 링크(g=use_tools)도 열린다", async ({ page, consoleErrors }) => {
     await page.goto("/result?l=user&d=marketing&g=use_tools&ko=1");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("활용자 맞춤 학습 로드맵");
-    await expect(page.getByRole("group", { name: "진단 요약" })).toContainText("업무 도구로 쓰기");
+    await expect(await openSummary(page)).toContainText("업무 도구로 쓰기");
     await expect(page.getByRole("region", { name: "진단 결론" })).toContainText(
       "다음 단계는 잘 되는 요청을 양식으로 만들어 내 자료와 함께 다시 쓰는 거예요.",
     );
@@ -145,17 +147,16 @@ test.describe("결과 링크 하위 호환 · 결론", () => {
     expect(consoleErrors).toEqual([]);
   });
 
-  test("목표 여러 개 링크: 목표마다 칩, 결론은 1순위 기준, 바로 보기 이동", async ({ page }) => {
+  test("목표 여러 개 링크: 목표마다 칩, 결론은 1순위 기준, 첫 화면에 여정과 첫 단계", async ({ page }) => {
     await page.goto("/result?l=developer&d=coding&g=build_products,build_agents,understand&ko=0");
-    const chips = await page.getByRole("group", { name: "진단 요약" }).getByRole("listitem").allInnerTexts().then(chipLabels);
+    await expect(page.getByTestId("summary-toggle")).toHaveText(/개발자 · 코딩 · 목표 3개/);
+    const chips = await (await openSummary(page)).getByRole("listitem").allInnerTexts().then(chipLabels);
     expect(chips).toEqual(expect.arrayContaining(["AI 제품 만들기", "나만의 에이전트 만들기", "개념 이해"]));
     expect(chips.indexOf("AI 제품 만들기")).toBeLessThan(chips.indexOf("개념 이해"));
     await expect(page.getByRole("region", { name: "진단 결론" })).toContainText("비용·속도·품질");
-    // 결론이 있어도 로드맵 바로가기는 첫 화면에 있다
-    const jump = page.getByRole("link", { name: "추천 강의 바로 보기", exact: true });
-    await expect(jump).toBeInViewport();
-    await jump.click();
-    await expect(page.getByRole("heading", { level: 2, name: "추천 로드맵" })).toBeInViewport();
+    // 결론이 있어도 학습 여정과 1단계 제목은 첫 화면에 있다
+    await expect(page.getByTestId("journey-steps")).toBeInViewport();
+    await expect(page.getByRole("heading", { level: 2, name: /^1단계 · / })).toBeInViewport();
   });
 
   for (const [name, query] of [

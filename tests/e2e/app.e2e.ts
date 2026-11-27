@@ -135,7 +135,7 @@ test.describe("결과", () => {
       await expect(link).toHaveAttribute("rel", /noopener/);
     }
     // 단계 2~3개
-    const steps = page.locator("#roadmap ol:not([aria-label]) > li"); // 실습 단계 목록(ol[aria-label])은 제외
+    const steps = page.getByTestId("roadmap-step");
     expect(await steps.count()).toBeGreaterThanOrEqual(2);
     expect(consoleErrors).toEqual([]);
   });
@@ -251,14 +251,14 @@ test.describe("결과: 용어와 간결한 카드", () => {
     await expect(page.getByRole("link", { name: /용어 전체 보기/ })).toHaveAttribute("href", /^\/glossary/);
   });
 
-  test("'추천 강의 바로 보기'가 로드맵으로 이동하고 순서·시작 강의를 안내한다", async ({ page }) => {
+  test("강의 탭은 단계 제목(작게)과 카드만: 큰 숫자·로드맵 머리·준비 안내 한 줄이 없고, 시작 강의를 안내한다", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}`);
-    const jump = page.getByRole("link", { name: "추천 강의 바로 보기", exact: true });
-    await expect(jump).toBeVisible();
-    await jump.click();
-    await expect(page).toHaveURL(/#roadmap$/);
-    await expect(page.getByRole("heading", { level: 2, name: "추천 로드맵" })).toBeInViewport();
-    await expect(page.getByText("1단계부터 순서대로 보세요")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2, name: /^1단계 · / })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "추천 로드맵" })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "추천 강의 바로 보기" })).toHaveCount(0);
+    await expect(page.getByTestId("prep-hint")).toHaveCount(0);
+    await expect(page.getByText("1단계부터 순서대로 보세요")).toHaveCount(0);
+    await expect(page.getByTestId("result-panel-lectures").getByTestId("weekly-mission")).toHaveCount(0);
     await expect(page.getByText("여기서 먼저 시작하세요")).toHaveCount(1);
   });
 
@@ -275,7 +275,7 @@ test.describe("결과: 용어와 간결한 카드", () => {
 
   test("단계의 첫 카드만 추천 이유 박스를 보여 준다", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}`);
-    const steps = page.locator("#roadmap ol:not([aria-label]) > li"); // 실습 단계 목록(ol[aria-label])은 제외
+    const steps = page.getByTestId("roadmap-step");
     const stepCount = await steps.count();
     for (let i = 0; i < stepCount; i++) {
       const cards = steps.nth(i).locator("article");
