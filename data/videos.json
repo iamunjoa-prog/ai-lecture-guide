@@ -15,7 +15,6 @@
     "domains": [
       "automation",
       "marketing",
-      "coding",
       "data",
       "education",
       "startup"
@@ -47,7 +46,6 @@
     "domains": [
       "automation",
       "marketing",
-      "coding",
       "data",
       "education",
       "startup"
@@ -112,12 +110,10 @@
     "domains": [
       "automation",
       "marketing",
-      "data",
-      "education"
+      "data"
     ],
     "goals": [
-      "use_tools",
-      "build_agents"
+      "use_tools"
     ],
     "summary": "조사·글쓰기·데이터 분석·업무 자동화를 비개발자 눈높이로 보여주는 실무형 강좌예요.",
     "takeaways": [
@@ -137,16 +133,13 @@
     "hasKoreanSubtitle": false,
     "durationMin": 25,
     "levels": [
-      "user",
-      "practitioner"
+      "practitioner",
+      "developer"
     ],
     "domains": [
       "automation",
-      "marketing",
       "coding",
-      "data",
-      "education",
-      "startup"
+      "data"
     ],
     "goals": [
       "use_tools",
@@ -174,6 +167,7 @@
       "developer"
     ],
     "domains": [
+      "automation",
       "coding",
       "data",
       "startup"
@@ -262,8 +256,7 @@
       "developer"
     ],
     "domains": [
-      "coding",
-      "automation"
+      "coding"
     ],
     "goals": [
       "use_tools",
@@ -372,7 +365,8 @@
     "durationMin": 42,
     "levels": [
       "beginner",
-      "user"
+      "user",
+      "practitioner"
     ],
     "domains": [
       "education"
@@ -427,8 +421,8 @@
     "hasKoreanSubtitle": false,
     "durationMin": 27,
     "levels": [
-      "user",
-      "practitioner"
+      "practitioner",
+      "developer"
     ],
     "domains": [
       "coding",
@@ -436,7 +430,6 @@
     ],
     "goals": [
       "use_tools",
-      "build_agents",
       "build_products"
     ],
     "summary": "3분 내외 레슨 9개로 Claude Code를 설치부터 MCP·Hooks까지 익히는 공식 입문 코스예요.",
@@ -489,9 +482,8 @@
       "practitioner"
     ],
     "domains": [
-      "startup",
-      "marketing",
-      "automation"
+      "automation",
+      "startup"
     ],
     "goals": [
       "use_tools",
@@ -518,9 +510,8 @@
       "developer"
     ],
     "domains": [
-      "coding",
       "automation",
-      "startup"
+      "coding"
     ],
     "goals": [
       "build_agents",
@@ -553,9 +544,7 @@
       "data"
     ],
     "goals": [
-      "use_tools",
-      "build_agents",
-      "build_products"
+      "use_tools"
     ],
     "summary": "ChatGPT Work의 핵심 기능을 2~4분짜리 영상 8개로 익히는 공식 입문 재생목록이에요.",
     "takeaways": [
@@ -579,9 +568,10 @@
       "practitioner"
     ],
     "domains": [
+      "automation",
       "marketing",
       "data",
-      "automation"
+      "startup"
     ],
     "goals": [
       "use_tools"
@@ -611,8 +601,7 @@
       "data"
     ],
     "goals": [
-      "use_tools",
-      "build_agents"
+      "use_tools"
     ],
     "summary": "비즈니스 질문에서 대시보드와 데이터 에이전트까지 이어지는 데이터 분석 데모 모음이에요.",
     "takeaways": [
@@ -698,11 +687,11 @@
     "durationMin": 84,
     "levels": [
       "beginner",
-      "user"
+      "user",
+      "practitioner"
     ],
     "domains": [
-      "startup",
-      "education"
+      "startup"
     ],
     "goals": [
       "understand"
@@ -729,8 +718,7 @@
       "practitioner"
     ],
     "domains": [
-      "startup",
-      "education"
+      "startup"
     ],
     "goals": [
       "understand"
@@ -885,7 +873,6 @@
     "domains": [
       "automation",
       "marketing",
-      "coding",
       "data",
       "education",
       "startup"
@@ -915,9 +902,8 @@
       "user"
     ],
     "domains": [
-      "startup",
       "coding",
-      "education"
+      "startup"
     ],
     "goals": [
       "build_products"
@@ -996,14 +982,14 @@
     "hasKoreanSubtitle": false,
     "durationMin": 62,
     "levels": [
+      "practitioner",
       "developer"
     ],
     "domains": [
-      "coding",
-      "startup"
+      "coding"
     ],
     "goals": [
-      "build_agents",
+      "use_tools",
       "build_products"
     ],
     "summary": "명세(스펙)를 먼저 쓰고 코딩 에이전트에게 구현을 맡기는 개발 방식을 배우는 풀코스예요.",
@@ -1112,7 +1098,6 @@
     "domains": [
       "automation",
       "marketing",
-      "coding",
       "data",
       "education",
       "startup"
@@ -1172,8 +1157,7 @@
     ],
     "domains": [
       "coding",
-      "data",
-      "education"
+      "data"
     ],
     "goals": [
       "understand",
@@ -1197,17 +1181,14 @@
     "hasKoreanSubtitle": true,
     "durationMin": 51,
     "levels": [
-      "beginner",
       "user",
       "practitioner"
     ],
     "domains": [
-      "automation",
-      "coding"
+      "automation"
     ],
     "goals": [
-      "use_tools",
-      "build_agents"
+      "use_tools"
     ],
     "summary": "비개발자도 따라 할 수 있게 Claude Code와 에이전트 도구에서 한국어 LLM Solar를 쓰는 법을 보여줘요.",
     "takeaways": [
@@ -1313,12 +1294,10 @@
       "developer"
     ],
     "domains": [
-      "coding",
-      "startup"
+      "coding"
     ],
     "goals": [
-      "understand",
-      "build_products"
+      "understand"
     ],
     "summary": "초거대 AI 모델을 학습·서빙하는 시스템 기술을 서울대 전병곤 교수가 설명해요.",
     "takeaways": [

@@ -57,11 +57,53 @@
 - 나머지 영어 강의는 공식 한국어 자막을 확인하지 못해 `false`로 했어요. 자동 번역 자막은 치지 않았어요.
 
 ## 커버리지 (level × goal, 강의 수)
+2026-11-27 태그 보정 후 값이에요 (`npm run report -- --summary`로 다시 계산할 수 있어요).
+
 | | understand | use_tools | build_agents | build_products |
 |---|---|---|---|---|
-| beginner | 10 | 10 | 3 | 2 |
-| user | 15 | 15 | 5 | 7 |
-| practitioner | 14 | 8 | 7 | 9 |
-| developer | 10 | 2 | 7 | 8 |
+| beginner | 10 | 9 | 0 | 1 |
+| user | 15 | 13 | 0 | 4 |
+| practitioner | 16 | 9 | 4 | 10 |
+| developer | 10 | 5 | 6 | 9 |
 
-분야별: automation 25 · coding 29 · data 24 · education 20 · marketing 16 · startup 23
+분야별: automation 25 · coding 24 · data 24 · education 14 · marketing 14 · startup 20
+
+## 태그 보정 기록 (Agent E, 2026-11-27)
+`npm run report`(수준 4 × 목표 4 × 분야 조합 9 × 한국어 선호 2 = 288개 페르소나)로 로드맵을 훑어보고, 강의 내용과 대상이 태그와 어긋난 곳을 고쳤어요. 재생목록은 목록 페이지의 실제 레슨 제목을 보고 판단했어요. 링크·제목·요약·takeaways는 바꾸지 않았어요.
+
+**원칙**: `domains`는 실제로 쓸모 있는 분야만(범용 개념 강의만 6개 전부), `goals`는 정말 도움이 되는 1~2개, `levels`는 연속·현실적으로.
+
+| 강의 | 바꾼 것 | 이유 |
+|---|---|---|
+| 개발자 아니어도 따라 하는 Claude Code & Hermes Agent… (Upstage) | levels beginner 제외 · domains에서 coding 제외 · goals에서 build_agents 제외 | 제목 그대로 비개발자 대상. 이미 있는 에이전트 도구에 Solar를 연결해 **쓰는** 웨비나라 use_tools. 개발자·코딩·에이전트 만들기 진단의 "기초 다지기"에 뜨던 문제 |
+| ChatGPT Work for Data Analytics (OpenAI) | goals에서 build_agents 제외 | 대시보드·시맨틱 레이어 등 데이터 분석가용 도구 사용법이 중심. 위와 같은 페르소나의 "기초 다지기"에 분야도 안 맞는데 목표 점수만으로 뜨던 문제 |
+| Getting Started with ChatGPT Work (OpenAI) | goals use_tools만 | 레슨이 Plugins·Scheduled tasks·Slides·모바일 등 기능 소개. 에이전트·제품 제작 강의가 아님 |
+| AI Fluency for nonprofits | goals use_tools만 · domains에서 education 제외 | 조사·글쓰기·데이터 분석·업무 보강 레슨. 교육 분야 내용 아님 |
+| Claude Code 101 | levels user,practitioner → practitioner,developer · goals use_tools, build_products | 설치·CLAUDE.md·Explore→Plan→Code→Commit 등 개발 워크플로 입문. 터미널을 쓰는 실무자·개발자 대상 |
+| Prompting 101 \| Code w/ Claude | levels → practitioner,developer · domains → automation,coding,data | 개발자 행사 세션, API 앱용 프롬프트(문서 분석 사례)를 다룸. 마케팅·교육과 거리가 멂 |
+| Spec-Driven Development with Coding Agents (Andrew Ng) | levels + practitioner · domains coding만 · goals use_tools, build_products | 코딩 에이전트를 **써서** 소프트웨어를 만드는 강의. 에이전트를 만드는 강의가 아님 |
+| Mastering Claude Code in 30 minutes | domains coding만 | 코딩 도구 사용법 |
+| Lessons from building agents on the Claude Platform | domains에서 startup 제외 | 개발자 관점의 구현 교훈 |
+| How teams use Claude | domains에서 marketing 제외 | 사례가 법무·고객지원·검색·앱 빌더(Notion·Lyft·HubSpot·Figma) 중심 |
+| How OpenAI uses ChatGPT Work | domains + startup | 전략 덱·고객 미팅 준비·예측 시트 레슨 포함 |
+| AI prompt engineering: A deep dive | domains + automation | 프롬프트 설계 전반이라 자동화에도 바로 쓰임 |
+| Getting started with Claude.ai · Prompting tips for Claude.ai · Full AI Prompting Course (Andrew Ng) · 챗지피티 A to Z (김성훈) | domains에서 coding 제외 | 채팅 앱 사용법·비개발자용 프롬프트. 코딩 진단에서 코딩 강의보다 앞서던 문제 |
+| Build Your Own App In 30 Minutes (Andrew Ng) | domains에서 education 제외 | 노코드 앱 만들기, 교육 분야 내용 아님 |
+| 모두를 위한 딥러닝 시즌 1 | domains에서 education 제외 | 텐서플로 실습 포함 딥러닝 강좌(교육에 AI를 쓰는 내용 아님) |
+| The Thinking Game · The future of intelligence (DeepMind) | domains에서 education 제외 · 다큐는 levels + practitioner | 교육 분야 내용 아님. 다큐는 누구나 볼 수 있음 |
+| What does AI mean for education? | levels + practitioner | AI를 이미 수업에 쓰는 교사에게도 유용 |
+| 초거대 AI를 위한 시스템 (서울대 전병곤) | domains에서 startup 제외 · goals understand만 | 학습·서빙 시스템 기술 개론 |
+
+**보정 전/후 — 개발자 · 코딩 · 에이전트 만들기 (영어 허용)**
+
+| 단계 | 보정 전 | 보정 후 |
+|---|---|---|
+| 기초 다지기 | 개발자 아니어도 따라 하는 Claude Code & Hermes Agent… (Upstage) · ChatGPT Work for Data Analytics (OpenAI) | Introduction to large language models · Introduction to Generative AI (Google Cloud Tech) |
+| 실전 활용 | Lessons from building agents · Tips for building AI agents · Spec-Driven Development | Lessons from building agents · Tips for building AI agents · 초거대 AI를 위한 시스템 (서울대) |
+
+### 남은 콘텐츠 공백 (새 강의가 필요해요 — 지어내지 않음)
+- **입문자·활용자용 "에이전트 만들기" 강의가 0개.** 비개발자가 노코드로 에이전트·자동화 비서를 만드는 공식 강의(예: GPTs·Claude Projects·노코드 자동화)가 없어요. 지금은 이 페르소나에 일반 사용법·개념 강의가 대신 나가요.
+- **Anthropic 외 강사의 에이전트 개발 강의가 없음.** build_agents 강의 6개가 모두 Anthropic이라, 강사당 2개 상한에 걸리면 개발자·에이전트 진단의 실전 3번째 칸과 실무자·에이전트 진단의 "한 단계 더"가 목표와 무관한 강의(서울대 시스템, KAIST 기계학습)로 채워져요. DeepLearning.AI·Google 등의 공식 에이전트 강의가 후보예요.
+- **입문자 build_products 1개**(Andrew Ng 30분 앱)뿐이고, **마케팅·교육 분야 전용 강의**가 적어요(각 14개 중 대부분 범용 강의).
+- **한국어 친화 강의 9개**(한국어 8 + 한국어 자막 1)뿐이고, 실무자·개발자용 한국어 실전(에이전트·코딩 도구) 강의가 없어요.
+- 한 번도 추천되지 않는 강의: Prompting for Agents, Mastering Claude Code, Headless automation(모두 Anthropic 상한), Zero to Hero·NYU DL·The Thinking Game(길이가 길어 동점에서 밀림), AI Fluency for nonprofits.
