@@ -3,7 +3,8 @@
  *
  * 형식: `l=user&d=marketing,coding&g=use_tools&ko=1`
  *  - l  : Level (필수)
- *  - d  : Domain 1~3개, 쉼표 구분 (필수, 중복은 하나로 합침)
+ *  - d  : Domain 0~3개, 쉼표 구분 (중복은 하나로 합침).
+ *         분야 미정이면 빈 값 `d=`로 쓴다. 파라미터 자체가 없으면 잘못된 링크로 본다.
  *  - g  : Goal (필수)
  *  - ko : "1" | "0" (없으면 false)
  * 하나라도 잘못되면 decode 결과는 null.
@@ -68,11 +69,14 @@ export function decodeDiagnosis(
   if (!isGoal(goal)) return null;
 
   const rawDomains = get(PARAM_KEYS.domains);
-  if (!rawDomains) return null;
-  const parts = rawDomains.split(",").map((s) => s.trim());
-  if (!parts.every(isDomain)) return null;
-  const domains = [...new Set(parts)] as Domain[];
-  if (domains.length < 1 || domains.length > MAX_DOMAINS) return null;
+  if (rawDomains === undefined) return null; // d 자체가 없음(빈 값 `d=`과 구분)
+  let domains: Domain[] = [];
+  if (rawDomains.trim() !== "") {
+    const parts = rawDomains.split(",").map((s) => s.trim());
+    if (!parts.every(isDomain)) return null;
+    domains = [...new Set(parts)] as Domain[];
+    if (domains.length > MAX_DOMAINS) return null;
+  }
 
   const ko = get(PARAM_KEYS.preferKorean);
   if (ko !== undefined && ko !== "0" && ko !== "1") return null;

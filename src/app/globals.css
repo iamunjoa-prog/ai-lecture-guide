@@ -233,7 +233,7 @@
 
   .progress-line {
     transform-origin: left center;
-    animation: progress-line var(--progress-duration, 1800ms) linear both;
+    animation: progress-line var(--progress-duration, 1200ms) linear both;
   }
 }
 

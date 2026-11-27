@@ -23,6 +23,13 @@ describe("encode/decode", () => {
       level: "user", domains: ["data"], goal: "understand", preferKorean: false,
     });
   });
+  it("분야 미정(빈 배열)은 d= 로 왕복된다", () => {
+    const none: DiagnosisResult = { level: "beginner", domains: [], goal: "understand", preferKorean: true };
+    expect(encodeDiagnosis(none)).toBe("l=beginner&d=&g=understand&ko=1");
+    expect(decodeDiagnosis(encodeDiagnosis(none))).toEqual(none);
+    expect(decodeDiagnosis("?l=beginner&d=&g=understand&ko=1")).toEqual(none);
+    expect(decodeDiagnosis({ l: "beginner", d: "", g: "understand", ko: "1" })).toEqual(none);
+  });
   it("diagnosisHref", () => {
     expect(diagnosisHref(d)).toBe(`/result?${encodeDiagnosis(d)}`);
   });
@@ -31,7 +38,9 @@ describe("encode/decode", () => {
     ["l=expert&d=marketing&g=use_tools&ko=1", "잘못된 수준"],
     ["d=marketing&g=use_tools&ko=1", "수준 없음"],
     ["l=user&g=use_tools&ko=1", "분야 없음"],
-    ["l=user&d=&g=use_tools", "빈 분야"],
+    ["l=user&g=use_tools&ko=1", "분야 파라미터 없음"],
+    ["l=user&d=,&g=use_tools", "쉼표만 있는 분야"],
+    ["l=user&d=coding,&g=use_tools", "끝에 쉼표"],
     ["l=user&d=marketing,cooking&g=use_tools", "모르는 분야"],
     ["l=user&d=marketing,coding,data,startup&g=use_tools", "분야 4개"],
     ["l=user&d=marketing&g=get_rich", "잘못된 목표"],

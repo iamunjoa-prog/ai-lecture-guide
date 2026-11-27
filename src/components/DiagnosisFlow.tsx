@@ -10,7 +10,8 @@ import { loadProgress, saveProgress } from "./progress-storage";
 const QUESTIONS: readonly Question[] = DIAGNOSIS_QUESTIONS;
 const TOTAL = QUESTIONS.length;
 const AUTO_ADVANCE_MS = 400;
-const LOADING_MS = 1800;
+const LOADING_MS = 1200;
+const NUDGE_MS = 1600;
 
 const STEP_LABELS: Record<Question["step"], string> = {
   level: "AI 활용 수준",
@@ -42,6 +43,9 @@ export function DiagnosisFlow() {
   const [advancing, setAdvancing] = useState(false);
   const timer = useRef<number | null>(null);
   const navigated = useRef(false);
+  const resultHref = useRef<string | null>(null);
+  const [nudge, setNudge] = useState(false);
+  const nudgeTimer = useRef<number | null>(null);
 
   const question = QUESTIONS[index];
   const selected = answers[question.id] ?? [];
@@ -99,6 +103,7 @@ export function DiagnosisFlow() {
       }
       saveDiagnosisToSession(d);
       const href = diagnosisHref(d, "/result");
+      resultHref.current = href;
       router.prefetch(href);
       setPhase("loading");
       window.scrollTo({ top: 0 });
@@ -106,6 +111,31 @@ export function DiagnosisFlow() {
     },
     [router],
   );
+
+  /** 로딩을 건너뛰고 바로 결과로 */
+  const skipLoading = useCallback(() => {
+    const href = resultHref.current;
+    if (!href) return;
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
+      timer.current = null;
+    }
+    router.push(href);
+  }, [router]);
+
+  useEffect(
+    () => () => {
+      if (nudgeTimer.current !== null) window.clearTimeout(nudgeTimer.current);
+    },
+    [],
+  );
+
+  /** 3개가 가득 찬 상태에서 4번째를 눌렀을 때 안내 문구를 잠깐 강조 */
+  const showNudge = () => {
+    setNudge(true);
+    if (nudgeTimer.current !== null) window.clearTimeout(nudgeTimer.current);
+    nudgeTimer.current = window.setTimeout(() => setNudge(false), NUDGE_MS);
+  };
 
   const goNext = useCallback(
     (current: DiagnosisAnswers) => {
@@ -132,11 +162,16 @@ export function DiagnosisFlow() {
       clearTimer();
       setAnswers((prev) => {
         const cur = prev[question.id] ?? [];
-        const next = cur.includes(optionId)
-          ? cur.filter((x) => x !== optionId)
-          : cur.length >= maxSelect
-            ? cur
-            : [...cur, optionId];
+        const exclusiveIds = question.options.filter((o) => o.exclusive).map((o) => o.id as string);
+        let next: string[];
+        if (cur.includes(optionId)) {
+          next = cur.filter((x) => x !== optionId);
+        } else if (exclusiveIds.includes(optionId)) {
+          next = [optionId]; // "잘 모르겠어요"는 다른 선택을 모두 지운다
+        } else {
+          const rest = cur.filter((x) => !exclusiveIds.includes(x)); // 다른 분야를 고르면 "잘 모르겠어요"가 풀린다
+          next = rest.length >= maxSelect ? rest : [...rest, optionId];
+        }
         return { ...prev, [question.id]: next };
       });
       return;
@@ -152,13 +187,14 @@ export function DiagnosisFlow() {
   if (phase === "loading") {
     return (
       <AppShell tone="stage">
-        <LoadingPlan durationMs={LOADING_MS} />
+        <LoadingPlan durationMs={LOADING_MS} onSkip={skipLoading} />
       </AppShell>
     );
   }
 
   const full = isMulti && selected.length >= maxSelect;
   const canProceed = isAnswered(question, answers);
+  const exclusivePicked = selected.some((id) => question.options.find((o) => o.id === id)?.exclusive);
 
   return (
     <AppShell>
@@ -186,6 +222,7 @@ export function DiagnosisFlow() {
                 description={o.description}
                 selected={isSelected}
                 disabled={full && !isSelected}
+                onDisabledClick={showNudge}
                 onClick={() => choose(o.id)}
               />
             );
@@ -199,11 +236,20 @@ export function DiagnosisFlow() {
           onClick={() => goNext(answers)}
           helperText={
             isMulti ? (
-              <span aria-live="polite">
-                {full ? "3개를 모두 골랐어요. 바꾸려면 고른 항목을 눌러 해제하세요" : `최대 ${maxSelect}개까지 고를 수 있어요`}
-                <span className="ml-1.5 font-semibold text-fg tabular-nums">
-                  ({selected.length}/{maxSelect})
-                </span>
+              <span
+                aria-live="polite"
+                className={nudge ? "rounded-md bg-accent-soft px-2 py-1 font-semibold text-accent-soft-fg" : undefined}
+              >
+                {exclusivePicked
+                  ? "분야를 정하지 않고 폭넓게 추천해 드려요"
+                  : full
+                    ? "3개를 모두 골랐어요. 바꾸려면 고른 항목을 눌러 해제하세요"
+                    : `최대 ${maxSelect}개까지 고를 수 있어요`}
+                {!exclusivePicked && (
+                  <span className="ml-1.5 font-semibold text-fg tabular-nums">
+                    ({selected.length}/{maxSelect})
+                  </span>
+                )}
               </span>
             ) : undefined
           }

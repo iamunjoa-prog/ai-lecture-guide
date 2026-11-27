@@ -38,6 +38,23 @@ for (const scheme of ["light", "dark"] as const) {
       await check(page, `분야 질문/${scheme}`);
     });
 
+    test("진단: '잘 모르겠어요' 선택 상태", async ({ page }) => {
+      await page.goto("/diagnosis");
+      for (const name of [/아직 거의 안 써봤어요/, /그냥 궁금한 걸/, /아직 써본 적 없어요/, /처음 들어봐요/, /전혀 못 해요/]) {
+        await page.getByRole("radio", { name }).click();
+        await page.waitForTimeout(650);
+      }
+      await page.getByRole("checkbox", { name: /^잘 모르겠어요/ }).click();
+      await page.waitForTimeout(800);
+      await check(page, `분야 미정/${scheme}`);
+    });
+
+    test("404 페이지", async ({ page }) => {
+      await page.goto("/does-not-exist");
+      await page.waitForTimeout(800);
+      await check(page, `404/${scheme}`);
+    });
+
     test("결과: 용어 행·카드 펼침", async ({ page }) => {
       await page.goto(`/result?${RESULT_QUERY}`);
       await page.getByTestId("starter-terms").locator("summary").first().click();

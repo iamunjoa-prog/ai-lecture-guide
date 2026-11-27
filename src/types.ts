@@ -76,7 +76,7 @@ export interface GlossaryTerm {
 /** 진단 결과 */
 export interface DiagnosisResult {
   level: Level;
-  domains: Domain[]; // 1~3개 선택
+  domains: Domain[]; // 0~3개 (비어 있으면 분야 미정)
   goal: Goal;
   preferKorean: boolean;
 }

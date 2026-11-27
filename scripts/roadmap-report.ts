@@ -7,6 +7,7 @@
  *   npm run report               # 전체 페르소나 + 경고 요약
  *   npm run report -- --summary  # 경고 요약과 커버리지 표만
  *   npm run report -- --level developer --goal build_agents --domains coding
+ *   npm run report -- --level user --goal understand --domains none   # 분야 미정
  *
  * 경고 종류
  *  - FEW     : 추천이 MIN_TOTAL(3)개 미만
@@ -23,6 +24,7 @@ const videos = videosJson as unknown as Video[];
 const instructors = instructorsJson as unknown as Instructor[];
 
 const DOMAIN_SETS: Domain[][] = [
+  [], // "잘 모르겠어요" (분야 미정)
   ["coding"],
   ["automation"],
   ["marketing"],
@@ -44,7 +46,8 @@ const opt = (name: string) => {
 const summaryOnly = flag("summary");
 const onlyLevel = opt("level") as Level | undefined;
 const onlyGoal = opt("goal") as Goal | undefined;
-const onlyDomains = opt("domains")?.split(",") as Domain[] | undefined;
+const domainsArg = opt("domains"); // "none" 또는 빈 값 = 분야 미정
+const onlyDomains = domainsArg === undefined ? undefined : domainsArg === "none" || domainsArg === "" ? [] : (domainsArg.split(",") as Domain[]);
 const onlyKo = opt("ko");
 
 const levels = onlyLevel ? [onlyLevel] : [...LEVELS];
@@ -70,7 +73,7 @@ for (const level of levels) {
       for (const preferKorean of koValues) {
         personaCount++;
         const d: DiagnosisResult = { level, goal, domains, preferKorean };
-        const persona = `${level}/${goal}/${domains.join("+")}/${preferKorean ? "ko" : "any"}`;
+        const persona = `${level}/${goal}/${domains.join("+") || "none"}/${preferKorean ? "ko" : "any"}`;
         const r = buildRoadmap(d, videos, instructors);
         const items = r.steps.flatMap((s) => s.items);
         if (items.length < 3) warnings.push({ persona, kind: "FEW", detail: `${items.length}개` });
