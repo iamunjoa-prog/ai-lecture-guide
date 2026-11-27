@@ -54,7 +54,7 @@ for (const scheme of ["light", "dark"] as const) {
       await page.getByTestId("starter-terms").locator("summary").first().click();
       const card = page.locator("article").first();
       await card.getByRole("button", { name: "자세히 보기" }).click();
-      await card.locator("button[aria-pressed]").first().click();
+      await card.getByTestId("card-terms").locator("button[aria-pressed]").first().click();
       await page.waitForTimeout(800);
       await check(page, `결과 펼침/${scheme}`);
     });

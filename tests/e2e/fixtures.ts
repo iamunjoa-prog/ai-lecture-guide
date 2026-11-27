@@ -85,3 +85,9 @@ export async function chooseSingle(page: Page, optionName: string | RegExp, next
   await page.getByRole("radio", { name: optionName }).click();
   if (nextTitle) await expect(page.getByRole("heading", { level: 1 })).toHaveText(nextTitle);
 }
+
+/** 진단 요약 칩 글자에서 '1순위' 표시를 떼어 낸다 */
+export const chipLabels = (texts: string[]) => texts.map((t) => t.replace(/^1순위\s*/, "").trim());
+
+/** 내 학습함 저장 키 (src/lib/saved.ts와 같다) */
+export const SAVED_KEY = "aig:saved:v1";

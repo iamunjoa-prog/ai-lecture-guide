@@ -135,7 +135,7 @@ test.describe("결과", () => {
       await expect(link).toHaveAttribute("rel", /noopener/);
     }
     // 단계 2~3개
-    const steps = page.locator("ol > li");
+    const steps = page.locator("#roadmap ol:not([aria-label]) > li"); // 실습 단계 목록(ol[aria-label])은 제외
     expect(await steps.count()).toBeGreaterThanOrEqual(2);
     expect(consoleErrors).toEqual([]);
   });
@@ -275,7 +275,7 @@ test.describe("결과: 용어와 간결한 카드", () => {
 
   test("단계의 첫 카드만 추천 이유 박스를 보여 준다", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}`);
-    const steps = page.locator("ol > li");
+    const steps = page.locator("#roadmap ol:not([aria-label]) > li"); // 실습 단계 목록(ol[aria-label])은 제외
     const stepCount = await steps.count();
     for (let i = 0; i < stepCount; i++) {
       const cards = steps.nth(i).locator("article");
@@ -295,7 +295,7 @@ test.describe("결과: 용어와 간결한 카드", () => {
     await expect(card.getByText("이 강의로 얻을 수 있는 것")).toBeVisible();
     await expect(card.getByRole("button", { name: "접기" })).toHaveAttribute("aria-expanded", "true");
 
-    const tag = card.locator("button[aria-pressed]").first();
+    const tag = card.getByTestId("card-terms").locator("button[aria-pressed]").first();
     await expect(tag).toBeVisible();
     await tag.click();
     await expect(tag).toHaveAttribute("aria-pressed", "true");
@@ -331,7 +331,7 @@ test.describe("용어집", () => {
     await page.goto(`/result?${RESULT_QUERY}`);
     const card = page.locator("article").first();
     await card.getByRole("button", { name: "자세히 보기" }).click();
-    await card.locator("button[aria-pressed]").first().click();
+    await card.getByTestId("card-terms").locator("button[aria-pressed]").first().click();
     await card.getByRole("link", { name: /자세히 보기/ }).click();
     await expect(page).toHaveURL(/\/glossary#[\w-]+$/);
     const id = new URL(page.url()).hash.slice(1);

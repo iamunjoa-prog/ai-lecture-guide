@@ -60,7 +60,7 @@ test.describe("'잘 모르겠어요' 선택지", () => {
     await page.waitForURL(/\/result\?/, { timeout: 5_000 });
     expect(Object.fromEntries(new URL(page.url()).searchParams)).toEqual({ l: "beginner", d: "", g: "understand", ko: "1" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("입문자 맞춤 학습 로드맵");
-    await expect(page.getByRole("list", { name: "진단 요약" })).toContainText("분야 미정");
+    await expect(page.getByRole("group", { name: "진단 요약" })).toContainText("분야 미정");
     expect(await page.locator("article").count()).toBeGreaterThanOrEqual(3);
     // 분야 문구 없이 사유가 만들어진다
     await expect(page.locator("article").first()).not.toContainText("에 AI를 적용하려는");
