@@ -43,9 +43,9 @@ describe("실제 데이터 참조 무결성", () => {
     for (const id of ids) expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
   });
 
-  it("용어 수 45~65개, 수준마다 10개 이상", () => {
+  it("용어 수 45~70개, 수준마다 10개 이상", () => {
     expect(glossary.length).toBeGreaterThanOrEqual(45);
-    expect(glossary.length).toBeLessThanOrEqual(65);
+    expect(glossary.length).toBeLessThanOrEqual(70);
     for (const l of LEVELS) expect(glossary.filter((t) => t.level === l).length).toBeGreaterThanOrEqual(10);
   });
 

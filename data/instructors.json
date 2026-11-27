@@ -218,5 +218,27 @@
     ],
     "credentialNote": "카나나 모델과 카카오톡 AI를 만드는 카카오의 공식 기술 채널이에요. 카카오 개발자 콘퍼런스 if(kakao) 등에서 발표한 에이전트·MCP 세션을 한국어로 볼 수 있어요.",
     "channelUrl": "https://www.youtube.com/@kakaotech"
+  },
+  {
+    "id": "runway",
+    "name": "Runway 공식 채널",
+    "nameEn": "Runway",
+    "title": "AI 영상 생성·편집 모델(Gen-4.5·Aleph)을 직접 만드는 기업",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "영상 생성·편집 AI 모델을 직접 연구·개발하는 Runway의 공식 채널(@RunwayML)이에요. 제품 사용법 레슨(Runway Academy)과 기능 안내 영상을 올려요. 일반 유튜버나 강의 판매 채널이 아니라 모델을 만든 회사 채널이라 골랐어요.",
+    "channelUrl": "https://www.youtube.com/@RunwayML"
+  },
+  {
+    "id": "adobe-firefly",
+    "name": "Adobe Firefly 공식 채널",
+    "nameEn": "Adobe Firefly",
+    "title": "생성형 AI 모델 Firefly를 만드는 Adobe의 Firefly 공식 채널",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "Firefly 이미지·영상 생성 모델은 Adobe가 직접 개발해요. 이 채널은 Adobe가 Firefly 소식과 사용법을 올리는 공식 채널(@AdobeFirefly)이에요. 고른 입문 영상은 외부 크리에이터가 진행하지만 Adobe 공식 채널의 튜토리얼이에요.",
+    "channelUrl": "https://www.youtube.com/@AdobeFirefly"
   }
 ]
