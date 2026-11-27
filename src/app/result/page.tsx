@@ -27,6 +27,7 @@ import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
 import affiliateJson from "@data/affiliate.json";
 import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
 import { lectureAnchorId, selectTheory } from "@/lib/theory";
+import { theoryHref } from "@/lib/glossary-tabs";
 import { journeyInputs, missionAnchorId, STEP_SUMMARIES, stepAnchorId, summaryLine } from "@/lib/journey";
 
 export const metadata: Metadata = {
@@ -289,7 +290,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
             allVideos={videos}
             instructors={instructors}
             levelLabel={levelLabel}
-            theoryHref={`/theory?l=${diagnosis.level}`}
+            theoryHref={theoryHref({ level: diagnosis.level })}
           />
           {!hasPrep && (
             <Slide tone="light" innerClassName="py-12">

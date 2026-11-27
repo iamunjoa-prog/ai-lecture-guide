@@ -19,8 +19,8 @@ export interface TheoryConceptCardProps {
   index: number;
   /** 처음부터 펼쳐 둘지 */
   defaultOpen?: boolean;
-  /** 개념 id를 앵커로 붙일지 (이론 전체 페이지 전용) */
-  anchor?: boolean;
+  /** 앵커 id (용어집 '3분 이론' 탭 전용, 예: theory-<개념 id>) */
+  anchorId?: string;
   /** 저장 버튼 표시 (기본 true) */
   savable?: boolean;
 }
@@ -34,14 +34,14 @@ export function TheoryConceptCard({
   lectures,
   index,
   defaultOpen = false,
-  anchor = false,
+  anchorId,
   savable = true,
 }: TheoryConceptCardProps) {
   const num = String(index).padStart(2, "0");
   return (
     <div className="relative border-b border-border">
       <details
-        id={anchor ? concept.id : undefined}
+        id={anchorId}
         open={defaultOpen || undefined}
         className="group scroll-mt-24"
         data-testid="theory-concept"

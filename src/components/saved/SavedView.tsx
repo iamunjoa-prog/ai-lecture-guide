@@ -7,6 +7,7 @@ import type { KnownIdLists } from "@/components/catalog";
 import { MissionActions, PracticeMissionBody, resolvePrompts } from "@/components/PracticeMissionBlock";
 import { decodeDiagnosis } from "@/lib/diagnosis-state";
 import type { PracticeMission } from "@/lib/practice";
+import { theoryHref } from "@/lib/glossary-tabs";
 import {
   emptySaved,
   exportFileName,
@@ -593,7 +594,7 @@ function TheoryPanel({ state, catalog }: { state: SavedState; catalog: SavedCata
       <EmptyState
         title="저장한 이론이 없어요"
         desc="3분 이론의 북마크를 누르면 다시 읽고 싶은 개념을 모아 둘 수 있어요."
-        cta={{ href: "/theory", label: "3분 이론 보기" }}
+        cta={{ href: theoryHref(), label: "3분 이론 보기" }}
       />
     );
   }
@@ -602,7 +603,7 @@ function TheoryPanel({ state, catalog }: { state: SavedState; catalog: SavedCata
       {items.map((c) => (
         <li key={c.id} className="flex items-start gap-2 border-b border-border py-4" data-testid="saved-theory">
           <div className="min-w-0 flex-1">
-            <Link href={`/theory#${c.id}`} className="text-[16px] leading-snug font-semibold tracking-[-0.015em] text-fg underline-offset-4 hover:underline">
+            <Link href={theoryHref({ conceptId: c.id })} className="text-[16px] leading-snug font-semibold tracking-[-0.015em] text-fg underline-offset-4 hover:underline">
               {c.title}
             </Link>
             <p className="mt-0.5 text-[14px] leading-relaxed text-fg-muted">{c.summary}</p>
