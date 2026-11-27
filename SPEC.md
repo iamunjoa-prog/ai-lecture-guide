@@ -116,5 +116,10 @@ score = 4·[level ∈ video.levels]
 Next.js 15 (App Router) · TypeScript · Tailwind CSS · 정적 JSON · Vercel 배포
 진단 상태는 URL 쿼리 + sessionStorage (서버 저장 없음)
 
+### 내 학습함 (`/saved`, 브라우저 저장)
+- 로그인 없음. localStorage `aig:saved:v1`에 `{version:1, lectures[{id,status:want|watching|done,savedAt,updatedAt}], missions[{videoId,status:todo|done,...}], skills|terms|theory[{id,savedAt}], lastDiagnosis?{href,savedAt}}`
+- 읽을 때 항상 검증(틀린 항목만 버림), 데이터에서 사라진 id는 정리, 저장 불가 브라우저에서는 안내만 하고 앱은 그대로 동작
+- 강의 카드·실습·스킬·용어·이론에 저장 토글, 결과 화면을 보면 최근 진단을 기억, 내보내기/가져오기(JSON 병합)·전체 삭제
+
 ## 7. 범위 밖 (2차 버전)
-Claude API로 맞춤형 추천 사유 생성 · 로그인/진도 체크/streak · 유료 강의
+Claude API로 맞춤형 추천 사유 생성 · 로그인·기기 간 동기화/streak · 유료 강의

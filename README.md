@@ -6,6 +6,9 @@ AI를 배우고 싶지만 어떤 강의부터 들어야 할지 모르는 사람�
 - 회원가입·서버 저장 없음. 진단 결과는 주소(URL)와 브라우저 세션에만 담깁니다.
 - 강의는 직접 확인한 링크만 등록합니다(아래 "강의 추가하기" 참고).
 - `/glossary`에서 입문부터 개발까지 AI 용어를 쉬운 말로 볼 수 있습니다.
+- 강의 카드마다 "강의 보고 해보기"(내 AI로 바로 해 보는 실습 미션과 복사용 프롬프트)가 있고, 결과 화면에 "이번 주 실습 미션"이 하나 뽑힙니다.
+- AI를 써 본 분에게는 "요즘 주목받는 AI 스킬" 3개를 추천합니다(전체 목록 `/skills`).
+- **내 학습함**(`/saved`): 강의·실습·스킬·3분 이론·용어를 북마크하고 시청·실습 상태를 기록합니다. 로그인 없이 이 브라우저(localStorage `aig:saved:v1`)에만 저장되며 서버로 보내지 않습니다. 내보내기/가져오기(JSON)·전체 삭제를 지원합니다.
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · 정적 JSON 데이터
 
@@ -108,7 +111,7 @@ Vercel Web Analytics(`@vercel/analytics`)만 사용합니다. 쿠키를 쓰지 �
 
 ### 배치 원칙
 
-- 광고는 **/result의 마지막 강의 카드 아래(선별 기준 안내 위)**, **/glossary 맨 아래** 두 곳에만 들어갑니다(`AdSlot`).
+- 광고는 **/result의 로드맵 끝(마지막 강의 카드와 "요즘 주목받는 AI 스킬" 아래, 선별 기준 안내 위)**, **/glossary 맨 아래** 두 곳에만 들어갑니다(`AdSlot`).
 - 허용하지 않는 곳: 진단 화면, 랜딩, 히어로 슬라이드, 강의 카드 사이, 404·오류 화면, 진단 정보가 없는 결과 화면.
 - 광고는 항상 "광고" 라벨이 달린 별도 카드에 들어가며, 높이를 미리 확보해 화면이 밀리지 않습니다. 라벨은 숨길 수 없습니다.
 - 광고·제휴 여부는 강의 선정과 순서에 영향을 주지 않습니다. 개인정보 처리방침(/privacy)에도 같은 내용을 밝혔습니다.
@@ -163,9 +166,9 @@ Vercel Web Analytics(`@vercel/analytics`)만 사용합니다. 쿠키를 쓰지 �
 ## 폴더 구조
 
 ```
-src/app/          페이지(/, /diagnosis, /result, /glossary, /privacy), 메타데이터(robots, sitemap, manifest, 아이콘)
+src/app/          페이지(/, /diagnosis, /result, /glossary, /theory, /skills, /saved, /privacy), 메타데이터(robots, sitemap, manifest, 아이콘)
 src/components/   화면 컴포넌트 (ui/ 는 디자인 시스템 부품)
-src/lib/          질문지·진단 URL 변환·추천 알고리즘·용어 선택 (순수 함수 + 단위 테스트)
+src/lib/          질문지·진단 URL 변환·추천 알고리즘·용어 선택·실습·스킬·내 학습함 저장(saved.ts) (순수 함수 + 단위 테스트)
 data/             강사·강의·용어 JSON
 scripts/          링크 점검, 로드맵 리포트, OG 이미지 생성
 tests/e2e/        Playwright E2E·접근성
