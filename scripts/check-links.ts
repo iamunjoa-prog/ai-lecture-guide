@@ -43,6 +43,7 @@ const THIRD_PARTY_CHANNELS: Record<string, { channel: string; note: string }[]> 
     { channel: "@jccei", note: "제주창조경제혁신센터 — 본인 강연" },
     { channel: "@naver_connect", note: "네이버 커넥트재단 — 본인 강연" },
   ],
+  microsoft: [{ channel: "@msftmechanics", note: "Microsoft Mechanics — Microsoft 공식 제품 시연 채널" }],
 };
 
 // ---------------------------------------------------------------------------
