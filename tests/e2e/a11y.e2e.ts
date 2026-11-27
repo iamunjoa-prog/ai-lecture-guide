@@ -11,6 +11,7 @@ const PAGES = [
   { name: "결과", path: `/result?${RESULT_QUERY}` },
   { name: "결과(빈 상태)", path: "/result" },
   { name: "용어집", path: "/glossary" },
+  { name: "3분 이론", path: "/theory" },
   { name: "개인정보 처리방침", path: "/privacy" },
 ] as const;
 
@@ -70,6 +71,18 @@ for (const scheme of ["light", "dark"] as const) {
       await page.goto("/glossary#llm");
       await page.waitForTimeout(800);
       await check(page, `용어집 펼침/${scheme}`);
+    });
+
+    test("3분 이론: 결과 화면 개념 펼침 · 이론 페이지 딥링크", async ({ page }) => {
+      await page.goto(`/result?${RESULT_QUERY}`);
+      const items = page.getByTestId("theory-list").getByTestId("theory-concept");
+      await items.nth(1).locator("summary").click();
+      await items.nth(2).locator("summary").click();
+      await page.waitForTimeout(800);
+      await check(page, `3분 이론 펼침/${scheme}`);
+      await page.goto("/theory#context-engineering");
+      await page.waitForTimeout(800);
+      await check(page, `이론 페이지 펼침/${scheme}`);
     });
 
     test("강사 선정 기준 시트", async ({ page }) => {

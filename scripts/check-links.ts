@@ -3,6 +3,8 @@
  *
  * 1) 스키마 점검: enum 값, instructorId 참조, takeaways 3개, id 중복, URL ↔ id 일치 등
  *    + 용어집(data/glossary.json): id 중복·형식, 필수 필드, related 참조, 강의 terms 참조
+ *    + 3분 이론(data/theory.json): id 중복·형식, 수준별 core 1개, 필수 필드·길이, termIds 참조, 출처 형식
+ *      (출처 URL은 형식만 본다. 네트워크 점검 대상이 아니다)
  * 2) 링크 점검: 모든 강의 URL을 YouTube oEmbed로 호출해
  *    - 200 응답인지
  *    - 업로드 채널(author_url)이 강사의 channelUrl과 같은지,
@@ -18,7 +20,8 @@ import { spawnSync } from "node:child_process";
 import instructorsJson from "../data/instructors.json";
 import videosJson from "../data/videos.json";
 import glossaryJson from "../data/glossary.json";
-import type { CredentialType, Domain, Goal, GlossaryTerm, Instructor, Language, Level, Video } from "../src/types";
+import theoryJson from "../data/theory.json";
+import type { CredentialType, Domain, Goal, GlossaryTerm, Instructor, Language, Level, TheoryConcept, Video } from "../src/types";
 
 // Node 내장 fetch는 HTTPS_PROXY를 기본으로 따르지 않는다. 프록시 환경이면
 // NODE_USE_ENV_PROXY=1을 켜고 자기 자신을 다시 실행한다 (Node 22.21+ / 24+).
@@ -33,6 +36,7 @@ if ((process.env.HTTPS_PROXY || process.env.https_proxy) && !process.env.NODE_US
 const videos = videosJson as unknown as Video[];
 const instructors = instructorsJson as unknown as Instructor[];
 const glossary = glossaryJson as unknown as GlossaryTerm[];
+const theory = theoryJson as unknown as TheoryConcept[];
 
 // ---------------------------------------------------------------------------
 // 허용된 제3자 업로드 채널 (data/CURATION.md "강사별 선정 근거" 기준)
@@ -181,6 +185,52 @@ for (const v of videos) {
   for (const id of v.terms) if (!termIds.has(id)) bad(where, `terms "${id}"인 용어가 없음`);
 }
 
+// 3분 이론 (출처 URL은 형식만 점검, 네트워크 호출 없음)
+const theoryIds = new Set<string>();
+for (const c of theory) {
+  const where = `theory:${c.id}`;
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(c.id ?? "")) bad(where, "id가 kebab-case가 아님");
+  if (theoryIds.has(c.id)) bad(where, "id 중복");
+  theoryIds.add(c.id);
+  if (!LEVELS.includes(c.level)) bad(where, `level이 이상함: ${c.level}`);
+  if (typeof c.core !== "boolean") bad(where, "core가 boolean이 아님");
+  checkEnumList(where, "goals", c.goals, GOALS);
+  for (const f of ["title", "summary", "analogy"] as const) {
+    if (!isNonEmptyString(c[f])) bad(where, `${f} 누락`);
+  }
+  if (isNonEmptyString(c.summary) && [...c.summary].length > 50) bad(where, `summary가 50자 초과 (${[...c.summary].length}자)`);
+  if (c.tryIt !== undefined && !isNonEmptyString(c.tryIt)) bad(where, "tryIt이 빈 문자열");
+  if (!Array.isArray(c.body) || c.body.length < 3 || c.body.length > 4) bad(where, "body는 3~4문단이어야 함");
+  else if (!c.body.every(isNonEmptyString)) bad(where, "빈 body 문단이 있음");
+  if (!Array.isArray(c.termIds) || c.termIds.length < 2 || c.termIds.length > 3) bad(where, "termIds는 2~3개여야 함");
+  else {
+    if (new Set(c.termIds).size !== c.termIds.length) bad(where, "termIds에 중복 값이 있음");
+    for (const id of c.termIds) if (!termIds.has(id)) bad(where, `termIds "${id}"인 용어가 없음`);
+  }
+  if (!Array.isArray(c.sources) || c.sources.length < 2) bad(where, "sources가 2개 미만");
+  else {
+    const urls = new Set<string>();
+    for (const src of c.sources) {
+      if (!isNonEmptyString(src.title) || !isNonEmptyString(src.publisher)) bad(where, "출처 title/publisher 누락");
+      let ok = false;
+      try {
+        const u = new URL(src.url);
+        ok = u.protocol === "https:" && u.hostname.includes(".") && !u.username && !u.password;
+      } catch {
+        ok = false;
+      }
+      if (!ok) bad(where, `출처 URL이 https 형식이 아님: ${src.url}`);
+      if (urls.has(src.url)) bad(where, `출처 URL 중복: ${src.url}`);
+      urls.add(src.url);
+    }
+  }
+}
+for (const l of LEVELS) {
+  const cores = theory.filter((c) => c.level === l && c.core).length;
+  if (cores !== 1) bad(`theory-level:${l}`, `core 개념이 ${cores}개 (정확히 1개여야 함)`);
+  if (theory.filter((c) => c.level === l).length < 3) bad(`theory-level:${l}`, "개념이 3개 미만");
+}
+
 // ---------------------------------------------------------------------------
 // 2) 링크 점검
 // ---------------------------------------------------------------------------
@@ -283,7 +333,7 @@ const pad = (s: string, n: number) => {
 const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
 async function main() {
-  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개 · 용어 ${glossary.length}개\n`);
+  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개 · 용어 ${glossary.length}개 · 이론 ${theory.length}개\n`);
 
   console.log("① 스키마");
   if (schemaProblems.length === 0) console.log("  통과");

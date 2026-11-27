@@ -165,6 +165,9 @@ export default function Home() {
             <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
               AI 용어집
             </Link>
+            <Link href="/theory" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
+              3분 이론
+            </Link>
             <Link href="/privacy" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
               개인정보 처리방침
             </Link>

@@ -7,13 +7,15 @@ import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { ResultActions } from "@/components/ResultActions";
 import { ResultEmptyState } from "@/components/ResultEmptyState";
 import { StarterTerms } from "@/components/StarterTerms";
-import { credentialBadge, glossary, instructors, thumbnailFor, videos } from "@/components/catalog";
+import { TheorySection } from "@/components/TheorySection";
+import { credentialBadge, glossary, instructors, theory, thumbnailFor, videos } from "@/components/catalog";
 import { decodeDiagnosis, type SearchParamsRecord } from "@/lib/diagnosis-state";
 import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_DESCRIPTIONS, LEVEL_LABELS } from "@/lib/questions";
 import { glossaryById, selectStarterTerms, termsForVideo } from "@/lib/glossary";
 import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
 import affiliateJson from "@data/affiliate.json";
 import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
+import { lectureAnchorId, selectTheory } from "@/lib/theory";
 
 export const metadata: Metadata = {
   title: "맞춤 학습 로드맵",
@@ -44,6 +46,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
   const byId = glossaryById(glossary);
   const roadmapVideos = roadmap.steps.flatMap((st) => st.items.map((it) => it.video));
   const starterTerms = selectStarterTerms(diagnosis, glossary, roadmapVideos);
+  const theoryConcepts = selectTheory(diagnosis, theory);
 
   const affiliateItems = selectAffiliate(diagnosis, affiliateJson as unknown as AffiliateItem[], 2);
 
@@ -91,6 +94,16 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
       {/* 시작 전에 알아두면 좋은 용어 */}
       <StarterTerms terms={starterTerms} byId={byId} glossaryHref={`/glossary?l=${diagnosis.level}`} />
 
+      {/* 강의 보기 전 3분 이론 */}
+      <TheorySection
+        concepts={theoryConcepts}
+        roadmapVideos={roadmapVideos}
+        allVideos={videos}
+        instructors={instructors}
+        levelLabel={levelLabel}
+        theoryHref={`/theory?l=${diagnosis.level}`}
+      />
+
       {/* 로드맵 */}
       <Slide tone="light" aria-labelledby="roadmap-title" id="roadmap" className="scroll-mt-2" innerClassName="pt-12 pb-10">
         <div className="mb-8 flex items-end justify-between gap-3">
@@ -128,24 +141,25 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
                 isLast={i === roadmap.steps.length - 1}
               >
                 {step.items.map(({ video, instructor, reason }, idx) => (
-                  <LectureCard
-                    key={video.id}
-                    instructorName={instructor.name}
-                    instructorTitle={instructor.title}
-                    instructorBadge={credentialBadge(instructor)}
-                    reason={reason}
-                    videoTitle={video.title}
-                    durationMin={video.durationMin}
-                    language={video.language}
-                    hasKoreanSubtitle={video.hasKoreanSubtitle}
-                    takeaways={video.takeaways}
-                    url={video.url}
-                    thumbnailUrl={thumbnailFor(video)}
-                    kind={video.kind}
-                    fullReason={idx === 0}
-                    startHere={i === 0 && idx === 0}
-                    terms={termsForVideo(video, byId).map(({ id, term, short }) => ({ id, term, short }))}
-                  />
+                  <div key={video.id} id={lectureAnchorId(video.id)} className="scroll-mt-6">
+                    <LectureCard
+                      instructorName={instructor.name}
+                      instructorTitle={instructor.title}
+                      instructorBadge={credentialBadge(instructor)}
+                      reason={reason}
+                      videoTitle={video.title}
+                      durationMin={video.durationMin}
+                      language={video.language}
+                      hasKoreanSubtitle={video.hasKoreanSubtitle}
+                      takeaways={video.takeaways}
+                      url={video.url}
+                      thumbnailUrl={thumbnailFor(video)}
+                      kind={video.kind}
+                      fullReason={idx === 0}
+                      startHere={i === 0 && idx === 0}
+                      terms={termsForVideo(video, byId).map(({ id, term, short }) => ({ id, term, short }))}
+                    />
+                  </div>
                 ))}
               </RoadmapStep>
             ))}

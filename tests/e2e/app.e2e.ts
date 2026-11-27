@@ -180,7 +180,7 @@ test.describe("강사 선정 기준 시트", () => {
 test.describe("좁은 화면(320px)", () => {
   test.use({ viewport: { width: 320, height: 640 } });
 
-  for (const path of ["/", "/diagnosis", "/glossary", `/result?${RESULT_QUERY}`, "/result?l=user&d=startup,marketing,education&g=use_tools&ko=1", "/result"]) {
+  for (const path of ["/", "/diagnosis", "/glossary", "/theory#transformer-and-attention", `/result?${RESULT_QUERY}`, "/result?l=user&d=startup,marketing,education&g=use_tools&ko=1", "/result"]) {
     test(`가로 스크롤이 생기지 않는다: ${path}`, async ({ page }) => {
       await page.goto(path);
       await page.waitForLoadState("networkidle");
