@@ -5,6 +5,9 @@
  *    + 용어집(data/glossary.json): id 중복·형식, 필수 필드, related 참조, 강의 terms 참조
  *    + 3분 이론(data/theory.json): id 중복·형식, 수준별 core 1개, 필수 필드·길이, termIds 참조, 출처 형식
  *      (출처 URL은 형식만 본다. 네트워크 점검 대상이 아니다)
+ *    + 실습 미션(data/practice.json): 강의와 1:1, 길이·개수, 자리표시자 최대 1개, domainVariants 키, needsTool 값
+ *    + 주목받는 AI 스킬(data/skills.json): id 중복·형식, 수준(입문자 제외)·목표 enum, 글자 수,
+ *      lectureIds/termIds/theoryIds 참조, 출처 2개 이상·https·checked 값 (최소 점검, 자세한 건 vitest)
  * 2) 링크 점검: 모든 강의 URL을 YouTube oEmbed로 호출해
  *    - 200 응답인지
  *    - 업로드 채널(author_url)이 강사의 channelUrl과 같은지,
@@ -21,6 +24,9 @@ import instructorsJson from "../data/instructors.json";
 import videosJson from "../data/videos.json";
 import glossaryJson from "../data/glossary.json";
 import theoryJson from "../data/theory.json";
+import practiceJson from "../data/practice.json";
+import skillsJson from "../data/skills.json";
+import type { TrendingSkill } from "../src/lib/skills";
 import type { CredentialType, Domain, Goal, GlossaryTerm, Instructor, Language, Level, TheoryConcept, Video } from "../src/types";
 
 // Node 내장 fetch는 HTTPS_PROXY를 기본으로 따르지 않는다. 프록시 환경이면
@@ -37,6 +43,7 @@ const videos = videosJson as unknown as Video[];
 const instructors = instructorsJson as unknown as Instructor[];
 const glossary = glossaryJson as unknown as GlossaryTerm[];
 const theory = theoryJson as unknown as TheoryConcept[];
+const skills = skillsJson as unknown as TrendingSkill[];
 
 // ---------------------------------------------------------------------------
 // 허용된 제3자 업로드 채널 (data/CURATION.md "강사별 선정 근거" 기준)
@@ -231,6 +238,89 @@ for (const l of LEVELS) {
   if (theory.filter((c) => c.level === l).length < 3) bad(`theory-level:${l}`, "개념이 3개 미만");
 }
 
+// 주목받는 AI 스킬 (최소 스키마 점검, 출처 URL은 형식만)
+const skillIds = new Set<string>();
+const SKILL_LEVELS: Level[] = ["user", "practitioner", "developer"];
+const chars = (s: unknown) => (typeof s === "string" ? [...s].length : 0);
+for (const s of skills) {
+  const where = `skill:${s.id}`;
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(s.id ?? "")) bad(where, "id가 kebab-case가 아님");
+  if (skillIds.has(s.id)) bad(where, "id 중복");
+  skillIds.add(s.id);
+  for (const f of ["name", "tagline", "whyNow", "asOf"] as const) {
+    if (!isNonEmptyString(s[f])) bad(where, `${f} 누락`);
+  }
+  if (chars(s.name) > 20) bad(where, `name이 20자 초과 (${chars(s.name)}자)`);
+  if (chars(s.tagline) > 45) bad(where, `tagline이 45자 초과 (${chars(s.tagline)}자)`);
+  checkEnumList(where, "levels", s.levels, SKILL_LEVELS);
+  checkEnumList(where, "goals", s.goals, GOALS);
+  if (s.domains !== undefined) checkEnumList(where, "domains", s.domains, DOMAINS);
+  if (!Array.isArray(s.whatYouCanDo) || s.whatYouCanDo.length !== 3 || !s.whatYouCanDo.every(isNonEmptyString)) {
+    bad(where, "whatYouCanDo가 정확히 3개가 아님");
+  }
+  if (!Array.isArray(s.lectureIds) || s.lectureIds.length < 1 || s.lectureIds.length > 4) bad(where, "lectureIds는 1~4개여야 함");
+  else for (const id of s.lectureIds) if (!videoIds.has(id)) bad(where, `lectureIds "${id}"인 강의가 없음`);
+  if (!Array.isArray(s.termIds) || s.termIds.length < 1 || s.termIds.length > 3) bad(where, "termIds는 1~3개여야 함");
+  else for (const id of s.termIds) if (!termIds.has(id)) bad(where, `termIds "${id}"인 용어가 없음`);
+  for (const id of s.theoryIds ?? []) if (!theoryIds.has(id)) bad(where, `theoryIds "${id}"인 개념이 없음`);
+  if (!isNonEmptyString(s.firstStep?.label) || !isNonEmptyString(s.firstStep?.prompt)) bad(where, "firstStep 누락");
+  else if (chars(s.firstStep.prompt) > 350) bad(where, `firstStep.prompt가 350자 초과 (${chars(s.firstStep.prompt)}자)`);
+  if (!Array.isArray(s.sources) || s.sources.length < 2) bad(where, "sources가 2개 미만");
+  else {
+    for (const src of s.sources) {
+      if (!isNonEmptyString(src.title) || !isNonEmptyString(src.publisher)) bad(where, "출처 title/publisher 누락");
+      if (src.checked !== "원문 확인" && src.checked !== "검색 확인") bad(where, `출처 checked 값이 이상함: ${String(src.checked)}`);
+      let ok = false;
+      try {
+        ok = new URL(src.url).protocol === "https:";
+      } catch {
+        ok = false;
+      }
+      if (!ok) bad(where, `출처 URL이 https 형식이 아님: ${src.url}`);
+    }
+  }
+}
+
+// 실습 미션 (형식만 점검. 규칙은 src/lib/practice.ts와 같다)
+{
+  const missions = practiceJson as unknown as Record<string, unknown>[];
+  const len = (v: unknown) => (typeof v === "string" ? [...v].length : 0);
+  const seen = new Set<string>();
+  for (const m of missions) {
+    const id = String(m.videoId);
+    const where = `practice:${id}`;
+    if (!videoIds.has(id)) bad(where, "videoId인 강의가 없음");
+    if (seen.has(id)) bad(where, "videoId 중복");
+    seen.add(id);
+    for (const [f, max] of [["title", 30], ["goal", 60], ["success", 60]] as const) {
+      if (!isNonEmptyString(m[f])) bad(where, `${f} 누락`);
+      else if (len(m[f]) > max) bad(where, `${f}가 ${max}자 초과 (${len(m[f])}자)`);
+    }
+    if (m.caution !== undefined && !isNonEmptyString(m.caution)) bad(where, "caution이 빈 문자열");
+    if (m.needsTool !== undefined && !["chat", "coding", "automation"].includes(String(m.needsTool))) bad(where, `needsTool이 이상함: ${String(m.needsTool)}`);
+    const steps = m.steps;
+    if (!Array.isArray(steps) || steps.length < 2 || steps.length > 4 || !steps.every(isNonEmptyString)) bad(where, "steps는 비어 있지 않은 문자열 2~4개여야 함");
+    const prompts = m.prompts as { label?: unknown; text?: unknown; domainVariants?: Record<string, unknown> }[];
+    if (!Array.isArray(prompts) || prompts.length < 1 || prompts.length > 3) {
+      bad(where, "prompts는 1~3개여야 함");
+      continue;
+    }
+    for (const p of prompts) {
+      if (!isNonEmptyString(p.label)) bad(where, "prompt label 누락");
+      const texts: unknown[] = [p.text, ...Object.values(p.domainVariants ?? {})];
+      for (const k of Object.keys(p.domainVariants ?? {})) if (!DOMAINS.includes(k as Domain)) bad(where, `domainVariants 키가 이상함: ${k}`);
+      for (const t of texts) {
+        if (!isNonEmptyString(t)) bad(where, "빈 프롬프트 문구");
+        else {
+          if (len(t) > 350) bad(where, `프롬프트가 350자 초과 (${len(t)}자)`);
+          if ((t.match(/\[[^[\]\n]+\]/g) ?? []).length > 1) bad(where, "프롬프트 자리표시자 [..]가 2개 이상");
+        }
+      }
+    }
+  }
+  for (const v of videos) if (!seen.has(v.id)) bad(`practice:${v.id}`, "이 강의의 실습 미션이 없음");
+}
+
 // ---------------------------------------------------------------------------
 // 2) 링크 점검
 // ---------------------------------------------------------------------------
@@ -333,7 +423,7 @@ const pad = (s: string, n: number) => {
 const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
 async function main() {
-  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개 · 용어 ${glossary.length}개 · 이론 ${theory.length}개\n`);
+  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개 · 용어 ${glossary.length}개 · 이론 ${theory.length}개 · 실습 ${(practiceJson as unknown[]).length}개 · 스킬 ${skills.length}개\n`);
 
   console.log("① 스키마");
   if (schemaProblems.length === 0) console.log("  통과");
