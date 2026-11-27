@@ -162,10 +162,13 @@ export default function Home() {
         <div className="mt-20 border-t border-stage-border pt-6 text-[14px] text-stage-muted">
           <p>AI 강의 길잡이</p>
           <nav aria-label="바닥글" className="mt-1 -ml-1 flex flex-wrap items-center gap-x-3">
+            <Link href="/practice" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
+              실습 모음
+            </Link>
             <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
               AI 용어집
             </Link>
-            <Link href="/theory" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
+            <Link href="/glossary?tab=theory" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
               3분 이론
             </Link>
             <Link href="/skills" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">

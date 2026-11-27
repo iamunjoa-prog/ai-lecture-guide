@@ -235,7 +235,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
         <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">이 로드맵에는 아직 실습 미션이 없어요. 강의부터 시작해 보세요.</p>
       ) : (
         <>
-          <h2 className="mt-8 text-[19px] font-bold tracking-[-0.02em] text-fg">강의 보고 해보기</h2>
+          <h2 className="mt-8 text-[19px] font-bold tracking-[-0.02em] text-fg">직접 해보기</h2>
           <p className="mt-0.5 text-[14px] leading-relaxed text-fg-muted">
             강의를 본 뒤 직접 해 보면 오래 남아요. 완료하면 학습 여정에 표시돼요.
           </p>
