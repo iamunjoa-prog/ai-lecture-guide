@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 // Pretendard 가변 폰트(동적 서브셋): 글자 범위별 woff2 조각을 필요한 만큼만 받는다. 외부 CDN 요청 없음.
 import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "./globals.css";
+import { ToastRegion } from "@/components/saved/toast";
 import { getSiteUrl, OG_ALT, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -55,6 +56,8 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
+        {/* 복사·저장 알림 (스크린리더 안내 겸용). 모든 페이지가 같이 쓴다 */}
+        <ToastRegion />
         {/* 쿠키 없는 방문 통계(Vercel Web Analytics). Vercel 배포 빌드에서만 넣는다(로컬·자체 서버에서는 스크립트 404를 피한다) */}
         {process.env.VERCEL ? <Analytics /> : null}
       </body>

@@ -8,7 +8,7 @@ export { BottomCTA, type BottomCTAProps } from "./BottomCTA";
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from "./Button";
 export { QuestionHeader, type QuestionHeaderProps, type QuestionHint } from "./QuestionHeader";
 export { LoadingPlan, type LoadingPlanProps } from "./LoadingPlan";
-export { ResultHero, type ResultHeroProps, type ResultHeroChip } from "./ResultHero";
+export { ResultHero, type ResultHeroProps, type ResultHeroChip, type ResultHeroChipGroup } from "./ResultHero";
 export { Chip, Tag, type ChipProps, type ChipTone } from "./Chip";
 export { LectureCard, formatDuration, type LectureCardProps } from "./LectureCard";
 export { RoadmapStep, type RoadmapStepProps } from "./RoadmapStep";

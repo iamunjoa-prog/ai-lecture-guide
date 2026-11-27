@@ -89,3 +89,22 @@ export const IconChevronDown = (p: IconProps) => (
     <path d="M6 9.5l6 6 6-6" />
   </Svg>
 );
+
+/** 북마크 (filled면 채운 모양 — 저장됨) */
+export const IconBookmark = ({ filled = false, ...p }: IconProps & { filled?: boolean }) => (
+  <Svg {...p}>
+    <path d="M7 4.5h10a1 1 0 011 1v14l-6-4-6 4v-14a1 1 0 011-1z" fill={filled ? "currentColor" : "none"} />
+  </Svg>
+);
+export const IconCopy = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="8.5" y="8.5" width="11" height="11" rx="2" />
+    <path d="M15.5 8.5V6a1.5 1.5 0 00-1.5-1.5H6A1.5 1.5 0 004.5 6v8A1.5 1.5 0 006 15.5h2.5" />
+  </Svg>
+);
+export const IconInfo = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 11v5M12 8h.01" />
+  </Svg>
+);
