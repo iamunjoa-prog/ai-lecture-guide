@@ -163,6 +163,7 @@ export const LEVEL_QUESTIONS: LevelQuestion[] = [
     step: "level",
     type: "single",
     title: "AI에게 질문할 때 어떻게 하세요?",
+    subtitle: "AI에게 하는 질문이나 지시를 '프롬프트'라고 불러요.",
     options: [
       { id: "simple", label: "그냥 궁금한 걸 바로 물어봐요", emoji: "💬", points: 0 },
       {
@@ -174,7 +175,7 @@ export const LEVEL_QUESTIONS: LevelQuestion[] = [
       },
       {
         id: "template",
-        label: "자주 쓰는 프롬프트를 템플릿으로 만들어 둬요",
+        label: "자주 쓰는 질문(프롬프트)을 양식으로 만들어 둬요",
         emoji: "📋",
         points: 2,
       },
@@ -191,7 +192,7 @@ export const LEVEL_QUESTIONS: LevelQuestion[] = [
       {
         id: "advanced",
         label: "여러 AI 도구를 상황에 맞게 골라 써요",
-        description: "GPTs, 프로젝트, 이미지 생성 등",
+        description: "예: 글쓰기는 ChatGPT, 이미지는 다른 도구처럼요",
         emoji: "🧰",
         points: 2,
       },
@@ -202,7 +203,7 @@ export const LEVEL_QUESTIONS: LevelQuestion[] = [
     step: "level",
     type: "single",
     title: "API나 자동화 도구를 써본 적 있나요?",
-    subtitle: "Zapier, Make 같은 노코드 도구도 포함이에요.",
+    subtitle: "API는 프로그램끼리 기능을 주고받는 통로예요. 코딩 없이 쓰는 자동화 서비스(Zapier, Make)도 포함이에요.",
     options: [
       { id: "none", label: "처음 들어봐요", emoji: "🤔", points: 0 },
       { id: "heard", label: "들어는 봤는데 써본 적은 없어요", emoji: "👂", points: 1 },
@@ -215,7 +216,7 @@ export const LEVEL_QUESTIONS: LevelQuestion[] = [
       {
         id: "api",
         label: "AI API를 직접 호출해 봤어요",
-        description: "OpenAI, Anthropic API 등",
+        description: "코드로 ChatGPT·Claude 같은 AI를 불러와 쓰는 것이에요",
         emoji: "🔌",
         points: 4,
         signals: ["api"],
@@ -232,7 +233,7 @@ export const LEVEL_QUESTIONS: LevelQuestion[] = [
       { id: "read", label: "코드를 조금 읽을 수 있어요", emoji: "👀", points: 1 },
       {
         id: "script",
-        label: "간단한 스크립트는 직접 짤 수 있어요",
+        label: "간단한 프로그램은 직접 짤 수 있어요",
         emoji: "🐍",
         points: 3,
         signals: ["code"],
@@ -338,7 +339,7 @@ export const GOAL_OPTIONS: QuestionOption<Goal>[] = [
   {
     id: "understand",
     label: GOAL_LABELS.understand,
-    description: "AI가 뭔지 제대로 알고 싶어요",
+    description: "아직 잘 모르겠고, AI가 뭔지부터 알고 싶어요",
     emoji: "🧠",
   },
   {
@@ -350,7 +351,7 @@ export const GOAL_OPTIONS: QuestionOption<Goal>[] = [
   {
     id: "build_agents",
     label: GOAL_LABELS.build_agents,
-    description: "알아서 일하는 AI 비서를 만들고 싶어요",
+    description: "내 일을 알아서 처리하는 AI 비서를 만들고 싶어요",
     emoji: "🤖",
   },
   {
@@ -367,7 +368,7 @@ export const DOMAIN_QUESTION: DomainQuestion = {
   type: "multi",
   maxSelect: MAX_DOMAINS,
   title: "어떤 분야에 AI를 쓰고 싶으세요?",
-  subtitle: "가장 관심 있는 분야를 골라 주세요.",
+  subtitle: "관심 있는 분야를 최대 3개까지 골라 주세요. 잘 모르겠다면 가장 끌리는 것 하나만 골라도 괜찮아요.",
   options: DOMAIN_OPTIONS,
 };
 
@@ -376,7 +377,7 @@ export const GOAL_QUESTION: GoalQuestion = {
   step: "goal",
   type: "single",
   title: "AI로 이루고 싶은 목표는 무엇인가요?",
-  subtitle: "가장 가까운 하나만 골라 주세요.",
+  subtitle: "가장 가까운 하나만 골라 주세요. 잘 모르겠다면 '개념 이해'로 시작해도 좋아요.",
   options: GOAL_OPTIONS,
 };
 

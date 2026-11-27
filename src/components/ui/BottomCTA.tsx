@@ -42,7 +42,7 @@ export function BottomCTA({
         className,
       )}
     >
-      {helperText && <p className="mb-3 text-center text-[13px] text-fg-muted">{helperText}</p>}
+      {helperText && <p className="mb-3 text-center text-[14px] text-fg-muted">{helperText}</p>}
       {href && !disabled ? (
         <Button href={href} variant={variant} size="lg" fullWidth trailingIcon={trailingIcon}>
           {label}

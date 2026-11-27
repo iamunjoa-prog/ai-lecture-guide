@@ -38,6 +38,8 @@ export interface LectureCardProps {
   terms?: { id: string; term: string; short: string }[];
   /** true면 추천 이유 전체를 박스로, false면 첫 문장만 흐린 글씨로 보여 준다 */
   fullReason?: boolean;
+  /** 로드맵에서 가장 먼저 볼 강의 표시 */
+  startHere?: boolean;
   className?: string;
 }
 
@@ -87,11 +89,13 @@ export function LectureCard({
   kind = "video",
   terms = [],
   fullReason = true,
+  startHere = false,
   className,
 }: LectureCardProps) {
   const uid = useId();
   const [open, setOpen] = useState(false);
   const [termId, setTermId] = useState<string | null>(null);
+  const [thumbOk, setThumbOk] = useState(true);
   const selected = terms.find((t) => t.id === termId);
 
   return (
@@ -101,6 +105,11 @@ export function LectureCard({
         className,
       )}
     >
+      {startHere && (
+        <p className="mb-3 inline-flex items-center rounded-full bg-accent px-3 py-1 text-[13px] font-bold text-accent-fg">
+          여기서 먼저 시작하세요
+        </p>
+      )}
       {/* 강사 */}
       <header>
         {instructorBadge && (
@@ -129,23 +138,25 @@ export function LectureCard({
             {videoTitle}
           </h3>
           <ul
-            className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5 text-[13px] text-fg-muted"
+            className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5 text-[14px] text-fg-muted"
             aria-label="강의 정보"
           >
             <Meta icon={<IconClock size={15} />}>
               {formatDuration(durationMin)}
             </Meta>
             <Meta icon={<IconGlobe size={15} />}>
-              {language === "ko" ? "한국어" : "영어"}
+              <span className="font-medium text-fg">
+                {language === "ko" ? "한국어 강의" : "영어 강의"}
+              </span>
             </Meta>
             {language === "en" && (
               <Meta icon={<IconSubtitles size={15} />}>
-                {hasKoreanSubtitle ? "한국어 자막" : "자막 없음"}
+                {hasKoreanSubtitle ? "한국어 자막 있음" : "한국어 자막 없음"}
               </Meta>
             )}
           </ul>
         </div>
-        {thumbnailUrl && (
+        {thumbnailUrl && thumbOk && (
           <div
             className="relative mt-1 hidden aspect-video w-24 shrink-0 overflow-hidden rounded-md bg-stage min-[360px]:block"
             aria-hidden="true"
@@ -153,9 +164,16 @@ export function LectureCard({
             <span className="absolute inset-0 flex items-center justify-center text-stage-muted">
               <IconPlay size={20} strokeWidth={1.25} />
             </span>
-            <span
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url("${thumbnailUrl}")` }}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={thumbnailUrl}
+              alt=""
+              width={96}
+              height={54}
+              loading="lazy"
+              decoding="async"
+              onError={() => setThumbOk(false)}
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
         )}
@@ -213,7 +231,7 @@ export function LectureCard({
       </div>
 
       <div id={`${uid}-more`} hidden={!open} className="mt-3">
-        <p className="text-[13px] font-semibold text-fg">
+        <p className="text-[14px] font-semibold text-fg">
           이 강의로 얻을 수 있는 것
         </p>
         <ul className="mt-2.5 flex flex-col gap-2">
@@ -247,7 +265,7 @@ export function LectureCard({
                       setTermId((cur) => (cur === t.id ? null : t.id))
                     }
                     className={cn(
-                      "inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm font-medium transition-colors duration-200",
+                      "inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium transition-colors duration-200",
                       termId === t.id
                         ? "border-fg bg-surface-2 text-fg"
                         : "border-border-strong text-fg-muted hover:text-fg",

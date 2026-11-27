@@ -54,7 +54,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           <Link
             href="/"
             aria-label="처음 화면으로"
-            className="-ml-1 rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
+            className="-ml-1 inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
           >
             AI 강의 길잡이
           </Link>
@@ -74,6 +74,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
               : LEVEL_DESCRIPTIONS[diagnosis.level]
           }
           chips={chips}
+          jump={{ href: "#roadmap", label: "추천 강의 바로 보기" }}
         />
       </Slide>
 
@@ -81,16 +82,21 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
       <StarterTerms terms={starterTerms} byId={byId} glossaryHref={`/glossary?l=${diagnosis.level}`} />
 
       {/* 로드맵 */}
-      <Slide tone="light" aria-labelledby="roadmap-title" innerClassName="pt-14 pb-10">
+      <Slide tone="light" aria-labelledby="roadmap-title" id="roadmap" className="scroll-mt-2" innerClassName="pt-12 pb-10">
         <div className="mb-8 flex items-end justify-between gap-3">
           <div>
             <p className="eyebrow text-fg-muted">Roadmap</p>
             <h2 id="roadmap-title" className="mt-2 text-[28px] font-bold tracking-[-0.03em] text-fg">
               추천 로드맵
             </h2>
+            {lectureCount > 0 && (
+              <p className="mt-1.5 text-[15px] leading-relaxed text-fg-muted">
+                1단계부터 순서대로 보세요. 첫 강의부터 시작하면 됩니다.
+              </p>
+            )}
           </div>
           {lectureCount > 0 && (
-            <p className="shrink-0 pb-1 text-[13px] font-medium text-fg-muted tabular-nums">
+            <p className="shrink-0 pb-1 text-[14px] font-medium text-fg-muted tabular-nums">
               {roadmap.steps.length}단계 · 강의 {lectureCount}개
             </p>
           )}
@@ -127,6 +133,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
                     thumbnailUrl={thumbnailFor(video)}
                     kind={video.kind}
                     fullReason={idx === 0}
+                    startHere={i === 0 && idx === 0}
                     terms={termsForVideo(video, byId).map(({ id, term, short }) => ({ id, term, short }))}
                   />
                 ))}
