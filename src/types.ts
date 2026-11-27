@@ -92,7 +92,7 @@ export interface TheoryConcept {
 export interface DiagnosisResult {
   level: Level;
   domains: Domain[]; // 0~3개 (비어 있으면 분야 미정)
-  goal: Goal;
+  goals: Goal[]; // 1~4개, 중복 없음. 첫 번째가 가장 우선 ('잘 모르겠어요' → ["understand"])
   preferKorean: boolean;
 }
 
