@@ -26,7 +26,7 @@ export function TopBar({ step, total, onBack, backHref, right, className }: TopB
   return (
     <header
       className={cn(
-        "sticky top-0 z-20 -mx-5 flex h-14 items-center gap-4 bg-bg/85 px-5 backdrop-blur-xl backdrop-saturate-150",
+        "sticky top-0 z-20 -mx-5 flex h-14 items-center gap-4 bg-bg px-5",
         className,
       )}
     >

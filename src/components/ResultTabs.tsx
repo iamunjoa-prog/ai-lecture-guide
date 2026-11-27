@@ -150,7 +150,7 @@ export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[
       <nav
         ref={navRef}
         aria-label="결과 보기 분류"
-        className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur-xl backdrop-saturate-150"
+        className="sticky top-0 z-20 border-b border-border bg-bg"
         data-testid="result-tabs"
       >
         <div

@@ -186,7 +186,7 @@ export function SavedView({ catalog }: { catalog: SavedCatalog }) {
     <>
       <nav
         aria-label="내 학습함 분류"
-        className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur-xl backdrop-saturate-150"
+        className="sticky top-0 z-20 border-b border-border bg-bg"
       >
         <div
           role="tablist"
