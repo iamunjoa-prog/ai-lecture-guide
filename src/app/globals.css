@@ -1,26 +1,268 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Pretendard Variable (CDN).
+   주의: Next가 next/font CSS와 합쳐 번들하므로 @import url()은 파일 중간에 놓여 무시된다.
+   그래서 @font-face로 직접 선언. 더 가벼운 dynamic-subset을 쓰려면 layout.tsx <head>에
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+   를 넣고 아래 @font-face는 지우면 된다. */
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2")
+    format("woff2-variations");
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* =========================================================
+   AI 강의 길잡이 — 디자인 토큰
+   팔레트: "Iris"(비비드 인디고-바이올렛) + "Apricot"(따뜻한 살구 주황)
+   ========================================================= */
+:root {
+  color-scheme: light;
+
+  /* 표면 */
+  --bg: #f6f5fb;
+  --surface: #ffffff;
+  --surface-2: #f1effa;
+  --surface-sunken: #eceaf5;
+  --border: #e3e0ef;
+  --border-strong: #cdc8e0;
+
+  /* 텍스트 */
+  --fg: #17142b;
+  --fg-muted: #5b5775; /* AA on bg/surface */
+  --fg-subtle: #6e6a88;
+
+  /* 브랜드 */
+  --primary: #5a3ff0;
+  --primary-hover: #4a2fe0;
+  --primary-pressed: #3f26c8;
+  --primary-fg: #ffffff;
+  --primary-soft: #eeeaff;
+  --primary-soft-fg: #3f26c8;
+  --primary-ring: rgb(90 63 240 / 0.45);
+
+  --accent: #ff8a3d;
+  --accent-soft: #fff0e4;
+  --accent-soft-fg: #9a3d00;
+
+  --success: #12a46a;
+  --success-soft: #e3f7ee;
+  --success-soft-fg: #0b6b45;
+
+  --danger: #d93a4a;
+
+  /* 반경 */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-full: 9999px;
+
+  /* 그림자 */
+  --sh-sm: 0 1px 2px rgb(23 20 43 / 0.06), 0 1px 1px rgb(23 20 43 / 0.04);
+  --sh-md: 0 4px 14px -4px rgb(42 28 120 / 0.14), 0 2px 4px rgb(23 20 43 / 0.04);
+  --sh-lg: 0 16px 40px -12px rgb(42 28 120 / 0.25), 0 4px 10px rgb(23 20 43 / 0.05);
+  --sh-cta: 0 10px 24px -8px rgb(90 63 240 / 0.55);
+
+  /* 간격(4px 그리드) */
+  --space-gutter: 20px;
+  --content-max: 480px;
+
+  /* 모션 */
+  --motion-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f0d1a;
+    --surface: #1a1729;
+    --surface-2: #221e36;
+    --surface-sunken: #14121f;
+    --border: #2e2947;
+    --border-strong: #423b63;
+    --fg: #f3f1fb;
+    --fg-muted: #b3aed0;
+    --fg-subtle: #9a95b8;
+    --primary: #8f7bff;
+    --primary-hover: #a092ff;
+    --primary-pressed: #7c66f5;
+    --primary-fg: #12092e;
+    --primary-soft: #2a2152;
+    --primary-soft-fg: #cfc6ff;
+    --primary-ring: rgb(143 123 255 / 0.55);
+    --accent: #ffa266;
+    --accent-soft: #3a2416;
+    --accent-soft-fg: #ffc79e;
+    --success: #3ccf8e;
+    --success-soft: #12301f;
+    --success-soft-fg: #8ee8bd;
+    --danger: #ff6b78;
+    --sh-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --sh-md: 0 4px 14px -4px rgb(0 0 0 / 0.5);
+    --sh-lg: 0 16px 40px -12px rgb(0 0 0 / 0.6);
+    --sh-cta: 0 10px 24px -8px rgb(143 123 255 / 0.45);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 수동 다크 강제(미리보기·향후 토글용) */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f0d1a;
+  --surface: #1a1729;
+  --surface-2: #221e36;
+  --surface-sunken: #14121f;
+  --border: #2e2947;
+  --border-strong: #423b63;
+  --fg: #f3f1fb;
+  --fg-muted: #b3aed0;
+  --fg-subtle: #9a95b8;
+  --primary: #8f7bff;
+  --primary-hover: #a092ff;
+  --primary-pressed: #7c66f5;
+  --primary-fg: #12092e;
+  --primary-soft: #2a2152;
+  --primary-soft-fg: #cfc6ff;
+  --primary-ring: rgb(143 123 255 / 0.55);
+  --accent: #ffa266;
+  --accent-soft: #3a2416;
+  --accent-soft-fg: #ffc79e;
+  --success: #3ccf8e;
+  --success-soft: #12301f;
+  --success-soft-fg: #8ee8bd;
+  --danger: #ff6b78;
+  --sh-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --sh-md: 0 4px 14px -4px rgb(0 0 0 / 0.5);
+  --sh-lg: 0 16px 40px -12px rgb(0 0 0 / 0.6);
+  --sh-cta: 0 10px 24px -8px rgb(143 123 255 / 0.45);
+}
+
+/* Tailwind v4 테마 연결: bg-surface, text-fg-muted, rounded-lg, shadow-md ... */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-fg: var(--primary-soft-fg);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-fg: var(--accent-soft-fg);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-soft-fg: var(--success-soft-fg);
+  --color-danger: var(--danger);
+
+  /* 하위 호환(기존 템플릿) */
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+
+  --shadow-sm: var(--sh-sm);
+  --shadow-md: var(--sh-md);
+  --shadow-lg: var(--sh-lg);
+  --shadow-cta: var(--sh-cta);
+
+  --ease-out: var(--motion-out);
+  --ease-spring: var(--motion-spring);
+
+  --container-content: var(--content-max);
+
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+
+  --animate-fade-up: fade-up var(--dur-slow) var(--motion-out) both;
+  --animate-pop: pop 420ms var(--motion-spring) both;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-orbit: orbit 2.4s linear infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes check-in {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1, h2, h3, h4 {
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+  :focus-visible {
+    outline: 3px solid var(--primary-ring);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--primary-soft);
+    color: var(--primary-soft-fg);
+  }
+  button:not(:disabled), [role="button"], a { cursor: pointer; }
+}
+
+@layer components {
+  .check-pop { animation: check-in 260ms var(--motion-spring) both; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
