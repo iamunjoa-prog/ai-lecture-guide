@@ -5,6 +5,7 @@ import {
   hasRef,
   lectureOf,
   missionOf,
+  setLectureStatus,
   setMissionStatus,
   toggleLecture,
   toggleMission,
@@ -113,7 +114,18 @@ export function SaveToggle({ kind, id, label, variant = "icon", onStage = false,
 }
 
 /** 실습 '완료했어요' 토글 (누르면 실습도 함께 저장된다) */
-export function MissionDoneToggle({ videoId, className, onDone }: { videoId: string; className?: string; onDone?: () => void }) {
+export function MissionDoneToggle({
+  videoId,
+  title,
+  className,
+  onDone,
+}: {
+  videoId: string;
+  /** 있으면 접근 가능한 이름을 '완료했어요: {title}'로 (한 화면에 미션이 여럿일 때) */
+  title?: string;
+  className?: string;
+  onDone?: () => void;
+}) {
   const { state, available, ready } = useSaved();
   const done = ready && available && missionOf(state, videoId)?.status === "done";
   const onClick = () => {
@@ -132,7 +144,9 @@ export function MissionDoneToggle({ videoId, className, onDone }: { videoId: str
     <button
       type="button"
       aria-pressed={done}
+      aria-label={title ? `완료했어요: ${title}` : undefined}
       onClick={onClick}
+      data-testid="mission-done"
       className={cn(
         "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 text-[14px] font-medium transition-colors duration-200",
         done ? "border-transparent bg-ink text-ink-fg" : "border-border-strong text-fg-muted hover:text-fg",
@@ -143,6 +157,45 @@ export function MissionDoneToggle({ videoId, className, onDone }: { videoId: str
         <IconCheck size={16} strokeWidth={2} />
       </span>
       완료했어요
+    </button>
+  );
+}
+
+/**
+ * 강의 '다 봤어요' 토글 (누르면 강의도 함께 저장된다). 다시 누르면 '보는 중'으로 돌린다.
+ * 내 학습 여정의 강의 완료는 이 상태로 센다.
+ */
+export function LectureDoneToggle({ videoId, title, className }: { videoId: string; title: string; className?: string }) {
+  const { state, available, ready } = useSaved();
+  const done = ready && available && lectureOf(state, videoId)?.status === "done";
+  const onClick = () => {
+    if (!ready) return;
+    if (!available) {
+      showToast(UNAVAILABLE_MESSAGE, "info", 3200);
+      return;
+    }
+    applySaved(
+      (s) => setLectureStatus(s, videoId, done ? "watching" : "done", nowIso()),
+      done ? "보는 중으로 바꿨어요" : "다 본 강의로 기록했어요",
+    );
+  };
+  return (
+    <button
+      type="button"
+      aria-pressed={done}
+      aria-label={`다 봤어요: ${title}`}
+      onClick={onClick}
+      data-testid="lecture-done"
+      className={cn(
+        "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 text-[14px] font-medium transition-colors duration-200",
+        done ? "border-transparent bg-ink text-ink-fg" : "border-border-strong text-fg-muted hover:text-fg",
+        className,
+      )}
+    >
+      <span aria-hidden="true" className="flex">
+        <IconCheck size={16} strokeWidth={2} />
+      </span>
+      다 봤어요
     </button>
   );
 }
