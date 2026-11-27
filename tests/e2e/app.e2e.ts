@@ -227,7 +227,7 @@ test("주요 화면에서 콘솔 에러가 없다", async ({ page, consoleErrors
 
 test.describe("결과: 용어와 간결한 카드", () => {
   test("시작 전 용어는 처음 4개만 보이고 '더 보기'로 나머지를 펼친다", async ({ page }) => {
-    await page.goto(`/result?${RESULT_QUERY}`);
+    await page.goto(`/result?${RESULT_QUERY}#prep`);
     await expect(page.getByRole("heading", { level: 2, name: "시작 전에 알아두면 좋은 용어" })).toBeVisible();
     const rows = page.getByTestId("starter-terms").locator("details");
     await expect(rows).toHaveCount(4);

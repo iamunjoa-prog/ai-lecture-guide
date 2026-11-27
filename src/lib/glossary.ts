@@ -169,3 +169,6 @@ export function selectStarterTerms(
     .sort((a, b) => levelIndex(a.term.level) - levelIndex(b.term.level) || byScore(a, b))
     .map((s) => s.term);
 }
+
+/** 결과 화면 '시작 전 용어'에서 처음 보여 주는 용어 수. 나머지는 "더 보기"로 펼친다 */
+export const INITIAL_TERMS = 4;

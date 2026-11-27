@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GlossaryHashOpener } from "@/components/GlossaryHashOpener";
 import { SiteHeaderBar } from "@/components/SiteHeaderBar";
-import { formatAsOf, latestAsOf, SkillCard, skillLectureLinks } from "@/components/SkillCard";
-import { skillTerms } from "@/components/SkillsSection";
+import { formatAsOf, latestAsOf, parseSkillFilter, skillLectureLinks, skillTerms } from "@/components/skill-links";
+import { SkillsBrowser } from "@/components/SkillsBrowser";
 import { glossary, instructors, skills, videos } from "@/components/catalog";
 import { Slide } from "@/components/ui";
 import { glossaryById } from "@/lib/glossary";
@@ -15,21 +14,21 @@ export const metadata: Metadata = {
   description: "AI를 써 본 사람이 다음에 익히면 좋은 실전 스킬을 근거와 함께 정리했습니다.",
 };
 
-export default function SkillsPage() {
+export default async function SkillsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const initial = parseSkillFilter((await searchParams).l);
   const byId = glossaryById(glossary);
   const videosById = indexVideos(videos);
   const asOf = latestAsOf(skills);
 
   return (
     <main className="flex min-h-dvh flex-col bg-bg">
-      <GlossaryHashOpener />
       <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
-        <SiteHeaderBar />
+        <SiteHeaderBar current="skills" />
         <div className="animate-fade-in pt-14 pb-14">
           <p className="eyebrow text-stage-muted">Trending skills</p>
           <h1 className="display mt-4 text-[clamp(34px,10vw,50px)] text-stage-fg text-balance">요즘 주목받는 AI 스킬</h1>
           <p className="mt-5 text-[17px] leading-relaxed text-stage-muted">
-            AI를 써 본 분이 다음에 익히면 좋은 스킬 {skills.length}가지를 공개 자료를 근거로 골랐어요. 궁금한 스킬을 눌러 펼쳐 보세요.
+            AI를 써 본 분이 다음에 익히면 좋은 스킬 {skills.length}가지를 공개 자료를 근거로 골랐어요. 수준을 고르면 맞는 스킬만 볼 수 있어요.
           </p>
           {asOf && <p className="mt-3 text-[14px] text-stage-muted">{formatAsOf(asOf)}</p>}
         </div>
@@ -39,17 +38,14 @@ export default function SkillsPage() {
         <h2 id="skills-list-title" className="sr-only">
           스킬 목록
         </h2>
-        <div className="border-t border-border" data-testid="skills-list">
-          {skills.map((s) => (
-            <SkillCard
-              key={s.id}
-              skill={s}
-              anchor
-              lectures={skillLectureLinks(s, videosById, instructors)}
-              terms={skillTerms(s, byId)}
-            />
-          ))}
-        </div>
+        <SkillsBrowser
+          initial={initial}
+          items={skills.map((s) => ({
+            skill: s,
+            lectures: skillLectureLinks(s, videosById, instructors),
+            terms: skillTerms(s, byId),
+          }))}
+        />
         <p className="mt-6 text-[13px] leading-relaxed text-fg-muted">
           각 스킬의 &lsquo;근거&rsquo;는 원문 또는 검색으로 확인한 공개 자료입니다. 서비스 이름과 기능은 바뀔 수 있어요.
         </p>

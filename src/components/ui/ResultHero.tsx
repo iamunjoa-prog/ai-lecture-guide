@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Chip } from "./Chip";
-import { IconChevronDown } from "./icons";
+import { IconArrowRight, IconChevronDown } from "./icons";
 import { cn } from "./cn";
 
 export interface ResultHeroChip {
@@ -28,13 +28,15 @@ export interface ResultHeroProps {
   chips?: ResultHeroChip[];
   /** 묶음으로 나눈 진단 요약 칩 (있으면 chips 대신 쓴다) */
   chipGroups?: ResultHeroChipGroup[];
+  /** 진단 결론 아래 한 줄 링크 (예: 다음에 익히면 좋은 스킬) */
+  teaser?: { href: string; label: ReactNode };
   /** 바로가기 링크(예: 추천 강의 바로 보기) */
   jump?: { href: string; label: ReactNode };
   className?: string;
 }
 
 /** 결과 화면 상단 키노트 슬라이드 내용 (어두운 Slide 안에 둔다) */
-export function ResultHero({ eyebrow, title, description, conclusion, chips, chipGroups, jump, className }: ResultHeroProps) {
+export function ResultHero({ eyebrow, title, description, conclusion, teaser, chips, chipGroups, jump, className }: ResultHeroProps) {
   return (
     <div className={cn("animate-fade-in pt-8 pb-10", className)}>
       {eyebrow && <p className="eyebrow-ko text-[13px] text-stage-muted">{eyebrow}</p>}
@@ -48,6 +50,18 @@ export function ResultHero({ eyebrow, title, description, conclusion, chips, chi
           <p className="mt-1.5 text-[16px] leading-relaxed text-stage-muted">{conclusion.now}</p>
           <p className="mt-1 text-[16px] font-semibold leading-relaxed text-stage-fg">{conclusion.next}</p>
         </section>
+      )}
+      {teaser && (
+        <a
+          href={teaser.href}
+          className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full text-[15px] leading-snug text-stage-muted transition-colors duration-200 hover:text-stage-fg"
+          data-testid="hero-teaser"
+        >
+          <span className="min-w-0">{teaser.label}</span>
+          <span aria-hidden="true" className="flex shrink-0 text-accent">
+            <IconArrowRight size={16} strokeWidth={2} />
+          </span>
+        </a>
       )}
       {jump && (
         <a

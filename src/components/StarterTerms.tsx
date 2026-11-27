@@ -4,10 +4,9 @@ import Link from "next/link";
 import { useId, useState } from "react";
 import type { GlossaryTerm } from "@/types";
 import { IconArrowRight, IconChevronDown, cn, Slide } from "@/components/ui";
+import { INITIAL_TERMS } from "@/lib/glossary";
 import { TermAccordion } from "./TermAccordion";
 
-/** 처음에 보여 주는 용어 수. 나머지는 "더 보기"로 펼친다 */
-export const INITIAL_TERMS = 4;
 
 /** 결과 화면: 시작 전에 알아두면 좋은 용어 */
 export function StarterTerms({
@@ -19,7 +18,8 @@ export function StarterTerms({
   terms: GlossaryTerm[];
   byId: Record<string, GlossaryTerm>;
   glossaryHref: string;
-  roadmapHref?: string;
+  /** null이면 '추천 강의 바로 보기' 링크를 숨긴다 */
+  roadmapHref?: string | null;
 }) {
   const [expanded, setExpanded] = useState(false);
   const listId = useId();
@@ -60,13 +60,15 @@ export function StarterTerms({
           <IconArrowRight size={16} strokeWidth={2} />
         </Link>
       </div>
-      <a
-        href={roadmapHref}
-        className="mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-full text-[15px] font-semibold text-fg underline underline-offset-4"
-      >
-        용어는 나중에, 추천 강의 바로 보기
-        <IconChevronDown size={16} />
-      </a>
+      {roadmapHref && (
+        <a
+          href={roadmapHref}
+          className="mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-full text-[15px] font-semibold text-fg underline underline-offset-4"
+        >
+          용어는 나중에, 추천 강의 바로 보기
+          <IconChevronDown size={16} />
+        </a>
+      )}
     </Slide>
   );
 }

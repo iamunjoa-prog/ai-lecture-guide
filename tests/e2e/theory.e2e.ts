@@ -1,9 +1,9 @@
 import { expect, RESULT_QUERY, test } from "./fixtures";
 
-/** 결과 화면 '강의 보기 전 3분 이론'과 /theory 페이지 */
+/** 결과 화면 '시작 전 준비' 탭의 '강의 보기 전 3분 이론'과 /theory 페이지 */
 test.describe("결과: 3분 이론", () => {
   test("개념 3개, 첫 개념만 펼쳐져 있고 다른 개념도 펼칠 수 있다", async ({ page, consoleErrors }) => {
-    await page.goto(`/result?${RESULT_QUERY}`);
+    await page.goto(`/result?${RESULT_QUERY}#prep`);
     await expect(page.getByRole("heading", { level: 2, name: "강의 보기 전 3분 이론" })).toBeVisible();
     const items = page.getByTestId("theory-list").getByTestId("theory-concept");
     await expect(items).toHaveCount(3);
@@ -29,8 +29,8 @@ test.describe("결과: 3분 이론", () => {
     expect(consoleErrors).toEqual([]);
   });
 
-  test("강의 링크: 로드맵 강의는 카드로 이동, 아니면 유튜브 새 탭", async ({ page }) => {
-    await page.goto(`/result?${RESULT_QUERY}`);
+  test("강의 링크: 로드맵 강의는 '추천 강의' 탭으로 바꿔 카드로 이동, 아니면 유튜브 새 탭", async ({ page }) => {
+    await page.goto(`/result?${RESULT_QUERY}#prep`);
     const items = page.getByTestId("theory-list").getByTestId("theory-concept");
     let internal = 0;
     for (let i = 0; i < 3; i++) {
@@ -52,16 +52,21 @@ test.describe("결과: 3분 이론", () => {
     }
     expect(internal).toBeGreaterThan(0);
 
-    // 첫 개념의 로드맵 강의 링크를 누르면 해당 카드가 화면에 보인다
+    // 첫 개념의 로드맵 강의 링크를 누르면 '추천 강의' 탭으로 바뀌고 해당 카드가 화면에 보인다
     const inRoadmap = page.getByTestId("theory-list").locator('a[href^="#lecture-"]').first();
     const target = (await inRoadmap.getAttribute("href"))!;
     await inRoadmap.click();
     await expect(page).toHaveURL(new RegExp(`${target}$`));
+    await expect(page.getByRole("tab", { name: "추천 강의" })).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByTestId("result-panel-prep")).toBeHidden();
     await expect(page.locator(`[id="${target.slice(1)}"] article`)).toBeInViewport();
+    // 뒤로 가기: 다시 '시작 전 준비'
+    await page.goBack();
+    await expect(page.getByRole("tab", { name: "시작 전 준비" })).toHaveAttribute("aria-selected", "true");
   });
 
   test("출처는 새 탭 외부 링크(rel noopener)이고 개념마다 2개 이상", async ({ page }) => {
-    await page.goto(`/result?${RESULT_QUERY}`);
+    await page.goto(`/result?${RESULT_QUERY}#prep`);
     const items = page.getByTestId("theory-list").getByTestId("theory-concept");
     for (let i = 0; i < 3; i++) {
       const links = items.nth(i).getByTestId("theory-sources").locator("a");
@@ -74,9 +79,13 @@ test.describe("결과: 3분 이론", () => {
     }
   });
 
-  test("'이론 전체 보기'는 /theory로, 추천 강의 바로 보기도 그대로 동작한다", async ({ page }) => {
-    await page.goto(`/result?l=beginner&d=education&g=understand&ko=1`);
+  test("'이론 전체 보기'는 /theory로, 추천 강의 바로 보기는 '추천 강의' 탭의 로드맵으로", async ({ page }) => {
+    await page.goto(`/result?l=beginner&d=education&g=understand&ko=1#prep`);
     await expect(page.getByRole("link", { name: /이론 전체 보기/ })).toHaveAttribute("href", "/theory?l=beginner");
+    // 이론 아래 '이론은 나중에' 링크도 추천 강의 탭으로 보낸다
+    await page.getByRole("link", { name: /이론은 나중에, 추천 강의 바로 보기/ }).click();
+    await expect(page.getByRole("heading", { level: 2, name: "추천 로드맵" })).toBeInViewport();
+    await page.getByRole("tab", { name: "시작 전 준비" }).click();
     const jump = page.getByRole("link", { name: "추천 강의 바로 보기", exact: true });
     await jump.click();
     await expect(page).toHaveURL(/#roadmap$/);
@@ -84,7 +93,7 @@ test.describe("결과: 3분 이론", () => {
   });
 
   test("수준마다 다른 개념이 나온다 (입문자는 '다음 말' 개념이 먼저)", async ({ page }) => {
-    await page.goto(`/result?l=beginner&d=education&g=use_tools&ko=1`);
+    await page.goto(`/result?l=beginner&d=education&g=use_tools&ko=1#prep`);
     const first = page.getByTestId("theory-list").getByTestId("theory-concept").first();
     await expect(first.locator("summary")).toContainText("다음 말");
   });

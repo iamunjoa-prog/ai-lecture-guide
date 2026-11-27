@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Button, IconArrowRight, IconCheck, Reveal, Slide } from "@/components/ui";
 import { CriteriaSheet } from "@/components/CriteriaSheet";
-import { credentialBadge, instructors, knownIdLists, videos } from "@/components/catalog";
-import { SavedHeaderLink } from "@/components/saved/SavedHeaderLink";
+import { credentialBadge, instructors, videos } from "@/components/catalog";
+import { SiteHeaderBar } from "@/components/SiteHeaderBar";
 import { CRITERIA, EXCLUDED_NOTE } from "@/components/criteria";
 import { DIAGNOSIS_MINUTES, LEVEL_QUESTIONS, QUESTION_COUNT } from "@/lib/questions";
 
@@ -23,15 +23,7 @@ export default function Home() {
     <main className="flex min-h-dvh flex-col">
       {/* 1. 히어로 — 어두운 키노트 슬라이드 */}
       <Slide tone="stage" as="header" innerClassName="flex min-h-[92svh] flex-col pt-[env(safe-area-inset-top)]">
-        <div className="flex h-14 items-center justify-between">
-          <p className="text-[15px] font-semibold tracking-[-0.01em] text-stage-fg">AI 강의 길잡이</p>
-          <nav aria-label="내 메뉴" className="-mr-2 flex items-center gap-1">
-            <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full px-2 text-[15px] font-medium text-stage-muted transition-colors duration-200 hover:text-stage-fg">
-              용어집
-            </Link>
-            <SavedHeaderLink known={knownIdLists()} />
-          </nav>
-        </div>
+        <SiteHeaderBar home />
         <div className="flex flex-1 flex-col justify-center py-14">
           <p className="eyebrow animate-fade-in text-stage-muted">Curated YouTube Lectures</p>
           <h1 className="display mt-5 animate-fade-in text-[clamp(30px,9.6vw,52px)] text-stage-fg [animation-delay:80ms]">

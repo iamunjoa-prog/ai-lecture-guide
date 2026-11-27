@@ -3,7 +3,6 @@ import { axeCheck, expectNoOverflow, SKILLS } from "./helpers-saved";
 
 /** 강의 보고 해보기 · 이번 주 실습 미션 · 요즘 주목받는 AI 스킬 · 결과 칩 */
 const NON_BEGINNER = "l=practitioner&d=automation&g=use_tools,build_agents&ko=1";
-const BEGINNER = "l=beginner&d=education&g=understand&ko=1";
 
 test.describe("강의 보고 해보기", () => {
   test.use({ permissions: ["clipboard-read", "clipboard-write"] });
@@ -55,32 +54,52 @@ test.describe("이번 주 실습 미션", () => {
 });
 
 test.describe("요즘 주목받는 AI 스킬", () => {
-  test("입문자가 아니면 3개, 펼치면 근거·첫걸음·관련 강의", async ({ page }) => {
+  test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+
+  test("입문자가 아니면 '다음 스킬' 탭에 3개, 자세히 보기로 근거·첫걸음·관련 강의", async ({ page }) => {
     await page.goto(`/result?${NON_BEGINNER}`);
+    await page.getByRole("tab", { name: "다음 스킬" }).click();
     const section = page.getByTestId("skills-section");
     await expect(section.getByRole("heading", { name: "요즘 주목받는 AI 스킬" })).toBeVisible();
     await expect(section).toContainText(/\d{4}년 \d{1,2}월 기준/);
     const cards = section.getByTestId("skill-card");
     await expect(cards).toHaveCount(3);
-    await cards.first().locator("summary").click();
-    await expect(cards.first().getByText("왜 지금")).toBeVisible();
-    await expect(cards.first().getByTestId("prompt-box")).toBeVisible();
-    for (const a of await cards.first().getByTestId("skill-sources").locator("a").all()) {
+    const first = cards.first();
+    // 접힌 상태: 이름·한 줄 소개·첫걸음 복사 버튼이 보이고, 자세한 내용은 숨어 있다
+    await expect(first.getByRole("heading", { level: 3 })).toBeVisible();
+    await expect(first.getByRole("button", { name: /^첫걸음 프롬프트 복사/ })).toBeVisible();
+    await expect(first.getByText("왜 지금")).toBeHidden();
+    const more = first.getByTestId("skill-more");
+    await expect(more).toHaveAttribute("aria-expanded", "false");
+    await more.click();
+    await expect(more).toHaveAttribute("aria-expanded", "true");
+    await expect(first.getByText("왜 지금")).toBeVisible();
+    await expect(first.getByTestId("prompt-box")).toBeVisible();
+    for (const a of await first.getByTestId("skill-sources").locator("a").all()) {
       await expect(a).toHaveAttribute("target", "_blank");
       await expect(a).toHaveAttribute("rel", /noopener/);
     }
-    for (const a of await cards.first().getByTestId("skill-lectures").locator("a").all()) {
+    for (const a of await first.getByTestId("skill-lectures").locator("a").all()) {
       const href = (await a.getAttribute("href"))!;
       if (href.startsWith("#lecture-")) await expect(page.locator(`[id="${href.slice(1)}"] article`)).toHaveCount(1);
       else expect(href).toMatch(/^https:\/\/www\.youtube\.com\//);
     }
-    await expect(section.getByRole("link", { name: /스킬 전체 보기/ })).toHaveAttribute("href", "/skills");
+    await expect(section.getByRole("link", { name: /스킬 전체 보기/ })).toHaveAttribute("href", "/skills?l=practitioner");
   });
 
-  test("입문자에게는 스킬 대신 한 줄 안내", async ({ page }) => {
-    await page.goto(`/result?${BEGINNER}`);
-    await expect(page.getByTestId("skills-section")).toHaveCount(0);
-    await expect(page.getByTestId("skills-hint")).toHaveText("기본기를 익히면 다음 단계 스킬을 추천해 드려요.");
+  test("접힌 카드에서 첫걸음 프롬프트를 바로 복사한다 (결과 탭·/skills)", async ({ page }) => {
+    for (const path of [`/result?${NON_BEGINNER}#skills`, "/skills"]) {
+      await page.goto(path);
+      const card = page.getByTestId("skill-card").first();
+      const id = (await card.getAttribute("data-skill-id"))!;
+      const skill = SKILLS.find((s) => s.id === id)!;
+      await expect(card.getByTestId("skill-more")).toHaveAttribute("aria-expanded", "false");
+      await card.getByRole("button", { name: /^첫걸음 프롬프트 복사/ }).click();
+      await expect(page.getByTestId("toast")).toHaveText("복사했어요");
+      expect((await page.evaluate(() => navigator.clipboard.readText())).trim(), path).toBe(skill.firstStep.prompt.trim());
+      // 복사해도 카드는 접힌 그대로
+      await expect(card.getByTestId("skill-more")).toHaveAttribute("aria-expanded", "false");
+    }
   });
 
   test("/skills: 전체 목록, 해시로 해당 스킬이 펼쳐진다, sitemap 포함", async ({ page, request, consoleErrors }) => {
@@ -88,18 +107,54 @@ test.describe("요즘 주목받는 AI 스킬", () => {
     await page.goto(`/skills#${target.id}`);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("요즘 주목받는 AI 스킬");
     await expect(page.getByTestId("skill-card")).toHaveCount(SKILLS.length);
-    await expect(page.locator(`details#${target.id}`)).toHaveAttribute("open", "");
+    await expect(page.locator(`[id="${target.id}"]`).getByTestId("skill-more")).toHaveAttribute("aria-expanded", "true");
+    await expect(page.locator(`[id="${target.id}"]`)).toBeInViewport();
     await page.evaluate((id) => (window.location.hash = `#${id}`), SKILLS[0].id);
-    await expect(page.locator(`details#${SKILLS[0].id}`)).toHaveAttribute("open", "");
+    await expect(page.locator(`[id="${SKILLS[0].id}"]`).getByTestId("skill-more")).toHaveAttribute("aria-expanded", "true");
     expect(await (await request.get("/sitemap.xml")).text()).toContain("/skills");
     expect(consoleErrors).toEqual([]);
   });
 
-  test("랜딩·용어집·이론·결과에서 /skills로 갈 수 있다", async ({ page }) => {
-    for (const p of ["/", "/glossary", "/theory", `/result?${RESULT_QUERY}`]) {
+  test("/skills: 수준 필터와 ?l= 주소가 맞물린다 (입문자 값은 전체 + 안내)", async ({ page, consoleErrors }) => {
+    const count = (l: string) => SKILLS.filter((s) => s.levels.includes(l)).length;
+    await page.goto("/skills?l=developer");
+    const filters = page.getByRole("radiogroup", { name: "수준별로 보기" });
+    await expect(filters.getByRole("radio")).toHaveText(["전체", "활용자", "실무자", "개발자"]);
+    await expect(filters.getByRole("radio", { name: "개발자" })).toHaveAttribute("aria-checked", "true");
+    await expect(page.getByTestId("skill-card")).toHaveCount(count("developer"));
+
+    await filters.getByRole("radio", { name: "활용자" }).click();
+    await expect(page).toHaveURL(/\/skills\?l=user$/);
+    await expect(page.getByTestId("skill-card")).toHaveCount(count("user"));
+    // 화살표 키로 옮기면 바로 고른다 (활용자 → 실무자)
+    await page.keyboard.press("ArrowRight");
+    await expect(filters.getByRole("radio", { name: "실무자" })).toBeFocused();
+    await expect(filters.getByRole("radio", { name: "실무자" })).toHaveAttribute("aria-checked", "true");
+    await expect(page).toHaveURL(/\/skills\?l=practitioner$/);
+    await filters.getByRole("radio", { name: "전체" }).click();
+    await expect(page).toHaveURL(/\/skills$/);
+    await expect(page.getByTestId("skill-card")).toHaveCount(SKILLS.length);
+    // 새로고침해도 필터가 유지된다
+    await filters.getByRole("radio", { name: "개발자" }).click();
+    await page.reload();
+    await expect(filters.getByRole("radio", { name: "개발자" })).toHaveAttribute("aria-checked", "true");
+
+    await page.goto("/skills?l=beginner");
+    await expect(filters.getByRole("radio", { name: "전체" })).toHaveAttribute("aria-checked", "true");
+    await expect(page.getByTestId("skill-card")).toHaveCount(SKILLS.length);
+    const note = page.getByTestId("beginner-note");
+    await expect(note).toContainText("입문자라면 기본 강의와 실습부터 시작해 보세요");
+    await expect(note.getByRole("link", { name: /진단하기/ })).toHaveAttribute("href", "/diagnosis");
+    expect(consoleErrors).toEqual([]);
+  });
+
+  test("머리글 'AI 스킬' 링크: 여러 화면에서 /skills로 (입문자 결과만 제외)", async ({ page }) => {
+    for (const p of ["/", "/glossary", "/theory", "/privacy", "/saved", "/skills", `/result?${RESULT_QUERY}`]) {
       await page.goto(p);
-      expect(await page.locator('a[href="/skills"]').count(), p).toBeGreaterThan(0);
+      await expect(page.getByRole("navigation", { name: "내 메뉴" }).getByRole("link", { name: "AI 스킬" }), p).toHaveAttribute("href", "/skills");
     }
+    await page.goto("/skills");
+    await expect(page.getByRole("navigation", { name: "내 메뉴" }).getByRole("link", { name: "AI 스킬" })).toHaveAttribute("aria-current", "page");
   });
 });
 
@@ -120,9 +175,13 @@ test.describe("좁은 화면·접근성", () => {
     await page.goto(`/result?${NON_BEGINNER}`);
     await page.getByTestId("weekly-mission").getByRole("button", { name: "미션 펼쳐 보기" }).click();
     await page.locator("article").first().getByRole("button", { name: "자세히 보기" }).click();
-    await page.getByTestId("skills-section").locator("summary").first().click();
     await expectNoOverflow(page);
-    await page.goto(`/skills#${SKILLS[0].id}`);
+    await page.getByRole("tab", { name: "다음 스킬" }).click();
+    await page.getByTestId("skills-section").getByTestId("skill-more").first().click();
+    await expectNoOverflow(page);
+    await page.getByRole("tab", { name: "시작 전 준비" }).click();
+    await expectNoOverflow(page);
+    await page.goto(`/skills?l=practitioner#${SKILLS[0].id}`);
     await expectNoOverflow(page);
   });
 });
@@ -134,12 +193,15 @@ for (const scheme of ["light", "dark"] as const) {
       await page.goto(`/result?${NON_BEGINNER}`);
       await page.getByTestId("weekly-mission").getByRole("button", { name: "미션 펼쳐 보기" }).click();
       await page.locator("article").first().getByRole("button", { name: "자세히 보기" }).click();
-      await page.getByTestId("skills-section").locator("summary").first().click();
       await page.waitForTimeout(800);
-      await axeCheck(page, `결과 펼침(실습·스킬)/${scheme}`);
+      await axeCheck(page, `결과 펼침(실습)/${scheme}`);
+      await page.getByRole("tab", { name: "다음 스킬" }).click();
+      await page.getByTestId("skills-section").getByTestId("skill-more").first().click();
+      await page.waitForTimeout(800);
+      await axeCheck(page, `결과 다음 스킬 탭/${scheme}`);
     });
-    test("/skills (펼침)", async ({ page }) => {
-      await page.goto(`/skills#${SKILLS[0].id}`);
+    test("/skills (필터·펼침)", async ({ page }) => {
+      await page.goto(`/skills?l=developer#${SKILLS[0].id}`);
       await page.waitForTimeout(800);
       await axeCheck(page, `/skills/${scheme}`);
     });
