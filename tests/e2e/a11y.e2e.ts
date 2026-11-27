@@ -11,7 +11,8 @@ const PAGES = [
   { name: "결과", path: `/result?${RESULT_QUERY}` },
   { name: "결과(빈 상태)", path: "/result" },
   { name: "용어집", path: "/glossary" },
-  { name: "3분 이론", path: "/theory" },
+  { name: "용어집 3분 이론 탭", path: "/glossary?tab=theory" },
+  { name: "실습 모음", path: "/practice" },
   { name: "개인정보 처리방침", path: "/privacy" },
 ] as const;
 
@@ -75,7 +76,9 @@ for (const scheme of ["light", "dark"] as const) {
       await items.nth(2).locator("summary").click();
       await page.waitForTimeout(800);
       await check(page, `3분 이론 펼침/${scheme}`);
+      // 예전 주소 /theory#<개념>은 용어집 3분 이론 탭으로 넘어가 그 개념을 펼친다
       await page.goto("/theory#context-engineering");
+      await expect(page.locator("details#theory-context-engineering")).toHaveAttribute("open", "");
       await page.waitForTimeout(800);
       await check(page, `이론 페이지 펼침/${scheme}`);
     });
