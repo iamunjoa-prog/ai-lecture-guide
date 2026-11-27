@@ -83,3 +83,9 @@ export const IconX = (p: IconProps) => (
     <path d="M6 6l12 12M18 6L6 18" />
   </Svg>
 );
+
+export const IconChevronDown = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M6 9.5l6 6 6-6" />
+  </Svg>
+);

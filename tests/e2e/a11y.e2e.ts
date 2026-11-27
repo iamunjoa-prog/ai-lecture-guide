@@ -10,6 +10,7 @@ const PAGES = [
   { name: "진단", path: "/diagnosis" },
   { name: "결과", path: `/result?${RESULT_QUERY}` },
   { name: "결과(빈 상태)", path: "/result" },
+  { name: "용어집", path: "/glossary" },
 ] as const;
 
 for (const scheme of ["light", "dark"] as const) {
@@ -35,6 +36,22 @@ for (const scheme of ["light", "dark"] as const) {
       for (const name of [/^코딩/, /^업무 자동화/, /^데이터 분석/]) await page.getByRole("checkbox", { name }).click();
       await page.waitForTimeout(800);
       await check(page, `분야 질문/${scheme}`);
+    });
+
+    test("결과: 용어 행·카드 펼침", async ({ page }) => {
+      await page.goto(`/result?${RESULT_QUERY}`);
+      await page.getByTestId("starter-terms").locator("summary").first().click();
+      const card = page.locator("article").first();
+      await card.getByRole("button", { name: "자세히 보기" }).click();
+      await card.locator("button[aria-pressed]").first().click();
+      await page.waitForTimeout(800);
+      await check(page, `결과 펼침/${scheme}`);
+    });
+
+    test("용어집: 용어 펼침", async ({ page }) => {
+      await page.goto("/glossary#llm");
+      await page.waitForTimeout(800);
+      await check(page, `용어집 펼침/${scheme}`);
     });
 
     test("강사 선정 기준 시트", async ({ page }) => {
