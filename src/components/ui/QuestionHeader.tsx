@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cn } from "./cn";
 
 export interface QuestionHeaderProps {
-  /** 작은 단계 라벨. 예: "질문 2" */
+  /** 작은 단계 라벨. 예: "AI 활용 수준 · 1/5" */
   stepLabel?: ReactNode;
   /** 큰 질문 제목 */
   title: ReactNode;
@@ -15,12 +15,12 @@ export interface QuestionHeaderProps {
 
 export function QuestionHeader({ stepLabel, title, helper, id, className }: QuestionHeaderProps) {
   return (
-    <div className={cn("animate-fade-up pt-6 pb-7", className)}>
-      {stepLabel && <p className="mb-2 text-sm font-bold tracking-wide text-primary-soft-fg">{stepLabel}</p>}
-      <h1 id={id} className="text-[26px] font-bold leading-[1.35] tracking-[-0.025em] text-fg text-balance">
+    <div className={cn("pt-8 pb-8", className)}>
+      {stepLabel && <p className="eyebrow-ko mb-3 text-[13px] text-fg-muted">{stepLabel}</p>}
+      <h1 id={id} className="display text-[30px] text-fg text-balance outline-none">
         {title}
       </h1>
-      {helper && <p className="mt-2.5 text-[15px] leading-relaxed text-fg-muted">{helper}</p>}
+      {helper && <p className="mt-3 text-[15px] leading-relaxed text-fg-muted">{helper}</p>}
     </div>
   );
 }

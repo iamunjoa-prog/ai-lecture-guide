@@ -1,14 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef } from "react";
-import { Button, cn } from "@/components/ui";
-
-const CRITERIA = [
-  { icon: "🏢", title: "AI 기업 창업자", desc: "Anthropic, OpenAI, 업스테이지처럼 AI 기업을 세운 사람" },
-  { icon: "🔬", title: "핵심 연구자", desc: "딥러닝 선구자처럼 기술을 직접 만든 연구자" },
-  { icon: "🎓", title: "대학 교수", desc: "대학에서 정규 AI 강의를 하는 교수" },
-  { icon: "✅", title: "AI 기업 공식 채널", desc: "AI를 만드는 회사가 직접 운영하는 채널" },
-];
+import { Button, cn, IconCheck, IconX } from "@/components/ui";
+import { instructors, videos } from "./catalog";
+import { CRITERIA, EXCLUDED_NOTE } from "./criteria";
 
 export interface CriteriaSheetProps {
   /** 트리거 버튼 문구 */
@@ -55,12 +50,11 @@ export function CriteriaSheet({ triggerLabel = "강사 선정 기준 보기", cl
         type="button"
         onClick={open}
         className={cn(
-          "inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-fg-muted underline-offset-4 transition-colors hover:bg-surface-2 hover:text-fg hover:underline",
+          "inline-flex min-h-11 items-center gap-1 text-[15px] font-medium text-fg underline decoration-border-strong underline-offset-[6px] transition-colors duration-200 hover:decoration-fg",
           className,
         )}
         aria-haspopup="dialog"
       >
-        <span aria-hidden="true">🛡️</span>
         {triggerLabel}
       </button>
       <dialog
@@ -71,39 +65,46 @@ export function CriteriaSheet({ triggerLabel = "강사 선정 기준 보기", cl
           if (e.target === e.currentTarget) close();
         }}
         className={cn(
-          "fixed inset-x-0 top-auto bottom-0 m-0 mx-auto w-full max-w-content max-h-[85dvh] overflow-y-auto",
-          "rounded-t-xl border border-b-0 border-border bg-surface p-0 text-fg shadow-lg",
-          "backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:animate-fade-up",
+          "fixed inset-x-0 top-auto bottom-0 m-0 mx-auto w-full max-w-content max-h-[88dvh] overflow-y-auto",
+          "rounded-t-xl bg-surface p-0 text-fg shadow-sheet",
+          "backdrop:bg-black/40 backdrop:backdrop-blur-sm open:animate-fade-in",
         )}
       >
-        <div className="px-6 pt-3 pb-[max(24px,env(safe-area-inset-bottom))]">
-          <div className="mx-auto mb-5 h-1.5 w-10 rounded-full bg-border-strong" aria-hidden="true" />
-          <h2 id={titleId} className="text-xl font-bold text-fg">
-            이런 강사의 강의만 추천해요
+        <div className="relative px-6 pt-8 pb-[max(24px,env(safe-area-inset-bottom))]">
+          <button
+            type="button"
+            onClick={close}
+            aria-label="닫기"
+            className="absolute top-4 right-4 inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-fg-muted transition-colors hover:text-fg"
+          >
+            <IconX size={18} />
+          </button>
+          <p className="eyebrow text-fg-muted">Selection Criteria</p>
+          <h2 id={titleId} className="mt-2 pr-10 text-[24px] font-bold leading-tight tracking-[-0.03em] text-fg">
+            이런 강사의 유튜브 강의만 선별합니다
           </h2>
-          <p className="mt-1.5 text-[15px] leading-relaxed text-fg-muted">
-            AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널만 추천해요. 아래 기준 중 하나 이상을 충족해야
-            목록에 올라가요.
+          <p className="mt-3 text-[15px] leading-relaxed text-fg-muted">
+            아래 기준 중 하나 이상을 충족한 강사의 유튜브 강의만 담았습니다. 현재 강사 {instructors.length}명, 강의{" "}
+            {videos.length}개입니다.
           </p>
-          <ul className="mt-5 flex flex-col gap-3">
+          <ul className="mt-6 border-t border-border">
             {CRITERIA.map((c) => (
-              <li key={c.title} className="flex items-start gap-3 rounded-lg bg-surface-2 px-4 py-3">
-                <span aria-hidden="true" className="text-2xl leading-none">
-                  {c.icon}
+              <li key={c.title} className="flex items-start gap-3 border-b border-border py-4">
+                <span aria-hidden="true" className="mt-[3px] flex shrink-0 text-accent-ink">
+                  <IconCheck size={18} strokeWidth={2} />
                 </span>
                 <span className="min-w-0">
-                  <span className="block font-bold text-fg">{c.title}</span>
-                  <span className="block text-sm leading-relaxed text-fg-muted">{c.desc}</span>
+                  <span className="block font-semibold text-fg">{c.title}</span>
+                  <span className="mt-0.5 block text-sm leading-relaxed text-fg-muted">{c.desc}</span>
                 </span>
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-sm leading-relaxed text-fg-muted">
-            일반 유튜버, 유료 강의 판매 채널, 출처가 불분명한 재업로드 영상은 넣지 않아요. 모든 링크는 직접 확인한
-            것만 등록해요.
+          <p className="mt-5 text-sm leading-relaxed text-fg-muted">
+            {EXCLUDED_NOTE} 모든 링크는 실제로 열어 확인한 것만 등록합니다.
           </p>
-          <Button fullWidth size="lg" className="mt-6" onClick={close}>
-            확인했어요
+          <Button fullWidth size="lg" className="mt-7" onClick={close}>
+            확인
           </Button>
         </div>
       </dialog>

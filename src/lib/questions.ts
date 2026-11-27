@@ -150,7 +150,7 @@ export const LEVEL_QUESTIONS: LevelQuestion[] = [
     step: "level",
     type: "single",
     title: "ChatGPT나 Claude 같은 AI, 얼마나 자주 쓰세요?",
-    subtitle: "솔직하게 골라 주세요. 정답은 없어요.",
+    subtitle: "정답은 없어요. 지금과 가장 가까운 것을 골라 주세요.",
     options: [
       { id: "never", label: "아직 거의 안 써봤어요", emoji: "🙈", points: 0 },
       { id: "sometimes", label: "가끔 궁금할 때 써요", emoji: "🙂", points: 1 },
@@ -367,7 +367,7 @@ export const DOMAIN_QUESTION: DomainQuestion = {
   type: "multi",
   maxSelect: MAX_DOMAINS,
   title: "어떤 분야에 AI를 쓰고 싶으세요?",
-  subtitle: "관심 있는 분야를 골라 주세요. 여러 개 골라도 좋아요.",
+  subtitle: "가장 관심 있는 분야를 골라 주세요.",
   options: DOMAIN_OPTIONS,
 };
 
@@ -375,7 +375,7 @@ export const GOAL_QUESTION: GoalQuestion = {
   id: "goal",
   step: "goal",
   type: "single",
-  title: "AI로 이루고 싶은 목표는 뭐예요?",
+  title: "AI로 이루고 싶은 목표는 무엇인가요?",
   subtitle: "가장 가까운 하나만 골라 주세요.",
   options: GOAL_OPTIONS,
 };

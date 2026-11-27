@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: "%s · AI 강의 길잡이",
   },
   description:
-    "1분 진단으로 내 수준·분야·목표에 맞는 AI 강의를 찾아 드려요. AI를 만든 사람들의 무료 유튜브 강의만 골라 로드맵으로 정리해 드려요.",
+    "AI 기업 창업자·핵심 연구자·대학 교수·AI 기업 공식 채널의 유튜브 강의 중 검증된 것만 선별했습니다. 1분 진단으로 수준과 목표에 맞는 학습 로드맵을 순서대로 정리해 드립니다.",
 };
 
 export const viewport: Viewport = {
@@ -15,10 +15,13 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f5fb" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0d1a" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
 };
+
+/** 스크롤 등장 효과는 JS가 켜졌을 때만 적용한다(꺼져 있으면 모든 내용이 그대로 보인다) */
+const JS_FLAG = "document.documentElement.classList.add('js')";
 
 export default function RootLayout({
   children,
@@ -26,8 +29,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"

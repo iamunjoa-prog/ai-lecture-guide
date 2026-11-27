@@ -1,22 +1,26 @@
 import type { ReactNode } from "react";
 import { cn } from "./cn";
 
-export type ChipTone = "neutral" | "primary" | "accent" | "success";
+/**
+ * neutral 본문 위 헤어라인 알약
+ * stage   어두운 무대 위 밝은 회색 테두리 알약
+ * accent  연한 오렌지 배지
+ */
+export type ChipTone = "neutral" | "stage" | "accent";
 
 export interface ChipProps {
   children: ReactNode;
   tone?: ChipTone;
-  /** 앞쪽 아이콘(이모지) */
+  /** 앞쪽 아이콘(SVG) */
   icon?: ReactNode;
   size?: "sm" | "md";
   className?: string;
 }
 
 const tones: Record<ChipTone, string> = {
-  neutral: "bg-surface-2 text-fg-muted border-border",
-  primary: "bg-primary-soft text-primary-soft-fg border-transparent",
-  accent: "bg-accent-soft text-accent-soft-fg border-transparent",
-  success: "bg-success-soft text-success-soft-fg border-transparent",
+  neutral: "border-border-strong text-fg-muted",
+  stage: "border-stage-border text-stage-fg",
+  accent: "border-transparent bg-accent-soft text-accent-soft-fg",
 };
 
 /** 요약 칩 / 배지 */
@@ -24,13 +28,13 @@ export function Chip({ children, tone = "neutral", icon, size = "md", className 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 whitespace-nowrap rounded-full border font-semibold",
-        size === "sm" ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-sm",
+        "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border font-medium",
+        size === "sm" ? "px-2.5 py-0.5 text-[13px]" : "px-3.5 py-1.5 text-sm",
         tones[tone],
         className,
       )}
     >
-      {icon && <span aria-hidden="true">{icon}</span>}
+      {icon && <span aria-hidden="true" className="flex">{icon}</span>}
       {children}
     </span>
   );

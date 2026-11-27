@@ -5,7 +5,7 @@
  */
 import instructorsJson from "@data/instructors.json";
 import videosJson from "@data/videos.json";
-import type { Instructor, Video } from "@/types";
+import type { CredentialType, Instructor, Video } from "@/types";
 
 export const instructors = instructorsJson as unknown as Instructor[];
 export const videos = videosJson as unknown as Video[];
@@ -13,4 +13,20 @@ export const videos = videosJson as unknown as Video[];
 /** 유튜브 썸네일 (영상만, 재생목록은 id가 영상이 아니라서 없음) */
 export function thumbnailFor(video: Video): string | undefined {
   return video.kind === "video" ? `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg` : undefined;
+}
+
+/** 선정 기준 표시 이름 */
+export const CREDENTIAL_LABELS: Record<CredentialType, string> = {
+  founder: "창업자",
+  core_researcher: "핵심 연구자",
+  professor: "교수",
+  official_channel: "공식 채널",
+};
+
+/** 강의 카드 위 작은 라벨. 예: "창업자 · 핵심 연구자" (최대 2개) */
+export function credentialBadge(instructor: Instructor): string {
+  return instructor.credentials
+    .slice(0, 2)
+    .map((c) => CREDENTIAL_LABELS[c])
+    .join(" · ");
 }

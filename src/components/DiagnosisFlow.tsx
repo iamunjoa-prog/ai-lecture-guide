@@ -16,7 +16,7 @@ const STEP_LABELS: Record<Question["step"], string> = {
   level: "AI 활용 수준",
   domain: "관심 분야",
   goal: "학습 목표",
-  language: "마지막 질문",
+  language: "강의 언어",
 };
 
 function stepLabel(q: Question, index: number): string {
@@ -148,8 +148,8 @@ export function DiagnosisFlow() {
 
   if (phase === "loading") {
     return (
-      <AppShell>
-        <LoadingPlan title="맞춤 학습 플랜을 만들고 있어요" />
+      <AppShell tone="stage">
+        <LoadingPlan durationMs={LOADING_MS} />
       </AppShell>
     );
   }
@@ -165,13 +165,12 @@ export function DiagnosisFlow() {
         backHref={index === 0 ? "/" : undefined}
         onBack={index === 0 ? undefined : goBack}
       />
-      <div key={question.id} className="flex animate-fade-up flex-col">
+      <div key={question.id} className="flex animate-fade-in flex-col">
         <QuestionHeader
           id={headingId}
           stepLabel={stepLabel(question, index)}
           title={question.title}
           helper={question.subtitle}
-          className="outline-none"
         />
         <OptionGroup variant={question.type} labelledBy={headingId}>
           {question.options.map((o) => {
@@ -180,7 +179,6 @@ export function DiagnosisFlow() {
               <OptionCard
                 key={o.id}
                 variant={question.type}
-                icon={o.emoji}
                 title={o.label}
                 description={o.description}
                 selected={isSelected}
@@ -199,7 +197,7 @@ export function DiagnosisFlow() {
           isMulti ? (
             <span aria-live="polite">
               최대 {maxSelect}개까지 고를 수 있어요
-              <span className="ml-1 font-semibold text-primary-soft-fg tabular-nums">
+              <span className="ml-1.5 font-semibold text-fg tabular-nums">
                 ({selected.length}/{maxSelect})
               </span>
             </span>

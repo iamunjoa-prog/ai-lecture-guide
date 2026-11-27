@@ -2,14 +2,20 @@ import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "./cn";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost";
+/**
+ * primary   잉크(검정) 알약 — 본문 화면의 주 버튼
+ * accent    시그널 오렌지 — 어두운 무대 위의 대표 CTA 전용
+ * secondary 헤어라인 테두리
+ * ghost     글자만
+ */
+export type ButtonVariant = "primary" | "accent" | "secondary" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
 interface CommonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
-  /** 왼쪽 아이콘(이모지/SVG) */
+  /** 왼쪽 아이콘(SVG) */
   leadingIcon?: ReactNode;
   /** 오른쪽 아이콘 */
   trailingIcon?: ReactNode;
@@ -30,24 +36,22 @@ export type ButtonProps = CommonProps &
   );
 
 const base =
-  "inline-flex select-none items-center justify-center gap-2 whitespace-nowrap font-semibold tracking-[-0.01em] " +
-  "transition-[background-color,color,box-shadow,transform] duration-150 ease-out active:scale-[0.98] " +
-  "disabled:cursor-not-allowed disabled:active:scale-100 aria-disabled:pointer-events-none";
+  "inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold tracking-[-0.01em] " +
+  "transition-[background-color,color,border-color,opacity] duration-200 ease-out " +
+  "disabled:cursor-not-allowed aria-disabled:pointer-events-none";
 
 const variants: Record<ButtonVariant, string> = {
-  primary:
-    "bg-primary text-primary-fg shadow-cta hover:bg-primary-hover active:bg-primary-pressed " +
-    "disabled:bg-surface-sunken disabled:text-fg-subtle disabled:shadow-none",
+  primary: "bg-ink text-ink-fg hover:bg-ink-hover disabled:bg-surface-sunken disabled:text-fg-muted",
+  accent: "bg-accent text-accent-fg hover:bg-accent-hover disabled:opacity-40",
   secondary:
-    "bg-surface text-fg border border-border-strong shadow-sm hover:bg-surface-2 " +
-    "disabled:text-fg-subtle disabled:bg-surface-2",
-  ghost: "bg-transparent text-primary-soft-fg hover:bg-primary-soft disabled:text-fg-subtle",
+    "border border-border-strong bg-transparent text-fg hover:border-fg-subtle hover:bg-surface-2 disabled:text-fg-muted",
+  ghost: "bg-transparent text-fg hover:bg-surface-2 disabled:text-fg-muted",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "min-h-11 px-4 text-sm rounded-md",
-  md: "min-h-12 px-5 text-base rounded-lg",
-  lg: "min-h-14 px-6 text-[17px] rounded-lg",
+  sm: "min-h-11 px-4 text-sm",
+  md: "min-h-12 px-5 text-[15px]",
+  lg: "min-h-14 px-7 text-[17px]",
 };
 
 export function Button(props: ButtonProps) {
@@ -63,9 +67,9 @@ export function Button(props: ButtonProps) {
   const classes = cn(base, variants[variant], sizes[size], fullWidth && "w-full", className);
   const content = (
     <>
-      {leadingIcon && <span aria-hidden="true" className="shrink-0">{leadingIcon}</span>}
+      {leadingIcon && <span aria-hidden="true" className="flex shrink-0">{leadingIcon}</span>}
       <span>{children}</span>
-      {trailingIcon && <span aria-hidden="true" className="shrink-0">{trailingIcon}</span>}
+      {trailingIcon && <span aria-hidden="true" className="flex shrink-0">{trailingIcon}</span>}
     </>
   );
 
