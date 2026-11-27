@@ -12,7 +12,7 @@
     "levels": ["user", "practitioner", "developer"],
     "goals": ["use_tools", "build_agents"],
     "domains": ["automation", "data", "marketing"],
-    "lectureIds": ["tYOI-WoLS_o", "PLOjSa4kyvo_M", "PLHiXJG-Lqz-s"],
+    "lectureIds": ["tYOI-WoLS_o", "PLOjSa4kyvo_M", "PLHiXJG-Lqz-s", "uDr0xdA_E_A"],
     "termIds": ["ai-agent", "human-in-the-loop"],
     "theoryIds": ["from-chatbot-to-agent", "guardrails-and-human-review"],
     "firstStep": {
@@ -40,7 +40,7 @@
     "levels": ["user", "practitioner", "developer"],
     "goals": ["use_tools", "build_agents"],
     "domains": ["automation", "marketing", "education"],
-    "lectureIds": ["bjdBVZa66oU", "PLmWCw1CzcFim_hkruZSlABOUOAAQ5JMyo", "dlS2meHJWAk", "qtO940hejdE"],
+    "lectureIds": ["bjdBVZa66oU", "PLmWCw1CzcFim_hkruZSlABOUOAAQ5JMyo", "dlS2meHJWAk"],
     "termIds": ["skills", "custom-assistant", "instruction-file"],
     "theoryIds": ["give-your-own-materials", "context-is-working-memory"],
     "firstStep": {
@@ -68,7 +68,7 @@
     "levels": ["user", "practitioner", "developer"],
     "goals": ["build_agents", "use_tools"],
     "domains": ["automation", "data", "coding"],
-    "lectureIds": ["PLyCki2K0Lg", "2v6zhEFh3HI", "DRghWwm3dt8"],
+    "lectureIds": ["_jjSS0qGFbI", "PLyCki2K0Lg", "2v6zhEFh3HI", "DRghWwm3dt8"],
     "termIds": ["mcp", "tool-use", "api"],
     "theoryIds": ["tool-use-and-mcp", "rag-search-then-answer"],
     "firstStep": {
@@ -176,7 +176,7 @@
     "levels": ["user", "practitioner"],
     "goals": ["use_tools", "understand"],
     "domains": ["data", "marketing", "education", "startup"],
-    "lectureIds": ["EWvNQjAaOHw", "t2Zo3YAJdj4"],
+    "lectureIds": ["R-KJgjIrh24", "YkCDVn3_wiw", "IJsp9AC-n7Q", "EWvNQjAaOHw"],
     "termIds": ["web-search", "hallucination"],
     "theoryIds": ["ai-can-be-wrong", "rag-search-then-answer"],
     "firstStep": {
@@ -258,7 +258,7 @@
     "levels": ["user", "practitioner", "developer"],
     "goals": ["use_tools", "build_agents"],
     "domains": ["automation", "data"],
-    "lectureIds": ["PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO", "2v6zhEFh3HI"],
+    "lectureIds": ["6Mmevs1877A", "PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO", "2v6zhEFh3HI"],
     "termIds": ["privacy-security", "guardrails", "ai-safety"],
     "theoryIds": ["do-not-share-sensitive-info", "guardrails-and-human-review"],
     "firstStep": {

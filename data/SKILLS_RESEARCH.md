@@ -14,16 +14,16 @@
 
 | # | id | 이름 | 수준 | 목표 | 강의 |
 |---|---|---|---|---|---|
-| 1 | delegate-to-agents | AI에게 일 맡기기 | user·practitioner·developer | use_tools, build_agents | tYOI-WoLS_o, PLOjSa4kyvo_M, PLHiXJG-Lqz-s |
-| 2 | reusable-skills | 나만의 AI 스킬 만들기 | user·practitioner·developer | use_tools, build_agents | bjdBVZa66oU, PLmWCw1CzcFim_hkruZSlABOUOAAQ5JMyo, dlS2meHJWAk, qtO940hejdE |
-| 3 | connect-tools-and-data | AI에 도구·자료 연결하기 | user·practitioner·developer | build_agents, use_tools | PLyCki2K0Lg, 2v6zhEFh3HI, DRghWwm3dt8 |
+| 1 | delegate-to-agents | AI에게 일 맡기기 | user·practitioner·developer | use_tools, build_agents | tYOI-WoLS_o, PLOjSa4kyvo_M, PLHiXJG-Lqz-s, uDr0xdA_E_A |
+| 2 | reusable-skills | 나만의 AI 스킬 만들기 | user·practitioner·developer | use_tools, build_agents | bjdBVZa66oU, PLmWCw1CzcFim_hkruZSlABOUOAAQ5JMyo, dlS2meHJWAk |
+| 3 | connect-tools-and-data | AI에 도구·자료 연결하기 | user·practitioner·developer | build_agents, use_tools | _jjSS0qGFbI, PLyCki2K0Lg, 2v6zhEFh3HI, DRghWwm3dt8 |
 | 4 | vibe-coding | 말로 작은 도구 만들기 | user·practitioner | build_products | gJYZE9UXiHk, 8zH_O74hZBw, ff3j4olCUig, KiJcZlqJKuE |
 | 5 | context-engineering | AI에게 맥락 설계해 주기 | practitioner·developer | build_agents, build_products, use_tools | 8Aoq6mJeAXI, UjvgpPG1XTU, T9aRN5JkmL8 |
 | 6 | verify-ai-output | AI 결과 검증하기 | user·practitioner·developer | use_tools, understand, build_products | PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv, T9aRN5JkmL8, jDCkirAz4-E |
-| 7 | deep-research | AI로 깊이 조사하기 | user·practitioner | use_tools, understand | EWvNQjAaOHw, t2Zo3YAJdj4 |
+| 7 | deep-research | AI로 깊이 조사하기 | user·practitioner | use_tools, understand | R-KJgjIrh24, YkCDVn3_wiw, IJsp9AC-n7Q, EWvNQjAaOHw |
 | 8 | workflow-automation | 반복 업무 자동화하기 | user·practitioner | use_tools, build_agents | AkUUeePtbe4, k4V44dn_TQo, tYOI-WoLS_o |
 | 9 | coding-agents | 코딩 에이전트와 일하기 | practitioner·developer | build_products, use_tools | 6eBSHbLKuN0, PLmWCw1CzcFilebjK89WLb5cAvM8K0cLB3, wo0Rsh9hlTo, dRsjO-88nBs |
-| 10 | agent-safety | 에이전트 시대 보안 습관 | user·practitioner·developer | use_tools, build_agents | PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO, 2v6zhEFh3HI |
+| 10 | agent-safety | 에이전트 시대 보안 습관 | user·practitioner·developer | use_tools, build_agents | 6Mmevs1877A, PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO, 2v6zhEFh3HI |
 | 11 | agent-design | 에이전트 직접 설계하기 | practitioner·developer | build_agents, build_products | LP5OCa20Zpg, XSZP9GhhuAc, OhI005_aJkA, tK32trvj_b4 |
 
 추천 규칙(src/lib/skills.ts `selectSkills`): 수준 일치 → 목표 점수(1순위 목표 +2, 나머지 목표 하나당 +1) → 분야 겹침 수 → skills.json 순서. 최대 3개. 그래서 데이터 순서도 '두루 쓸모 있는 것'이 앞에 오도록 정했어요.
@@ -43,7 +43,7 @@
 - **OpenAI Help, Custom GPT retirement and migration FAQ** — 원문 확인. "We're planning to retire custom GPTs and help creators migrate them to plugins. Plugins can bring reusable instructions, reference files, and connected apps together."
 - **OpenAI, The state of enterprise AI 2025 report (PDF, 2025-12)** — 원문 확인. "Weekly users of Custom GPTs and Projects have increased by approximately 19× year-to-date." (데이터 문장에는 넣지 않고 근거로만 둠)
 - 선정 이유: 2026년 하반기에 세 회사가 '맞춤 비서(GPT·Gems)'에서 '스킬'로 형식을 모으고 있어요. 지금 가장 시의성이 큰 스킬이에요.
-- 주의: 강의 qtO940hejdE(Gems 만들기)는 Gems가 스킬로 바뀌는 중이라 화면이 달라질 수 있어요. 지시문을 쓰는 요령은 그대로 통해서 남겼어요.
+- ~~주의: 강의 qtO940hejdE(Gems 만들기)는 … 남겼어요.~~ → **3차 정비(2026-11-27)에서 제거**: 개인 계정은 2026-12-17 이후 Gems를 쓸 수 없어(Gemini Apps Help 원문 확인) 강의의 핵심 화면이 곧 맞지 않게 돼요. 이 스킬의 강의는 bjdBVZa66oU·Claude Code Skills 재생목록·dlS2meHJWAk 3개예요.
 
 ### 3. AI에 도구·자료 연결하기 (connect-tools-and-data)
 - **MCP 공식 문서, What is the Model Context Protocol (MCP)?** — 원문 확인. "MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems."
@@ -115,7 +115,23 @@
 | 미세조정(fine-tuning) | 탈락 | 대상자 대부분에게 우선순위가 낮고, 최근 공식 자료는 컨텍스트·도구 연결을 먼저 권해요. |
 | 일반 'AI 리터러시' | 탈락 | 검색 결과(LinkedIn Skills on the Rise 2026, WEF Future of Jobs 2025)에서 AI 관련 스킬 수요 증가는 보이지만 범위가 너무 넓고, 원문을 직접 읽을 수 없었어요. 데이터 근거로 쓰지 않았어요. |
 
-## 강의 공백 (PM 검토용 — videos.json에 넣지 않았어요)
+## 강의 공백 (PM 검토용) — 3차 정비(2026-11-27) 반영
+
+**반영 결과**: 후보 9개 중 ✅ 그대로 추가 3개(R-KJgjIrh24, 6Mmevs1877A, _jjSS0qGFbI) · 🔁 같은 성격의 확인 가능한 영상으로 바꿔 추가 2개(jv-lpIsnLOo → YkCDVn3_wiw, buwMJxvW7wI → IJsp9AC-n7Q) · ⏭️ 넣지 않음 4개(AI Fluency 레슨 3개 중복, 카파시 @ycombinator). 근거는 CURATION.md 「3차 정비」.
+
+| 후보 | 결과 |
+|---|---|
+| jv-lpIsnLOo (OpenAI Introduction to Deep Research) | ⏭️→✅ 같은 제목으로 채널에 공개돼 있고 설명·길이(20:16)를 확인할 수 있는 **YkCDVn3_wiw**로 바꿔 추가. jv-lpIsnLOo는 채널·검색 목록에 나오지 않아 확인 불가 |
+| R-KJgjIrh24 (Claude 리서치) | ✅ 추가 → deep-research 1순위 |
+| buwMJxvW7wI (@Google Gemini Deep Research 데모) | ⏭️ @Google은 공식 채널이지만 1년 넘은 2분 데모 + 새 허용 채널 필요 → 이미 등록된 @googleworkspace의 최근 레슨 **IJsp9AC-n7Q**(NotebookLM·Gemini 딥 리서치, 마케팅)를 대신 추가 → deep-research 3순위 |
+| Y0KidGr9Z2Y (AI Fluency 8강 Discernment) | ⏭️ 이미 연결한 AI Fluency 재생목록에 포함(재생목록 페이지에서 확인) — 중복 |
+| W4Ua6XFfX9w (AI Fluency 2B강 4D) | ⏭️ 같은 재생목록에 포함 — 중복 |
+| 6Mmevs1877A (Microsoft Mechanics 탈옥·인젝션) | ✅ 추가 → agent-safety 1순위 |
+| QbLf2zb3oPc (AI Fluency 10강 Diligence) | ⏭️ 같은 재생목록에 포함 — 중복 |
+| _jjSS0qGFbI (Claude 커넥터) | ✅ 추가 → connect-tools-and-data 1순위(활용 수준 공백 해소) |
+| LCEmiRjPEtQ (카파시 @ycombinator) | ⏭️ 투자사 채널(1차 큐레이션에서도 제외), 내용 미확인 |
+
+아래 표는 3차 정비 전 조사 기록이에요(그대로 둠).
 강의가 약한 스킬과, 화이트리스트 채널(AI 기업 공식 채널·창업자·핵심 연구자·교수)의 후보예요. 모두 2026-11-27에 `curl -sS -m 20 "https://www.youtube.com/oembed?url=<url>&format=json"`으로 **제목과 업로드 채널을 확인**했어요(시청은 안 함). 추가하려면 강의마다 실습 미션이 필요해요.
 
 | 스킬 | 공백 | 후보 (oEmbed 제목 · 채널) | 한 줄 이유 |
@@ -133,5 +149,5 @@
 공식 채널 영상을 찾지 못한 것: 컨텍스트 엔지니어링을 직접 다루는 Anthropic·Google 공식 영상(검색에 나온 것은 모두 제3자 재업로드·해설 채널이라 제외), Google 공식 프롬프트 인젝션 영상.
 
 ## 다시 확인할 것 (금방 낡는 부분)
-- Gems→스킬 전환(개인 2026-11~, 업무·학교 2027), 맞춤 GPT 종료(2026-12-11 예정) 일정은 바뀔 수 있어요. 2027년 초에 2번 스킬과 qtO940hejdE 연결을 다시 보세요.
+- Gems→스킬 전환(개인 2026-11~, 개인 Gems 파일은 2026-12-17까지 내려받기 가능, 업무·학교 2027), 맞춤 GPT 종료(2026-12-11 예정, 일부 Enterprise·FedRAMP 2027-02-28) 일정은 바뀔 수 있어요. 2027년 초에 2번 스킬 문구(whyNow)를 다시 보세요. (qtO940hejdE는 3차 정비에서 제거됨)
 - Anthropic 경제 지수는 분기마다 새로 나와요. 1번 스킬의 비율 문장은 다음 보고서가 나오면 갱신하세요.

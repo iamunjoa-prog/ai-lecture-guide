@@ -34,7 +34,7 @@ describe("data/practice.json 무결성", () => {
     const missionIds = missions.map((m) => m.videoId);
     expect(new Set(missionIds).size).toBe(missionIds.length);
     expect([...missionIds].sort()).toEqual([...videoIds].sort());
-    expect(missions).toHaveLength(65);
+    expect(missions).toHaveLength(70);
   });
 
   it("길이 제한: 제목 30자, 목표·성공 60자, 프롬프트 350자 이하", () => {
@@ -121,7 +121,7 @@ describe("data/practice.json 무결성", () => {
 describe("practiceById / missionForVideo", () => {
   it("videoId로 찾고, 없으면 undefined", () => {
     const byId = practiceById(missions);
-    expect(byId.size).toBe(65);
+    expect(byId.size).toBe(70);
     expect(missionForVideo(videos[0].id, byId)?.videoId).toBe(videos[0].id);
     expect(missionForVideo("nope", byId)).toBeUndefined();
   });
