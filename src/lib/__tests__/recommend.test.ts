@@ -294,7 +294,7 @@ describe("다중 목표", () => {
     ] as const;
     for (const level of ["beginner", "user", "practitioner", "developer"] as const) {
       for (const goals of combos) {
-        for (const domains of [[], ["marketing"], ["coding", "startup"], ["automation", "data"]] as const) {
+        for (const domains of [[], ["marketing"], ["creative"], ["coding", "startup"], ["automation", "data"]] as const) {
           const d = diag({ level, goals: [...goals], domains: [...domains] });
           const r = buildRoadmap(d, vs, realInstructors as Instructor[]);
           checkInvariants(r);
@@ -313,6 +313,24 @@ describe("다중 목표", () => {
         }
       }
     }
+  });
+
+  it("실제 데이터: 이미지·영상 제작(creative)을 고르면 어느 수준·목표에서도 creative 강의가 담기고 사유에 분야가 나온다", () => {
+    const vs = realVideos as Video[];
+    expect(vs.filter((v) => v.domains.includes("creative")).length).toBeGreaterThanOrEqual(6);
+    for (const level of ["beginner", "user", "practitioner", "developer"] as const) {
+      for (const goals of [["use_tools"], ["understand"], ["build_products"], ["build_agents"], ["use_tools", "build_products"]] as const) {
+        const r = buildRoadmap(diag({ level, goals: [...goals], domains: ["creative"] }), vs, realInstructors as Instructor[]);
+        checkInvariants(r);
+        expect(all(r).length).toBeGreaterThanOrEqual(3);
+        const hits = all(r).filter((i) => i.video.domains.includes("creative"));
+        expect(hits.length, `${level}/${goals}`).toBeGreaterThanOrEqual(1);
+        expect(hits[0].reason).toContain("이미지·영상 제작에 AI를 적용하려는");
+      }
+    }
+    // 입문자·업무 도구: 기초·실전 모두 creative 강의가 앞선다
+    const b = buildRoadmap(diag({ level: "beginner", goals: ["use_tools"], domains: ["creative"] }), vs, realInstructors as Instructor[]);
+    expect(all(b).filter((i) => i.video.domains.includes("creative")).length).toBeGreaterThanOrEqual(3);
   });
 
   it("추천 사유: 고른 목표 여러 개에 맞으면 그 목표들을 함께 말한다", () => {

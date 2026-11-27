@@ -1,6 +1,6 @@
 # 큐레이션 노트 (Agent A)
 
-검증일: 2026-11-27 · 강사 19명 · 강의 70개 (영상 56 · 재생목록 14, 한국어 13개) — 2차 보강 + 사실 검증 + 3차 정비(2026-11-27) 반영
+검증일: 2026-11-27 · 강사 21명 · 강의 80개 (영상 66 · 재생목록 14, 한국어 14개 · 한국어 친화 15개) — 2차 보강 + 사실 검증 + 3차 정비 + 이미지·영상 분야 추가(2026-11-27) 반영
 
 > **사실 검증 반영**: 아래 표·기록은 검증 전 작성본이라 일부가 옛 내용이에요(예: 제거된 강의, 「앤드루 응」 표기). 최신 판단은 [`VERIFICATION.md`](./VERIFICATION.md)를 따르세요.
 
@@ -32,6 +32,8 @@
 | microsoft | official_channel | (2차) Microsoft Developer(@MicrosoftDeveloper) 본 채널 + Microsoft 공식 제품 시연 채널 Microsoft Mechanics(@MSFTMechanics, `check-links` 허용 목록에 추가) |
 | naver-d2 | official_channel | (2차) 네이버 공식 기술 채널(@naver_d2). NAVER ENGINEERING DAY 등 사내 기술 행사 발표 |
 | kakao-tech | official_channel | (2차) 카카오 공식 기술 채널(@kakaotech). if(kakao) 개발자 콘퍼런스 세션 |
+| runway | official_channel | (이미지·영상) AI 영상 생성·편집 모델(Gen-4.5·Aleph)을 직접 만드는 Runway의 공식 채널(@RunwayML) |
+| adobe-firefly | official_channel | (이미지·영상) Firefly 모델을 직접 개발하는 Adobe의 Firefly 공식 채널(@AdobeFirefly). 채널 소유 확인은 간접 근거(아래 참고) |
 
 참고: 강사 한 명에 `channelUrl`은 하나라서, 개인 채널이 없는 강사(힌턴, 페이페이 리)는 대표 강의가 있는 기관 채널을 적었어요. 앤드루 응·김성훈은 영상마다 실제 업로드 채널이 다를 수 있어요(위 표 참고).
 
@@ -241,3 +243,72 @@ QA가 찾은 콘텐츠 공백을 채우려고 23개를 추가했어요. 모두 �
 ### 다시 볼 것
 - 2026-12-11(맞춤 GPT 종료), 2026-12-17(개인 계정 Gems 종료) 뒤에 OpenAI·Google 도움말을 다시 확인하세요. 업무·학교 계정 Gems 전환(2027)도 일정이 바뀔 수 있어요.
 - `YkCDVn3_wiw`·`6Mmevs1877A`·`OfUn6HjwXhI`·`ycAnRjyYC6o`는 오래된 영상이라 더 새 공식 영상이 나오면 바꾸는 것이 좋아요.
+
+## 이미지·영상 분야 추가 (2026-11-27)
+진단 분야에 **이미지·영상 제작**(`creative`, URL `d=creative`)이 생겨서, 이 분야 강의를 공식 채널에서만 새로 골랐어요. 강의 70개 → **80개**, 강사 19명 → **21명**(Runway, Adobe Firefly). **영상은 이번에도 시청하지 않았어요.** 요약·takeaways는 oEmbed 제목과 공식 채널 검색 결과의 설명 첫 줄만 근거로 보수적으로 썼어요.
+
+### 확인 방법
+- 후보는 각 공식 채널의 `/search` 결과(제목·길이·공개 시점·설명 첫 줄)에서 모았어요. 10개 모두 oEmbed로 제목·업로드 채널(author_url)을 확인했고, `npm run check-links` 80/80 통과.
+- 제품이 지금도 있는지: OpenAI Help「ChatGPT Images in ChatGPT」(원문 확인: 모든 요금제에서 이미지 생성, Images 2.6 언급), Gemini Apps Help「Generate & edit images with Gemini Apps」(원문 확인: Nano Banana로 생성·편집), Anthropic「Introducing Claude Design by Anthropic Labs」(원문 확인: 2026-04-17 연구 미리보기), Runway「Introducing Aleph 2.0 and Edit Studio」(검색 확인: 2026-05-21, 유료 플랜), Google Vids·Adobe Firefly는 각 공식 채널의 최근 업로드(각각 2개월 전 Vids HD 영상 생성, 2주 전 Adobe MAX 2026 Firefly 소식)로 현재 제품임을 확인했어요.
+- **Sora 종료**: OpenAI Help「Provenance signals in content processed by OpenAI tools」(원문 확인)에 "Sora is discontinued"라고 적혀 있고, 2026-03-24 종료 발표가 여러 언론에 보도됐어요. 그래서 Sora 영상은 하나도 넣지 않았어요.
+- `durationMin`은 채널 검색 결과의 재생 시간을 반올림했어요(추정값 없음): `CrrpfvbNyMw` 2:51→3 · `bH2nP-aCFjk` 29:23→29 · `jDxKzlGLCas` 22:38→23 · `nRLZqaNOrwQ` 27:24→27 · `VldX34mM95o` 48:11→48 · `56MhbPXEr9k` 2:10→2 · `Uvl-tRga98g` 28:00→28 · `-lVVZDuEIVs` 3:20→3 · `sqwbGJL4Pdk` 3:49→4 · `6oBmJARc0Aw` 24:43→25.
+- 영어 강의의 공식 한국어 자막은 확인하지 못해 모두 `hasKoreanSubtitle: false`.
+
+### 추가한 강의 10개
+| 강의 | 강사(채널) | 수준 · 목표 | 공개 시점(검색 기준) | 선정 근거 |
+|---|---|---|---|---|
+| `CrrpfvbNyMw` ChatGPT Images: Three Ways to Get Started | openai (@OpenAI) | beginner·user · use_tools | 약 2주 전 | 설명 첫 줄 "create new images and edit existing images directly inside ChatGPT". 입문자용 사용법 |
+| `bH2nP-aCFjk` Inside image generation’s Renaissance moment — the OpenAI Podcast Ep. 19 | openai | user·practitioner · understand | 약 6개월 전 | 설명: 제품 책임자 Adele Li·연구자 Kenji Hata가 출시 뒤 쓰임·흐름을 이야기. 공식 팟캐스트 |
+| `jDxKzlGLCas` Building with GPT-Live and Image Generation \| DevDay 2026 | openai | developer · build_products, build_agents | 약 2주 전 | 설명: 음성 에이전트에 위임·지연시간·끼어들기 설계. DevDay 공식 세션 |
+| `nRLZqaNOrwQ` Build creative apps with the GenMedia suite (I/O Connect ‘26) | google-for-developers (@GoogleDevelopers) | practitioner·developer · build_products, understand | 약 4개월 전 | 설명: Veo·Nano Banana·Genie·Lyria로 창작 앱 만들기. Google 공식 행사 세션 |
+| `VldX34mM95o` How a Moonshot Led to Google DeepMind's Veo 3 | google-for-developers | practitioner·developer · understand | 약 1년 전 | 설명: Veo 프로젝트 공동 리드(핵심 연구자) 대담. 요약에 "Veo 3 시점, 최신 버전과 달라요" 명시 |
+| `56MhbPXEr9k` Convert Google Slides into engaging product videos using Google Vids. | google-workspace (@googleworkspace) | beginner·user · use_tools | 약 4개월 전 | 설명 "you'll learn to convert static Google Slides into engaging product videos using Google Vids and Gemini". 공식 레슨 |
+| `Uvl-tRga98g` Designing with Claude: From prompt to production | anthropic (@claude, 기존 허용 채널) | user·practitioner · use_tools, build_products | 약 6개월 전 | 설명: Claude Design으로 브랜드에 맞는 시각 결과물. 디자인·시안 쪽 창작 |
+| `-lVVZDuEIVs` How to Use Aleph 2.0 in Edit Studio \| Runway | runway (@RunwayML) | user·practitioner · use_tools | 약 6개월 전 | 영상 편집 모델을 만든 회사의 공식 사용법. 요약에 "유료 플랜 기능" 명시 |
+| `sqwbGJL4Pdk` Get Started in Adobe Firefly and Create with Confidence with Jesús Ramirez \| Adobe Firefly | adobe-firefly (@AdobeFirefly) | beginner·user · use_tools | 약 7개월 전 | 설명 "beginner-friendly", 화면·모듈·커뮤니티 둘러보기. 진행자는 외부 크리에이터지만 Adobe 공식 채널 튜토리얼 |
+| `6oBmJARc0Aw` "토큰은 더 적게, 속도는 더 빠르게" 고효율 비디오 생성을 위한 잠재 공간 압축 기술 \| 상생과 성장 | kakao-tech (@kakaotech) | developer · understand | 약 4주 전 | 한국어 기술 발표(공식 기술 채널). 발표자·행사 정보는 확인하지 못해 요약에 넣지 않았어요. 카카오가 ECCV 2026에서 영상 생성 효율화 기술(KATok)을 발표했다는 공식 보도(kakaocorp.com)는 있지만, 이 영상과 같은 연구인지는 확인하지 못해 연결하지 않았어요 |
+
+**새 강사 적격성**
+- **runway** — Runway는 영상 생성·편집 모델을 직접 연구·개발하는 AI 기업이고, @RunwayML은 회사 공식 채널이에요(제품 레슨 Runway Academy, 공동창업자 크리스토발 발렌수엘라의 공식 행사 발표가 올라옴). `official_channel`.
+- **adobe-firefly** — Firefly 이미지·영상 모델은 Adobe가 직접 개발해요. @AdobeFirefly는 영상 설명에 Adobe 단축 링크(adobe.ly)와 "Subscribe to Adobe Firefly"를 다는 Adobe의 Firefly 채널이에요. 다만 Adobe 홈페이지에서 이 채널로 가는 링크는 직접 확인하지 못했어요(제3자 채널 목록 페이지로만 확인) — `@claude`처럼 **소유 확인은 간접 근거**예요. `official_channel`.
+- `THIRD_PARTY_CHANNELS`는 바꾸지 않았어요(새 강의는 모두 강사 본인 채널 또는 기존 허용 `@claude`).
+
+### 기존 강의 재태그 (`domains`에 creative 추가)
+| 강의 | 이유 |
+|---|---|
+| `G2fqAlgmoPo` Introduction to Generative AI (Google Cloud Tech) | 범용 생성형 AI 입문 — 글뿐 아니라 이미지 생성도 생성형 AI의 대표 예. 이미 모든 분야가 붙은 범용 개념 강의라 원칙("범용 개념 강의는 분야 전부")에 맞춰 추가 |
+| `PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv` AI Fluency Course (Anthropic) | 같은 원칙(모든 분야가 붙은 범용 AI 협업 강좌) |
+| `8ib4Qnh2HFE` Full AI Prompting Course with Andrew Ng | 공식 코스 페이지(사실 검증 때 확인)에 멀티미디어 프롬프트 레슨이 있음 |
+
+LLM 전용 개념 강의(`zizonToFXDs`, 카파시 강의들)와 Gemini Canvas 마케팅 앱(`7dsaxBUZPII`: 그림 입력 → 앱 만들기라 이미지 제작이 아님), 페이페이 리 TED(이미지 *이해*이지 제작이 아님)는 태그를 붙이지 않았어요.
+
+### 넣지 않은 후보와 이유
+- **Sora 영상 전부**(`gzneGhpXwjU` Introducing Sora 2, `360ZqfabuPQ` Getting started with Sora, `6PXWAvUG8Sg` storyboard, `70ush8Vknx8` "Sora, ImageGen, and Codex…" 등) — Sora 종료(위 참고).
+- **`sWkGomJ3TLI` Introducing ChatGPT Images 2.0** — 공식이지만 7개월 전 출시 발표이고 지금은 2.6까지 나왔어요. 같은 회사 입문 영상(`CrrpfvbNyMw`, 2주 전)과 팟캐스트로 충분.
+- **`H6ZXujE1qBA` nano-banana 비하인드, Nano Banana Pro 데모 영상들(@GoogleDevelopers)** — 1년 안팎 된 짧은 데모가 많고, google-for-developers 강의가 이미 2개 늘어 강사당 상한(로드맵당 2)에 걸려요.
+- **Google Vids·Google Pics·Veo 3.1 짧은 소개(@googleworkspace, @GoogleDeepMind)** — 15초~1분 30초 광고성 소개라 강의로 보기 어려워요. Vids는 실제 사용 과정을 보여 주는 레슨(`56MhbPXEr9k`)을 골랐어요.
+- **Microsoft(Designer·Copilot 이미지)** — 공식 채널에 1분 미만 소개 영상(`CVYs-WN8cOE`)만 찾았어요.
+- **Runway Gen-4·Gen-4.5 소개, App Studio, 발렌수엘라 기조연설(`fMV0Gs2hdKU`)** — 소개 영상은 짧은 시연, 기조연설은 제목상 '현실 세계 지능' 주제라 이미지·영상 제작 강의로 보기 어려워 뺐어요.
+- **카카오 `uGU-pvHx5oU` Personalized T2I 모델 개발기(2024)** — 공식이지만 2년 전. 더 최근 발표(`6oBmJARc0Aw`)를 골랐어요. NAVER D2「그림 그리는 AI」(8년 전)도 같은 이유로 제외. LG AI연구원 채널은 짧은 홍보 영상만 있었어요.
+- **Adobe `4U39evmdtac` Lightroom·Firefly 무드보드** — 검증은 통과했지만 사진가용이라 대상이 좁고 Adobe 강의가 2개가 되면 상한에 걸려서 보류.
+
+### 커버리지 — 이미지·영상(creative) 강의 13개(새 10 + 재태그 3), level × goal
+| | understand | use_tools | build_agents | build_products |
+|---|---|---|---|---|
+| beginner | 2 | 5 | 0 | 0 |
+| user | 3 | 7 | 0 | 1 |
+| practitioner | 3 | 2 | 0 | 2 |
+| developer | 3 | 0 | 1 | 2 |
+
+입문·활용자용 사용법(use_tools)이 가장 많고, 이해(understand)는 모든 수준에 2개 이상이에요. **빈칸**: beginner·user의 build_agents·build_products, developer·use_tools — 이 조합의 공식 이미지·영상 강의를 찾지 못했어요(지어내지 않음). 이런 진단에서는 분야 일치 강의가 기초·한 단계 더 칸에 들어가고, 실전 칸은 목표 일치 범용 강의가 채워요(`npm run report -- --domains creative`).
+
+전체 커버리지(`npm run report -- --summary`): beginner 10·17·5·4 / user 17·25·8·9 / practitioner 23·12·11·13 / developer 16·5·17·13 (understand·use_tools·build_agents·build_products). 분야별 automation 40 · marketing 27 · **creative 13** · coding 37 · data 32 · education 16 · startup 31. 페르소나 1,040개(분야 조합에 `creative`, `marketing+creative`, `creative+education+startup` 추가): FEW 0 · WEAK 5(이전 7) · MISSGOAL 0.
+
+### 용어·실습·스킬
+- 용어 5개 추가(61 → 66): `image-generation-model`(입문) · `ai-media-rights`(입문, 초상권·저작권·약관 확인과 AI 생성물 표시 — "법률 조언이 아니에요"·"서비스 약관과 관련 법을 확인하세요") · `diffusion-model`(활용, "모든 모델이 확산 모델은 아니에요") · `text-to-video`(활용) · `image-editing`(활용, 인페인팅·레퍼런스 이미지). 워터마크 설명(SynthID·C2PA)은 OpenAI Help 출처 신호 문서(원문 확인: ChatGPT·API 이미지에 C2PA 콘텐츠 자격 증명과 SynthID 워터마크, 편집·캡처로 사라질 수 있음)와 Google SynthID 공식 블로그(검색 확인) 범위로만 썼어요. 용어집 테스트 상한을 65 → 70개로 올렸어요.
+- 실습 10개 추가(모두 `needsTool: "chat"`). 이미지는 "이미지 생성 기능이 있는 AI", 영상은 "영상 생성 도구가 없다면 스토리보드·장면 프롬프트만 받아 두기" 같은 대안 단계를 넣었고, 실존 인물 얼굴·유명 캐릭터·브랜드 로고 금지, 상업적 이용 전 약관 확인, 필요하면 AI 생성물 표시를 주의로 달았어요. 기존 일반 미션 4개(`0vZ_UVLhSQQ`, `8ib4Qnh2HFE`, `G2fqAlgmoPo`, AI Fluency)에 `creative` 분야 문구를 추가했어요.
+- 스킬 1개 추가: `creative-drafts`「AI로 이미지·영상 초안 만들기」(user·practitioner, use_tools·build_products, 강의 `CrrpfvbNyMw`·`sqwbGJL4Pdk`·`-lVVZDuEIVs`·`Uvl-tRga98g`). 근거 4개 모두 원문 확인 — [`SKILLS_RESEARCH.md`](./SKILLS_RESEARCH.md) 12번. 기존 스킬의 `domains`에는 creative를 붙이지 않았어요(연결 강의가 이미지·영상과 무관해서).
+
+### 다시 볼 것
+- `VldX34mM95o`(Veo 3 시점), `bH2nP-aCFjk`(Images 2.0 무렵)는 제품 버전이 빨리 바뀌어요. 6개월 안에 더 새 공식 영상으로 바꿀지 확인하세요.
+- Adobe Firefly 채널 소유를 Adobe 공식 페이지 링크로 확인하면 위험 표기를 지울 수 있어요.

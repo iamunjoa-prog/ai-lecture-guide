@@ -6,11 +6,11 @@
 - 출처는 AI 기업 공식 문서·도움말·연구 보고서, 표준 문서, 공식 기업 보고서만 썼어요. 블로그·SEO 글·유튜버 정리는 쓰지 않았어요.
 - **원문 확인**: `curl`로 원문을 내려받아 HTML을 텍스트로 바꾸거나(PDF는 `pdftotext`), 해당 주장이 있는 문장을 직접 읽었어요.
 - **검색 확인**: 이 환경에서 열 수 없는 사이트(microsoft.com WorkLab, weforum.org, news.linkedin.com 등)는 WebSearch 결과에 그 페이지와 주장이 함께 보일 때만 썼어요. 데이터에는 2곳(Microsoft 업무 동향 지수 2025·2026)만 '검색 확인'으로 들어갔고, 두 출처 모두 같은 스킬 안의 '원문 확인' 출처와 함께 있어요.
-- 출처 37건(중복 제외 30개 URL): **원문 확인 35건 · 검색 확인 2건**.
+- 출처 41건(중복 제외 34개 URL): **원문 확인 39건 · 검색 확인 2건** (12번 스킬 추가분 4건 포함).
 - 가격·플랜·사용 한도·모델 버전 같은 금방 낡는 정보는 넣지 않았어요. 통계는 출처와 연도를 문장 안에 적었어요.
 - 영상은 시청하지 않았어요. 강의 연결은 data/videos.json의 제목·요약·용어(terms)로 판단했고, 후보 영상은 YouTube oEmbed로 제목과 채널만 확인했어요.
 
-## 선정한 스킬 11개
+## 선정한 스킬 12개 (12번은 이미지·영상 분야 추가 때 더함)
 
 | # | id | 이름 | 수준 | 목표 | 강의 |
 |---|---|---|---|---|---|
@@ -25,6 +25,7 @@
 | 9 | coding-agents | 코딩 에이전트와 일하기 | practitioner·developer | build_products, use_tools | 6eBSHbLKuN0, PLmWCw1CzcFilebjK89WLb5cAvM8K0cLB3, wo0Rsh9hlTo, dRsjO-88nBs |
 | 10 | agent-safety | 에이전트 시대 보안 습관 | user·practitioner·developer | use_tools, build_agents | 6Mmevs1877A, PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO, 2v6zhEFh3HI |
 | 11 | agent-design | 에이전트 직접 설계하기 | practitioner·developer | build_agents, build_products | LP5OCa20Zpg, XSZP9GhhuAc, OhI005_aJkA, tK32trvj_b4 |
+| 12 | creative-drafts | AI로 이미지·영상 초안 만들기 | user·practitioner | use_tools, build_products | CrrpfvbNyMw, sqwbGJL4Pdk, -lVVZDuEIVs, Uvl-tRga98g |
 
 추천 규칙(src/lib/skills.ts `selectSkills`): 수준 일치 → 목표 점수(1순위 목표 +2, 나머지 목표 하나당 +1) → 분야 겹침 수 → skills.json 순서. 최대 3개. 그래서 데이터 순서도 '두루 쓸모 있는 것'이 앞에 오도록 정했어요.
 
@@ -102,6 +103,14 @@
 - 선정 이유: 실무자·개발자가 직접 만들 때의 기본기. 우리 강의가 가장 두터운 분야이기도 해요.
 
 ---
+
+### 12. AI로 이미지·영상 초안 만들기 (creative-drafts) — 2026-11-27 추가
+- **OpenAI Help, ChatGPT Images in ChatGPT** — 원문 확인. "All ChatGPT plans include image creation in supported countries and territories." · "You can also upload an existing image and describe the changes you want ChatGPT to make." (Images 2.6 언급, 하루 전 갱신)
+- **Gemini Apps Help, Generate & edit images with Gemini Apps** — 원문 확인. "You can use Google's Nano Banana models to create and refine images." · "Be sure not to violate others' copyright or privacy rights."
+- **Anthropic, Introducing Claude Design by Anthropic Labs (2026-04-17)** — 원문 확인. "collaborate with Claude to create polished visual work like designs, prototypes, slides, one-pagers" · research preview.
+- **OpenAI Help, Provenance signals in content processed by OpenAI tools** — 원문 확인. "Images generated with ChatGPT or the OpenAI API include both signals"(Content Credentials·SynthID). 같은 문서에 "Sora is discontinued".
+- 선정 이유: 주요 챗봇 세 곳이 이미지 생성·편집·시각 디자인을 기본 기능으로 넣었고, 동시에 권리·출처 표시 안내가 공식 문서에 들어왔어요. '얼마나 많이 쓰는지' 같은 수치는 공식 원문에서 확인하지 못해(팟캐스트 영상 설명의 "1.5 billion images a week"는 영상 설명일 뿐이라) whyNow에 넣지 않았어요. 입문자에게는 스킬이 보이지 않으므로 levels는 user·practitioner.
+- 기존 스킬 `domains`에는 creative를 붙이지 않았어요(연결 강의가 이미지·영상과 무관).
 
 ## 탈락시킨 후보와 이유
 | 후보 | 결정 | 이유 |

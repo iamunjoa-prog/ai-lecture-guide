@@ -64,7 +64,7 @@ const THIRD_PARTY_CHANNELS: Record<string, { channel: string; note: string }[]> 
 // enum 목록 (src/types.ts와 같아야 함)
 // ---------------------------------------------------------------------------
 const LEVELS: Level[] = ["beginner", "user", "practitioner", "developer"];
-const DOMAINS: Domain[] = ["automation", "marketing", "coding", "data", "education", "startup"];
+const DOMAINS: Domain[] = ["automation", "marketing", "creative", "coding", "data", "education", "startup"];
 const GOALS: Goal[] = ["understand", "use_tools", "build_agents", "build_products"];
 const LANGUAGES: Language[] = ["ko", "en"];
 const CREDENTIALS: CredentialType[] = ["founder", "core_researcher", "professor", "official_channel"];

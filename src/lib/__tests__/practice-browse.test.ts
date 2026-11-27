@@ -103,7 +103,7 @@ describe("실제 데이터", () => {
   const videos = realVideos as Video[];
   const all = sortMissions(realPractice as PracticeMission[], new Map(videos.map((v) => [v.id, v])));
   it("미션 70개 모두 강의와 짝이 맞는다", () => {
-    expect(all).toHaveLength(70);
+    expect(all).toHaveLength(80);
   });
   it("수준마다 미션이 하나 이상 있다", () => {
     for (const level of LEVELS) expect(filterMissions(all, { ...DEFAULT_PRACTICE_FILTER, level }).length, level).toBeGreaterThan(0);

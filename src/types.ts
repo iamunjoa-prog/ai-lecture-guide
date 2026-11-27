@@ -13,7 +13,8 @@ export type Domain =
   | "coding" // 코딩
   | "data" // 데이터 분석
   | "education" // 교육
-  | "startup"; // 창업·비즈니스
+  | "startup" // 창업·비즈니스
+  | "creative"; // 이미지·영상 제작
 
 /** 목표 */
 export type Goal =

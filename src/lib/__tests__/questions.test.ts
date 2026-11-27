@@ -12,6 +12,7 @@ import {
   GOAL_QUESTION,
   GOALS,
   HINT_MAX_CHARS,
+  isDomain,
   LEVEL_LABELS,
   LEVEL_MAX_SCORE,
   LEVEL_QUESTIONS,
@@ -64,7 +65,14 @@ describe("질문지 구조", () => {
   it("선택지는 자기 평가가 아니라 행동 문장이다 ('잘해요'·'능숙' 같은 말을 쓰지 않는다)", () => {
     for (const q of LEVEL_QUESTIONS) for (const o of q.options) expect(o.label).not.toMatch(/잘해요|능숙|전문가 수준|고수/);
   });
-  it("분야 6개·목표 4개 + 각각 '잘 모르겠어요' 하나, 모두 라벨/설명이 있다", () => {
+  it("분야 7개 · 이미지·영상 제작(creative)은 마케팅·콘텐츠 바로 뒤", () => {
+    expect(DOMAINS).toHaveLength(7);
+    expect(DOMAIN_OPTIONS.map((o) => o.id)).toEqual(["automation", "marketing", "creative", "coding", "data", "education", "startup", UNSURE_ID]);
+    expect(DOMAIN_LABELS.creative).toBe("이미지·영상 제작");
+    expect(DOMAIN_OPTIONS.find((o) => o.id === "creative")?.description).toMatch(/그림|썸네일|영상/);
+    expect(isDomain("creative")).toBe(true);
+  });
+  it("분야 7개·목표 4개 + 각각 '잘 모르겠어요' 하나, 모두 라벨/설명이 있다", () => {
     expect(DOMAIN_OPTIONS.map((o) => o.id).sort()).toEqual([...DOMAINS, UNSURE_ID].sort());
     expect(GOAL_OPTIONS.map((o) => o.id).sort()).toEqual([...GOALS, UNSURE_ID].sort());
     for (const o of [...DOMAIN_OPTIONS, ...GOAL_OPTIONS]) {
@@ -253,6 +261,12 @@ describe("buildDiagnosis", () => {
     expect(
       buildDiagnosis({ lv_frequency: ["daily"], domains: ["marketing", "data"], goal: ["build_agents", "use_tools"], preferKorean: ["yes"] }),
     ).toEqual({ level: "user", domains: ["marketing", "data"], goals: ["build_agents", "use_tools"], preferKorean: true });
+  });
+  it("분야 이미지·영상 제작을 다른 분야와 함께 고를 수 있다", () => {
+    const ok = { goal: ["use_tools"], preferKorean: ["no"] };
+    expect(buildDiagnosis({ ...ok, domains: ["creative"] })?.domains).toEqual(["creative"]);
+    expect(buildDiagnosis({ ...ok, domains: ["marketing", "creative", "education"] })?.domains).toEqual(["marketing", "creative", "education"]);
+    expect(buildDiagnosis({ ...ok, domains: ["creative", UNSURE_ID] })).toBeNull();
   });
   it("분야 '잘 모르겠어요' → domains []", () => {
     expect(buildDiagnosis({ domains: ["unsure"], goal: ["use_tools"], preferKorean: ["no"] })).toEqual({

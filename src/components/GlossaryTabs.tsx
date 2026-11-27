@@ -90,7 +90,7 @@ export function GlossaryTabs({
       <nav
         ref={navRef}
         aria-label="용어집 분류"
-        className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur-xl backdrop-saturate-150"
+        className="sticky top-0 z-20 border-b border-border bg-bg"
         data-testid="glossary-tabs"
       >
         <div role="tablist" aria-label="용어집 보기" onKeyDown={onKeyDown} className="mx-auto grid max-w-content grid-cols-2 gap-1 px-5 py-2">

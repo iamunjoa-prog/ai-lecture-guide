@@ -299,5 +299,32 @@
       { "title": "2026 Work Trend Index Annual Report: Agents, human agency, and the opportunity for every organization", "url": "https://microsoft.com/en-us/worklab/work-trend-index/agents-human-agency-and-the-opportunity-for-every-organization", "publisher": "Microsoft WorkLab", "checked": "검색 확인" }
     ],
     "asOf": "2026-11"
+  },
+  {
+    "id": "creative-drafts",
+    "name": "AI로 이미지·영상 초안 만들기",
+    "tagline": "말로 설명해 그림·영상 초안을 받고, 쓰기 전 권리까지 확인해요",
+    "whyNow": "OpenAI 도움말에 따르면 ChatGPT는 모든 요금제에서 이미지를 만들 수 있고, 가진 이미지를 올려 바꿀 점을 말로 고칠 수도 있어요(지원 국가 기준). Gemini 앱도 Nano Banana 모델로 이미지 생성·편집을 제공하고, Anthropic은 2026년 4월 시안·슬라이드 같은 시각 결과물을 만드는 Claude Design을 연구 미리보기로 내놨어요. Gemini 도움말은 다른 사람의 저작권·개인정보를 침해하지 말라고 안내하고, OpenAI는 ChatGPT로 만든 이미지에 출처 신호(C2PA 콘텐츠 자격 증명·SynthID 워터마크)를 넣는다고 밝혀요.",
+    "whatYouCanDo": [
+      "말로 장면을 설명해 그림 초안을 여러 개 뽑아 비교할 수 있어요",
+      "바꿀 곳과 지킬 곳을 나눠 이미지·영상을 고칠 수 있어요",
+      "쓰기 전에 초상권·저작권·약관·AI 표시를 점검할 수 있어요"
+    ],
+    "levels": ["user", "practitioner"],
+    "goals": ["use_tools", "build_products"],
+    "domains": ["creative", "marketing"],
+    "lectureIds": ["CrrpfvbNyMw", "sqwbGJL4Pdk", "-lVVZDuEIVs", "Uvl-tRga98g"],
+    "termIds": ["image-generation-model", "image-editing", "ai-media-rights"],
+    "firstStep": {
+      "label": "같은 주제를 스타일 3가지로 받아 보기",
+      "prompt": "주제: 동네 빵집의 가을 신메뉴 소개 그림. 이 주제로 스타일이 다른 이미지 3장을 만들어 줘: 사진처럼 사실적, 따뜻한 수채화, 단순한 평면 일러스트. 세 장 모두 구도는 같게, 글자와 실존 인물·브랜드 로고는 넣지 않기. 이미지를 만들 수 없다면 스타일마다 이미지 생성 AI에 넣을 장면 설명을 3줄씩 써 줘. 마지막에 SNS용으로 가장 맞는 것을 하나 골라 이유를 알려 줘."
+    },
+    "sources": [
+      { "title": "ChatGPT Images in ChatGPT", "url": "https://help.openai.com/en/articles/9055440-editing-your-images-with-chatgpt-images", "publisher": "OpenAI Help Center", "checked": "원문 확인" },
+      { "title": "Generate & edit images with Gemini Apps", "url": "https://support.google.com/gemini/answer/14286560", "publisher": "Gemini Apps Help", "checked": "원문 확인" },
+      { "title": "Introducing Claude Design by Anthropic Labs", "url": "https://www.anthropic.com/news/claude-design-anthropic-labs", "publisher": "Anthropic", "checked": "원문 확인" },
+      { "title": "Provenance signals in content processed by OpenAI tools", "url": "https://help.openai.com/en/articles/8912793-c2pa-in-chatgpt-images", "publisher": "OpenAI Help Center", "checked": "원문 확인" }
+    ],
+    "asOf": "2026-11"
   }
 ]

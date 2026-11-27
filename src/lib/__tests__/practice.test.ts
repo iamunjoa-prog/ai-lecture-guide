@@ -17,7 +17,7 @@ import type { Domain, Video } from "../../types";
 
 const missions = realPractice as PracticeMission[];
 const videos = realVideos as Video[];
-const DOMAINS: Domain[] = ["automation", "marketing", "coding", "data", "education", "startup"];
+const DOMAINS: Domain[] = ["automation", "marketing", "creative", "coding", "data", "education", "startup"];
 const TOOLS = ["chat", "coding", "automation"];
 
 /** 비밀·인증 정보를 떠올리게 하는 말 */
@@ -34,7 +34,7 @@ describe("data/practice.json 무결성", () => {
     const missionIds = missions.map((m) => m.videoId);
     expect(new Set(missionIds).size).toBe(missionIds.length);
     expect([...missionIds].sort()).toEqual([...videoIds].sort());
-    expect(missions).toHaveLength(70);
+    expect(missions).toHaveLength(80);
   });
 
   it("길이 제한: 제목 30자, 목표·성공 60자, 프롬프트 350자 이하", () => {
@@ -121,7 +121,7 @@ describe("data/practice.json 무결성", () => {
 describe("practiceById / missionForVideo", () => {
   it("videoId로 찾고, 없으면 undefined", () => {
     const byId = practiceById(missions);
-    expect(byId.size).toBe(70);
+    expect(byId.size).toBe(80);
     expect(missionForVideo(videos[0].id, byId)?.videoId).toBe(videos[0].id);
     expect(missionForVideo("nope", byId)).toBeUndefined();
   });

@@ -11,6 +11,14 @@ describe("encode/decode", () => {
     const d2: DiagnosisResult = { level: "developer", domains: ["startup"], goals: ["build_products"], preferKorean: false };
     expect(decodeDiagnosis(encodeDiagnosis(d2))).toEqual(d2);
   });
+  it("이미지·영상 제작(creative) 분야: d=creative 왕복, 다른 분야와 함께, 예전 링크는 그대로", () => {
+    const c: DiagnosisResult = { level: "beginner", domains: ["creative"], goals: ["use_tools"], preferKorean: true };
+    expect(toSearchParams(c).get("d")).toBe("creative");
+    expect(decodeDiagnosis(encodeDiagnosis(c))).toEqual(c);
+    expect(decodeDiagnosis("l=user&d=marketing,creative&g=use_tools,build_products&ko=0")?.domains).toEqual(["marketing", "creative"]);
+    expect(decodeDiagnosis("l=user&d=creative,marketing,data,coding&g=use_tools")).toBeNull(); // 4개
+    expect(decodeDiagnosis("l=user&d=marketing,coding&g=use_tools&ko=1")).toEqual(d); // 예전 링크
+  });
   it("예시 형식을 그대로 읽는다 (? 포함, 쉼표 인코딩 안 된 형태)", () => {
     expect(decodeDiagnosis("?l=user&d=marketing,coding&g=use_tools&ko=1")).toEqual(d);
   });
