@@ -28,7 +28,12 @@
       "파일을 올려 요약·질문을 맡길 수 있어요",
       "업무에 맞는 기본 사용 흐름을 잡을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "chatbot",
+      "prompt",
+      "file-analysis"
+    ]
   },
   {
     "id": "OfUn6HjwXhI",
@@ -59,7 +64,12 @@
       "예시와 맥락을 넣어 답변 품질을 높일 수 있어요",
       "답이 아쉬울 때 다시 묻는 요령을 익힐 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "prompt",
+      "few-shot",
+      "prompt-engineering"
+    ]
   },
   {
     "id": "PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv",
@@ -92,7 +102,12 @@
       "일을 AI에게 맡길지 판단하는 기준(위임·설명·분별·성실)을 쓸 수 있어요",
       "AI 결과물을 비판적으로 검토하는 습관을 들일 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "generative-ai",
+      "hallucination",
+      "prompt"
+    ]
   },
   {
     "id": "PLf2m23nhTg1MjwozACw3ufAc3CUpfOBWO",
@@ -121,7 +136,12 @@
       "스프레드시트 데이터를 AI와 함께 분석할 수 있어요",
       "반복 업무를 AI 워크플로로 바꾸고 개인정보를 지키는 법을 알 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "file-analysis",
+      "workflow",
+      "privacy-security"
+    ]
   },
   {
     "id": "ysPbXH0LpIE",
@@ -151,7 +171,12 @@
       "XML 태그 등으로 긴 입력을 깔끔하게 정리할 수 있어요",
       "결과를 보며 프롬프트를 반복 개선할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "prompt-engineering",
+      "role-prompting",
+      "few-shot"
+    ]
   },
   {
     "id": "T9aRN5JkmL8",
@@ -182,7 +207,12 @@
       "모델의 사고 과정을 이끌어내는 기법을 적용할 수 있어요",
       "제품에 들어갈 프롬프트를 테스트하며 다듬을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "prompt-engineering",
+      "evals",
+      "reasoning-model"
+    ]
   },
   {
     "id": "LP5OCa20Zpg",
@@ -212,7 +242,12 @@
       "에이전트가 필요한 문제인지 판단할 수 있어요",
       "에이전트 설계 시 흔한 실수를 피할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "workflow",
+      "tool-use"
+    ]
   },
   {
     "id": "XSZP9GhhuAc",
@@ -240,7 +275,12 @@
       "도구 설명을 잘 써서 도구 사용 정확도를 높일 수 있어요",
       "에이전트 동작을 관찰하며 프롬프트를 고칠 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "tool-use",
+      "system-prompt"
+    ]
   },
   {
     "id": "6eBSHbLKuN0",
@@ -268,7 +308,12 @@
       "CLAUDE.md로 프로젝트 맥락을 알려줄 수 있어요",
       "기능 구현부터 커밋까지 AI와 함께 진행할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "coding-agent",
+      "instruction-file",
+      "context-window"
+    ]
   },
   {
     "id": "dRsjO-88nBs",
@@ -295,7 +340,12 @@
       "GitHub Actions 등 CI에 AI 작업을 붙일 수 있어요",
       "반복 개발 업무를 자동화 파이프라인으로 만들 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "coding-agent",
+      "agent-harness",
+      "workflow-automation"
+    ]
   },
   {
     "id": "PLyCki2K0Lg",
@@ -324,7 +374,12 @@
       "MCP 서버·클라이언트 구조를 이해할 수 있어요",
       "내 에이전트에 외부 도구를 연결하는 방향을 잡을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "mcp",
+      "tool-use",
+      "api"
+    ]
   },
   {
     "id": "om2lIWXLLN4",
@@ -352,7 +407,11 @@
       "AI 스타트업 창업 초기의 결정 과정을 엿볼 수 있어요",
       "Claude를 만드는 회사의 철학을 이해할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-safety",
+      "llm"
+    ]
   },
   {
     "id": "Uh98_aGhAuY",
@@ -380,7 +439,12 @@
       "학생이 AI를 '생각을 돕는 도구'로 쓰게 하는 방향을 잡을 수 있어요",
       "수업·교육 현장에 AI를 들일 때 고려할 점을 알 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "generative-ai",
+      "hallucination",
+      "ai-safety"
+    ]
   },
   {
     "id": "t2Zo3YAJdj4",
@@ -409,7 +473,12 @@
       "문서·자료 작업에 Claude를 곧바로 적용할 수 있어요",
       "내 업무에 맞는 활용 아이디어를 얻을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "file-analysis",
+      "project-knowledge",
+      "web-search"
+    ]
   },
   {
     "id": "PLmWCw1CzcFilebjK89WLb5cAvM8K0cLB3",
@@ -438,7 +507,12 @@
       "탐색→계획→코딩→커밋 흐름으로 작업할 수 있어요",
       "MCP와 Hooks로 Claude Code 기능을 확장할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "coding-agent",
+      "instruction-file",
+      "mcp"
+    ]
   },
   {
     "id": "PLmWCw1CzcFim_hkruZSlABOUOAAQ5JMyo",
@@ -466,7 +540,12 @@
       "나만의 첫 스킬을 만들어 볼 수 있어요",
       "스킬을 팀과 공유하고 문제를 해결할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "skills",
+      "context-engineering",
+      "instruction-file"
+    ]
   },
   {
     "id": "PLmWCw1CzcFimZNJTcPVEzACE9Vj2KjUal",
@@ -495,7 +574,12 @@
       "고객지원·검색·프로토타이핑에 AI를 적용할 아이디어를 얻을 수 있어요",
       "우리 팀에 맞는 AI 활용 시나리오를 그려볼 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "rag",
+      "workflow"
+    ]
   },
   {
     "id": "8Aoq6mJeAXI",
@@ -523,7 +607,12 @@
       "Claude API로 에이전트를 구성하는 흐름을 이해할 수 있어요",
       "에이전트 제품을 만들 때의 함정을 피할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "agent-loop",
+      "tool-use",
+      "context-engineering"
+    ]
   },
   {
     "id": "PLOjSa4kyvo_M",
@@ -552,7 +641,12 @@
       "예약 작업으로 반복 업무를 자동으로 돌릴 수 있어요",
       "코딩 없이 공유 가능한 간단한 웹사이트를 만들 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "no-code-automation",
+      "file-analysis",
+      "vibe-coding"
+    ]
   },
   {
     "id": "PLHiXJG-Lqz-s",
@@ -582,7 +676,12 @@
       "캠페인 이메일과 브리프를 AI로 빠르게 만들 수 있어요",
       "주간 지표 보고를 자동으로 예약할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "file-analysis",
+      "no-code-automation",
+      "prompt"
+    ]
   },
   {
     "id": "PLLcDQr36I1us",
@@ -609,7 +708,12 @@
       "이해관계자별로 분석 결과를 맞춤 정리할 수 있어요",
       "팀이 스스로 질문할 수 있는 데이터 에이전트를 만들 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "file-analysis",
+      "ai-agent",
+      "workflow"
+    ]
   },
   {
     "id": "G2fqAlgmoPo",
@@ -641,7 +745,12 @@
       "텍스트·이미지 생성 모델이 어떻게 동작하는지 이해할 수 있어요",
       "생성형 AI를 활용할 수 있는 업무 영역을 떠올릴 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "generative-ai",
+      "ai-model",
+      "multimodal"
+    ]
   },
   {
     "id": "zizonToFXDs",
@@ -674,7 +783,12 @@
       "프롬프트 튜닝과 파인튜닝의 차이를 알 수 있어요",
       "LLM을 활용한 서비스 사례를 이해할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "llm",
+      "fine-tuning",
+      "prompt-engineering"
+    ]
   },
   {
     "id": "d95J8yzvjbQ",
@@ -702,7 +816,12 @@
       "AI 연구가 과학 난제를 푸는 방식을 이해할 수 있어요",
       "AGI를 향한 연구자들의 고민을 느껴볼 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "reinforcement-learning",
+      "deep-learning",
+      "ai-safety"
+    ]
   },
   {
     "id": "PqVbypvxDto",
@@ -729,7 +848,12 @@
       "AGI까지 남은 과제가 무엇인지 설명할 수 있어요",
       "AI가 과학·사회에 미칠 영향을 내 관점으로 정리할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-safety",
+      "reasoning-model",
+      "multimodal"
+    ]
   },
   {
     "id": "zjkBMFhNj_g",
@@ -762,7 +886,12 @@
       "사전학습과 미세조정의 차이를 이해할 수 있어요",
       "LLM의 한계와 보안 위험을 알 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "llm",
+      "pretraining",
+      "hallucination"
+    ]
   },
   {
     "id": "EWvNQjAaOHw",
@@ -794,7 +923,12 @@
       "검색·파일 업로드·코드 실행 기능을 활용할 수 있어요",
       "음성·이미지 등 멀티모달 기능을 일상에 쓸 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-model",
+      "web-search",
+      "multimodal"
+    ]
   },
   {
     "id": "7xTGNNLPyMI",
@@ -827,7 +961,12 @@
       "환각(hallucination)이 왜 생기는지 이해할 수 있어요",
       "추론 모델과 강화학습의 역할을 알 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "pretraining",
+      "hallucination",
+      "reinforcement-learning"
+    ]
   },
   {
     "id": "PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ",
@@ -855,7 +994,12 @@
       "파이썬으로 작은 언어 모델을 만들 수 있어요",
       "GPT 구조를 코드 수준에서 설명할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "backpropagation",
+      "neural-network",
+      "transformer"
+    ]
   },
   {
     "id": "8ib4Qnh2HFE",
@@ -886,7 +1030,12 @@
       "글쓰기·요약·브레인스토밍에 AI를 활용할 수 있어요",
       "AI 답변을 검증하고 개선하는 습관을 들일 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "prompt",
+      "hallucination",
+      "prompt-engineering"
+    ]
   },
   {
     "id": "ff3j4olCUig",
@@ -914,7 +1063,11 @@
       "AI에게 요구사항을 설명하고 결과를 고쳐 나갈 수 있어요",
       "완성한 앱을 다른 사람과 공유할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "vibe-coding",
+      "prompt"
+    ]
   },
   {
     "id": "5p248yoa3oE",
@@ -942,7 +1095,11 @@
       "생성형 AI로 만들 수 있는 사업 기회를 찾을 수 있어요",
       "AI 스타트업을 빠르게 검증하는 방법을 알 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "generative-ai",
+      "machine-learning"
+    ]
   },
   {
     "id": "H2tmNDX9FnQ",
@@ -970,7 +1127,12 @@
       "클라우드·로컬 환경에서 AI와 함께 개발할 수 있어요",
       "AI가 쓴 코드를 검토하며 생산성을 높일 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "coding-agent",
+      "vibe-coding",
+      "instruction-file"
+    ]
   },
   {
     "id": "hy8UstR2NEg",
@@ -998,7 +1160,12 @@
       "에이전트가 만든 코드를 명세 기준으로 검증할 수 있어요",
       "에이전트 중심 개발 프로세스를 팀에 적용할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "spec-driven-development",
+      "coding-agent",
+      "evals"
+    ]
   },
   {
     "id": "N1TEjTeQeg0",
@@ -1025,7 +1192,12 @@
       "디지털 지능이 인간보다 빨리 배우는 이유를 설명할 수 있어요",
       "AI 위험에 대한 핵심 쟁점을 정리할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "neural-network",
+      "deep-learning",
+      "ai-safety"
+    ]
   },
   {
     "id": "40riCqvRoMs",
@@ -1053,7 +1225,12 @@
       "대규모 데이터(ImageNet)가 AI를 바꾼 이유를 알 수 있어요",
       "AI가 이미지를 학습하는 과정을 직관적으로 이해할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "computer-vision",
+      "training-data",
+      "deep-learning"
+    ]
   },
   {
     "id": "PLLHTzKZzVU9eaEyErdV26ikyolxOsz6mq",
@@ -1080,7 +1257,12 @@
       "에너지 기반 모델과 자기지도학습을 이해할 수 있어요",
       "PyTorch 실습으로 딥러닝 모델을 구현할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "neural-network",
+      "backpropagation",
+      "transformer"
+    ]
   },
   {
     "id": "ycAnRjyYC6o",
@@ -1112,7 +1294,12 @@
       "일상과 업무에서 챗GPT를 활용할 수 있어요",
       "AI 시대에 필요한 태도와 준비를 정리할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "llm",
+      "chatbot",
+      "prompt"
+    ]
   },
   {
     "id": "rFYoR8UFPgU",
@@ -1140,7 +1327,12 @@
       "사용자 반응을 보며 AI 제품을 키우는 방법을 배울 수 있어요",
       "내 AI 서비스 아이디어를 구체화할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "llm",
+      "chatbot",
+      "api"
+    ]
   },
   {
     "id": "PLlMkM4tgfjnLSOjrEJN31gZATbcj_MpUm",
@@ -1169,7 +1361,12 @@
       "텐서플로로 간단한 모델을 직접 구현할 수 있어요",
       "CNN·RNN의 기본 구조를 설명할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "machine-learning",
+      "neural-network",
+      "deep-learning"
+    ]
   },
   {
     "id": "vs0Y2HS9ybg",
@@ -1196,7 +1393,12 @@
       "에이전트 도구에 Solar 모델을 연결할 수 있어요",
       "한국어 업무에 맞는 AI 에이전트를 직접 만들어 볼 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "coding-agent",
+      "ai-model",
+      "no-code-automation"
+    ]
   },
   {
     "id": "PLpIPLT0Pf7IoTxTCi2MEQ94MZnHaxrP0j",
@@ -1223,7 +1425,12 @@
       "모델 평가·검증 방법을 데이터 분석에 적용할 수 있어요",
       "트랜스포머 등 최신 모델 구조를 이해할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "machine-learning",
+      "evals",
+      "transformer"
+    ]
   },
   {
     "id": "PLzZ7PPT4KK5pc2YCyoJVITY897cbyUEHL",
@@ -1251,7 +1458,11 @@
       "결정트리·나이브 베이즈 등 고전 알고리즘을 이해할 수 있어요",
       "기계학습 이론서를 읽을 수 있는 수학적 기반을 다질 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "machine-learning",
+      "training-data"
+    ]
   },
   {
     "id": "PLSY68sWRmr-O7G5X7mtjbb0e8N6DZammw",
@@ -1279,7 +1490,12 @@
       "추천 시스템·데이터 마이닝이 생활에 쓰이는 방식을 알 수 있어요",
       "관심 있는 AI 분야를 골라 더 깊이 공부할 방향을 잡을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "machine-learning",
+      "deep-learning",
+      "generative-ai"
+    ]
   },
   {
     "id": "0djc9NZ_E58",
@@ -1305,7 +1521,12 @@
       "LLM 서빙 비용과 속도를 좌우하는 요소를 알 수 있어요",
       "AI 제품의 인프라 설계 방향을 잡을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "latency-cost",
+      "llm",
+      "pretraining"
+    ]
   },
   {
     "id": "AkUUeePtbe4",
@@ -1332,7 +1553,12 @@
       "회의 후속 정리처럼 반복 업무를 에이전트에 맡길 수 있어요",
       "Gmail·Drive 등 여러 앱을 잇는 자동화를 만들 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "no-code-automation",
+      "workflow"
+    ]
   },
   {
     "id": "qtO940hejdE",
@@ -1361,7 +1587,12 @@
       "자주 하는 일을 지시문으로 정리해 Gem을 만들 수 있어요",
       "만든 Gem을 반복 업무에 다시 불러 쓸 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "custom-assistant",
+      "system-prompt",
+      "prompt"
+    ]
   },
   {
     "id": "dlS2meHJWAk",
@@ -1389,7 +1620,12 @@
       "지시문·지식 자료·기능을 직접 다듬을 수 있어요",
       "만든 에이전트를 동료와 공유해 함께 쓸 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "custom-assistant",
+      "project-knowledge"
+    ]
   },
   {
     "id": "kktBVmjA19A",
@@ -1417,7 +1653,12 @@
       "여러 업무 도구를 오가며 일하는 에이전트를 설정할 수 있어요",
       "만든 에이전트를 팀 전체가 같이 쓰도록 공유할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "system-prompt",
+      "tool-use"
+    ]
   },
   {
     "id": "bjdBVZa66oU",
@@ -1447,7 +1688,12 @@
       "내 업무 방식을 Claude가 기억해 반복하게 만들 수 있어요",
       "어떤 일을 스킬로 만들면 좋을지 고를 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "skills",
+      "prompt",
+      "custom-assistant"
+    ]
   },
   {
     "id": "tYOI-WoLS_o",
@@ -1475,7 +1721,12 @@
       "매일·매시간 도는 반복 작업을 예약할 수 있어요",
       "사람이 확인할 지점을 정해 안전하게 위임할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "no-code-automation",
+      "human-in-the-loop"
+    ]
   },
   {
     "id": "iLcH1Yp0vTw",
@@ -1503,7 +1754,11 @@
       "업스테이지 도구로 에이전트를 직접 만들어 볼 수 있어요",
       "완성한 에이전트를 평가 기준에 맞춰 다듬을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "evals"
+    ]
   },
   {
     "id": "44C8u0CDtSo",
@@ -1530,7 +1785,12 @@
       "도구를 붙인 에이전트를 직접 코드로 만들 수 있어요",
       "adk run·adk web으로 에이전트를 실행하고 확인할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "sdk",
+      "tool-use",
+      "agent-loop"
+    ]
   },
   {
     "id": "jDCkirAz4-E",
@@ -1557,7 +1817,12 @@
       "에이전트 평가·관측·배포에 필요한 요소를 챙길 수 있어요",
       "팀 서비스에 넣을 에이전트 구조를 설계할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "evals",
+      "observability",
+      "sdk"
+    ]
   },
   {
     "id": "tK32trvj_b4",
@@ -1584,7 +1849,12 @@
       "오래 걸리는 작업을 이어 가는 에이전트를 설계할 수 있어요",
       "실제 데모 코드를 보며 구현 흐름을 익힐 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "sdk",
+      "agent-loop",
+      "tool-use"
+    ]
   },
   {
     "id": "b7l_Dhe1h8M",
@@ -1611,7 +1881,12 @@
       "내 환경에서 에이전트를 실행·유지하는 구조를 잡을 수 있어요",
       "오래 걸리는 작업을 제품 기능으로 넣을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "agent-harness",
+      "api",
+      "agent-loop"
+    ]
   },
   {
     "id": "OhI005_aJkA",
@@ -1640,7 +1915,12 @@
       "도구 사용·계획·멀티 에이전트 설계 패턴을 익힐 수 있어요",
       "공개 코드 예제로 에이전트를 직접 만들어 볼 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "tool-use",
+      "multi-agent"
+    ]
   },
   {
     "id": "k4V44dn_TQo",
@@ -1668,7 +1948,12 @@
       "여러 단계 업무를 워크플로로 묶을 수 있어요",
       "커넥터·지식 자료를 붙여 실제 업무에 쓸 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "workflow-automation",
+      "ai-agent",
+      "project-knowledge"
+    ]
   },
   {
     "id": "Zqno_vux6d8",
@@ -1695,7 +1980,12 @@
       "코드랩을 따라 첫 에이전트를 만들 수 있어요",
       "에이전트에 도구를 붙이는 기본기를 익힐 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "tool-use",
+      "sdk"
+    ]
   },
   {
     "id": "gJYZE9UXiHk",
@@ -1724,7 +2014,12 @@
       "만든 앱을 대화로 고쳐 가며 다듬을 수 있어요",
       "시제품을 빠르게 만들어 주변에 보여 줄 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "vibe-coding",
+      "api-key",
+      "prompt"
+    ]
   },
   {
     "id": "8zH_O74hZBw",
@@ -1752,7 +2047,11 @@
       "첫 버전을 써 보고 바꿀 점을 말로 고칠 수 있어요",
       "완성한 앱을 링크로 게시해 공유할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "vibe-coding",
+      "prompt"
+    ]
   },
   {
     "id": "7dsaxBUZPII",
@@ -1779,7 +2078,11 @@
       "마케팅에 쓸 간단한 인터랙티브 도구를 만들 수 있어요",
       "코딩 없이 시제품을 만들어 팀과 나눌 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "vibe-coding",
+      "multimodal"
+    ]
   },
   {
     "id": "DRghWwm3dt8",
@@ -1806,7 +2109,12 @@
       "운영 업무에 맞는 에이전트 구조를 설계할 수 있어요",
       "실제 도입 과정의 시행착오를 미리 알 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "mcp",
+      "tool-use",
+      "ai-agent"
+    ]
   },
   {
     "id": "UjvgpPG1XTU",
@@ -1835,7 +2143,12 @@
       "워크플로와 에이전트를 언제 나눠 쓸지 판단할 수 있어요",
       "에이전트 설계 회의에서 쓸 개념 지도를 얻을 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "ai-agent",
+      "workflow",
+      "context-engineering"
+    ]
   },
   {
     "id": "wo0Rsh9hlTo",
@@ -1862,7 +2175,12 @@
       "Playwright로 E2E 테스트 환경을 꾸릴 수 있어요",
       "에이전트와 함께 개발할 때 품질을 지키는 방법을 익힐 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "agent-harness",
+      "coding-agent",
+      "evals"
+    ]
   },
   {
     "id": "NPIi9XaNIHs",
@@ -1888,7 +2206,12 @@
       "A2A로 에이전트끼리 협업시키는 구조를 설계할 수 있어요",
       "사내 AI 비서를 확장할 때 고려할 점을 챙길 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "a2a",
+      "multi-agent",
+      "orchestration"
+    ]
   },
   {
     "id": "2v6zhEFh3HI",
@@ -1916,7 +2239,12 @@
       "쿼리 저장소와 AI를 묶어 비개발자도 데이터를 보게 할 수 있어요",
       "팀의 데이터 민주화 도입 계획을 세울 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "mcp",
+      "tool-use",
+      "privacy-security"
+    ]
   },
   {
     "id": "KiJcZlqJKuE",
@@ -1945,6 +2273,11 @@
       "대화로 고쳐 가며 에이전트 앱을 다듬을 수 있어요",
       "완성한 앱을 공개 URL로 게시해 공유할 수 있어요"
     ],
-    "verifiedAt": "2026-11-27"
+    "verifiedAt": "2026-11-27",
+    "terms": [
+      "vibe-coding",
+      "ai-agent",
+      "streaming"
+    ]
   }
 ]

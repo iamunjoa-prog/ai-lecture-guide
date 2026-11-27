@@ -2,6 +2,7 @@
  * 데이터 점검 스크립트 (E 담당) — `npm run check-links`
  *
  * 1) 스키마 점검: enum 값, instructorId 참조, takeaways 3개, id 중복, URL ↔ id 일치 등
+ *    + 용어집(data/glossary.json): id 중복·형식, 필수 필드, related 참조, 강의 terms 참조
  * 2) 링크 점검: 모든 강의 URL을 YouTube oEmbed로 호출해
  *    - 200 응답인지
  *    - 업로드 채널(author_url)이 강사의 channelUrl과 같은지,
@@ -16,7 +17,8 @@
 import { spawnSync } from "node:child_process";
 import instructorsJson from "../data/instructors.json";
 import videosJson from "../data/videos.json";
-import type { CredentialType, Domain, Goal, Instructor, Language, Level, Video } from "../src/types";
+import glossaryJson from "../data/glossary.json";
+import type { CredentialType, Domain, Goal, GlossaryTerm, Instructor, Language, Level, Video } from "../src/types";
 
 // Node 내장 fetch는 HTTPS_PROXY를 기본으로 따르지 않는다. 프록시 환경이면
 // NODE_USE_ENV_PROXY=1을 켜고 자기 자신을 다시 실행한다 (Node 22.21+ / 24+).
@@ -30,6 +32,7 @@ if ((process.env.HTTPS_PROXY || process.env.https_proxy) && !process.env.NODE_US
 
 const videos = videosJson as unknown as Video[];
 const instructors = instructorsJson as unknown as Instructor[];
+const glossary = glossaryJson as unknown as GlossaryTerm[];
 
 // ---------------------------------------------------------------------------
 // 허용된 제3자 업로드 채널 (data/CURATION.md "강사별 선정 근거" 기준)
@@ -147,6 +150,37 @@ for (const v of videos) {
   }
 }
 
+// 용어집
+const termIds = new Set<string>();
+for (const t of glossary) {
+  const where = `term:${t.id}`;
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(t.id ?? "")) bad(where, "id가 kebab-case가 아님");
+  if (termIds.has(t.id)) bad(where, "id 중복");
+  termIds.add(t.id);
+  for (const f of ["term", "short", "detail"] as const) {
+    if (!isNonEmptyString(t[f])) bad(where, `${f} 누락`);
+  }
+  if (!LEVELS.includes(t.level)) bad(where, `level이 이상함: ${t.level}`);
+  checkEnumList(where, "goals", t.goals, GOALS);
+}
+for (const t of glossary) {
+  for (const r of t.related ?? []) {
+    if (r === t.id) bad(`term:${t.id}`, "related에 자기 자신이 있음");
+    else if (!termIds.has(r)) bad(`term:${t.id}`, `related "${r}"인 용어가 없음`);
+  }
+}
+for (const v of videos) {
+  if (v.terms === undefined) continue;
+  const where = `video:${v.id}`;
+  if (!Array.isArray(v.terms)) {
+    bad(where, "terms가 배열이 아님");
+    continue;
+  }
+  if (v.terms.length < 2 || v.terms.length > 3) bad(where, `terms는 2~3개여야 함 (현재 ${v.terms.length}개)`);
+  if (new Set(v.terms).size !== v.terms.length) bad(where, "terms에 중복 값이 있음");
+  for (const id of v.terms) if (!termIds.has(id)) bad(where, `terms "${id}"인 용어가 없음`);
+}
+
 // ---------------------------------------------------------------------------
 // 2) 링크 점검
 // ---------------------------------------------------------------------------
@@ -249,7 +283,7 @@ const pad = (s: string, n: number) => {
 const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
 async function main() {
-  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개\n`);
+  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개 · 용어 ${glossary.length}개\n`);
 
   console.log("① 스키마");
   if (schemaProblems.length === 0) console.log("  통과");
