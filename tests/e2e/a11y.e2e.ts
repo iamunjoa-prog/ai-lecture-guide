@@ -11,6 +11,7 @@ const PAGES = [
   { name: "결과", path: `/result?${RESULT_QUERY}` },
   { name: "결과(빈 상태)", path: "/result" },
   { name: "용어집", path: "/glossary" },
+  { name: "개인정보 처리방침", path: "/privacy" },
 ] as const;
 
 for (const scheme of ["light", "dark"] as const) {

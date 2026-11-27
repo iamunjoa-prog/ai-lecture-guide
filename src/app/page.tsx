@@ -161,9 +161,14 @@ export default function Home() {
         </Reveal>
         <div className="mt-20 flex items-center justify-between border-t border-stage-border pt-6 text-[14px] text-stage-muted">
           <p>AI 강의 길잡이</p>
-          <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
-            AI 용어집
-          </Link>
+          <nav aria-label="바닥글" className="flex items-center gap-3">
+            <Link href="/glossary" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
+              AI 용어집
+            </Link>
+            <Link href="/privacy" className="inline-flex min-h-11 items-center rounded-full px-1 text-[14px] transition-colors duration-200 hover:text-stage-fg">
+              개인정보 처리방침
+            </Link>
+          </nav>
         </div>
       </Slide>
     </main>
