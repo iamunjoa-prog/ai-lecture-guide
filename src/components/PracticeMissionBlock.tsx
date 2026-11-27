@@ -17,11 +17,13 @@ export function resolvePrompts(mission: PracticeMission, domains: readonly Domai
 export interface PracticeMissionBodyProps {
   mission: PracticeMission;
   prompts: ResolvedPrompt[];
+  /** 목표·준비물을 따로(접힌 머리에) 보여 줄 때 true */
+  hideIntro?: boolean;
   className?: string;
 }
 
-/** 미션 본문: 목표 · 준비물 · 단계 · 프롬프트(복사) · 성공 기준 · 주의 */
-export function PracticeMissionBody({ mission, prompts, className }: PracticeMissionBodyProps) {
+/** 목표 · 준비물 */
+export function MissionIntro({ mission, className }: { mission: PracticeMission; className?: string }) {
   return (
     <div className={className}>
       <p className="text-[15px] leading-relaxed text-fg">{mission.goal}</p>
@@ -30,7 +32,16 @@ export function PracticeMissionBody({ mission, prompts, className }: PracticeMis
           <span className="font-semibold text-fg">준비물</span> · {PRACTICE_TOOL_LABELS[mission.needsTool]}
         </p>
       )}
-      <ol className="mt-3.5 flex flex-col gap-2" aria-label="해 보는 순서">
+    </div>
+  );
+}
+
+/** 미션 본문: 목표 · 준비물 · 단계 · 프롬프트(복사) · 성공 기준 · 주의 */
+export function PracticeMissionBody({ mission, prompts, hideIntro = false, className }: PracticeMissionBodyProps) {
+  return (
+    <div className={className}>
+      {!hideIntro && <MissionIntro mission={mission} />}
+      <ol className={cn("flex flex-col gap-2", !hideIntro && "mt-3.5")} aria-label="해 보는 순서">
         {mission.steps.map((s, i) => (
           <li key={i} className="flex gap-2.5 text-[15px] leading-relaxed text-fg">
             <span
@@ -71,23 +82,11 @@ export function PracticeMissionBody({ mission, prompts, className }: PracticeMis
 }
 
 /** 실습 저장 + 완료 토글 */
-export function MissionActions({ videoId, className }: { videoId: string; className?: string }) {
+export function MissionActions({ videoId, title, className }: { videoId: string; title?: string; className?: string }) {
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       <SaveToggle kind="mission" id={videoId} label="실습 저장" variant="pill" />
-      <MissionDoneToggle videoId={videoId} />
+      <MissionDoneToggle videoId={videoId} title={title} />
     </div>
-  );
-}
-
-/** 강의 카드 '자세히 보기' 안의 '강의 보고 해보기' */
-export function PracticeMissionBlock({ mission, prompts }: { mission: PracticeMission; prompts: ResolvedPrompt[] }) {
-  return (
-    <section aria-label="강의 보고 해보기" className="mt-6 border-t border-border pt-5" data-testid="practice-mission">
-      <p className="eyebrow-ko text-accent-ink">강의 보고 해보기</p>
-      <h4 className="mt-1 text-[17px] font-semibold leading-snug tracking-[-0.015em] text-fg">{mission.title}</h4>
-      <PracticeMissionBody mission={mission} prompts={prompts} className="mt-1.5" />
-      <MissionActions videoId={mission.videoId} className="mt-4" />
-    </section>
   );
 }

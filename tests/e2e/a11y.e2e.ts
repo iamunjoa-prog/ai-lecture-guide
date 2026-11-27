@@ -54,7 +54,7 @@ for (const scheme of ["light", "dark"] as const) {
       await page.getByTestId("starter-terms").locator("summary").first().click();
       await page.waitForTimeout(800);
       await check(page, `결과 용어 펼침/${scheme}`);
-      await page.getByRole("tab", { name: "추천 강의" }).click();
+      await page.getByRole("tab", { name: "강의" }).click();
       const card = page.locator("article").first();
       await card.getByRole("button", { name: "자세히 보기" }).click();
       await card.getByTestId("card-terms").locator("button[aria-pressed]").first().click();

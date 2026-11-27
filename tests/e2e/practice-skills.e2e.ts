@@ -1,20 +1,36 @@
-import { chipLabels, expect, RESULT_QUERY, test } from "./fixtures";
+import { chipLabels, expect, openSummary, RESULT_QUERY, test } from "./fixtures";
 import { axeCheck, expectNoOverflow, SKILLS } from "./helpers-saved";
 
-/** 강의 보고 해보기 · 이번 주 실습 미션 · 요즘 주목받는 AI 스킬 · 결과 칩 */
+/** 실습 탭(강의 보고 해보기 · 이번 주 실습 미션) · 요즘 주목받는 AI 스킬 · 결과 칩 */
 const NON_BEGINNER = "l=practitioner&d=automation&g=use_tools,build_agents&ko=1";
 
-test.describe("강의 보고 해보기", () => {
+test.describe("실습 탭", () => {
   test.use({ permissions: ["clipboard-read", "clipboard-write"] });
 
-  test("카드를 펼치면 미션이 보이고, 프롬프트 복사가 된다 (자리표시자 강조)", async ({ page, consoleErrors }) => {
+  test("강의 카드 안에는 긴 미션이 없고, 실습 탭에 단계별로 접혀 있다. 펼치면 프롬프트 복사가 된다 (자리표시자 강조)", async ({ page, consoleErrors }) => {
     await page.goto(`/result?${RESULT_QUERY}`);
     const card = page.locator("article").first();
-    const mission = card.getByTestId("practice-mission");
-    await expect(mission).toBeHidden(); // 기본은 접힘
     await card.getByRole("button", { name: "자세히 보기" }).click();
-    await expect(mission).toBeVisible();
-    await expect(mission.getByText("강의 보고 해보기")).toBeVisible();
+    await expect(card.getByText("강의 보고 해보기")).toHaveCount(0);
+    await expect(card.getByTestId("prompt-box")).toHaveCount(0);
+
+    await page.getByRole("tab", { name: "실습" }).click();
+    const panel = page.getByTestId("result-panel-practice");
+    // 단계 순서 = 강의 탭 단계 순서
+    const lectureSteps = await page.getByTestId("roadmap-step").locator("h2").allInnerTexts();
+    const practiceSteps = await panel.getByTestId("practice-step").locator("h3").allInnerTexts();
+    expect(practiceSteps.length).toBeGreaterThan(0);
+    expect(lectureSteps.filter((t) => practiceSteps.includes(t))).toEqual(practiceSteps);
+
+    const mission = panel.getByTestId("mission-item").first();
+    // 접힌 상태: 제목·목표·강의 링크·저장/완료가 보이고, 순서·프롬프트는 숨어 있다
+    await expect(mission.getByRole("heading", { level: 4 })).toBeVisible();
+    await expect(mission.getByTestId("mission-lecture-link")).toBeVisible();
+    await expect(mission.getByRole("button", { name: /^완료했어요/ })).toBeVisible();
+    await expect(mission.getByRole("button", { name: "실습 저장" })).toBeVisible();
+    await expect(mission.getByTestId("prompt-box").first()).toBeHidden();
+    await mission.getByTestId("mission-more").click();
+    await expect(mission.getByTestId("mission-more")).toHaveAttribute("aria-expanded", "true");
     await expect(mission.getByText("이렇게 되면 성공")).toBeVisible();
     expect(await mission.getByRole("list", { name: "해 보는 순서" }).getByRole("listitem").count()).toBeGreaterThanOrEqual(2);
 
@@ -26,39 +42,42 @@ test.describe("강의 보고 해보기", () => {
     expect(copied.trim()).toBe(expected);
     // 자리표시자가 있으면 강조 표시
     if (/\[[^\]]+\]/.test(expected)) await expect(box.locator("mark[data-placeholder]").first()).toBeVisible();
+    // 다른 탭에 다녀와도 펼친 상태 유지
+    await page.getByRole("tab", { name: "강의" }).click();
+    await page.getByRole("tab", { name: "실습" }).click();
+    await expect(mission.getByTestId("mission-more")).toHaveAttribute("aria-expanded", "true");
     expect(consoleErrors).toEqual([]);
   });
 });
 
 test.describe("이번 주 실습 미션", () => {
-  test("로드맵 위에 접힌 카드로 보이고, 강의 카드로 이동·펼치기가 된다", async ({ page }) => {
-    await page.goto(`/result?${NON_BEGINNER}`);
+  test("실습 탭 맨 위에 있고, '미션 펼쳐 보기'가 목록의 미션을 펼친다. 완료는 목록과 같은 상태", async ({ page }) => {
+    await page.goto(`/result?${NON_BEGINNER}#practice`);
     const weekly = page.getByTestId("weekly-mission");
     await expect(weekly).toBeVisible();
     await expect(weekly.getByRole("heading", { name: "이번 주 실습 미션" })).toBeVisible();
-    const body = weekly.getByTestId("prompt-box").first();
-    await expect(body).toBeHidden();
-    await weekly.getByRole("button", { name: "미션 펼쳐 보기" }).click();
-    await expect(body).toBeVisible();
+    // 강의 탭에는 없다
+    await expect(page.getByTestId("result-panel-lectures").getByTestId("weekly-mission")).toHaveCount(0);
 
-    const href = (await weekly.getByTestId("weekly-lecture-link").getAttribute("href"))!;
-    expect(href).toMatch(/^#lecture-/);
-    await weekly.getByTestId("weekly-lecture-link").click();
-    await expect(page.locator(`[id="${href.slice(1)}"] article`)).toBeInViewport();
+    const href = (await weekly.getByTestId("weekly-open").getAttribute("href"))!;
+    expect(href).toMatch(/^#mission-/);
+    await weekly.getByTestId("weekly-open").click();
+    const item = page.locator(`[id="${href.slice(1)}"]`);
+    await expect(item).toBeInViewport();
+    await expect(item.getByText("이번 주 미션")).toBeVisible();
+    await expect(item.getByTestId("mission-more")).toHaveAttribute("aria-expanded", "true");
 
-    // 추천 강의 바로 보기는 그대로 로드맵 제목으로
-    await page.goto(`/result?${NON_BEGINNER}`);
-    await page.getByRole("link", { name: "추천 강의 바로 보기", exact: true }).click();
-    await expect(page.getByRole("heading", { level: 2, name: "추천 로드맵" })).toBeInViewport();
+    await weekly.getByTestId("mission-done").click();
+    await expect(item.getByTestId("mission-done")).toHaveAttribute("aria-pressed", "true");
   });
 });
 
 test.describe("요즘 주목받는 AI 스킬", () => {
   test.use({ permissions: ["clipboard-read", "clipboard-write"] });
 
-  test("입문자가 아니면 '다음 스킬' 탭에 3개, 자세히 보기로 근거·첫걸음·관련 강의", async ({ page }) => {
+  test("입문자가 아니면 '스킬' 탭에 3개, 자세히 보기로 근거·첫걸음·관련 강의", async ({ page }) => {
     await page.goto(`/result?${NON_BEGINNER}`);
-    await page.getByRole("tab", { name: "다음 스킬" }).click();
+    await page.getByRole("tab", { name: "스킬" }).click();
     const section = page.getByTestId("skills-section");
     await expect(section.getByRole("heading", { name: "요즘 주목받는 AI 스킬" })).toBeVisible();
     await expect(section).toContainText(/\d{4}년 \d{1,2}월 기준/);
@@ -159,9 +178,9 @@ test.describe("요즘 주목받는 AI 스킬", () => {
 });
 
 test.describe("결과 칩", () => {
-  test("수준·분야·목표 묶음 이름과 1순위 표시", async ({ page }) => {
+  test("요약 한 줄을 펼치면 수준·분야·목표 묶음 이름과 1순위 표시", async ({ page }) => {
     await page.goto(`/result?${NON_BEGINNER}`);
-    const summary = page.getByRole("group", { name: "진단 요약" });
+    const summary = await openSummary(page);
     for (const name of ["수준", "분야", "목표"]) await expect(summary.getByRole("list", { name })).toBeVisible();
     const goals = summary.getByRole("list", { name: "목표" }).getByRole("listitem");
     await expect(goals.first()).toContainText("1순위");
@@ -173,13 +192,16 @@ test.describe("좁은 화면·접근성", () => {
   test.use({ viewport: { width: 320, height: 640 } });
   test("320px: 펼친 결과 섹션·/skills에 가로 넘침이 없다", async ({ page }) => {
     await page.goto(`/result?${NON_BEGINNER}`);
-    await page.getByTestId("weekly-mission").getByRole("button", { name: "미션 펼쳐 보기" }).click();
+    await openSummary(page);
     await page.locator("article").first().getByRole("button", { name: "자세히 보기" }).click();
     await expectNoOverflow(page);
-    await page.getByRole("tab", { name: "다음 스킬" }).click();
+    await page.getByRole("tab", { name: "실습" }).click();
+    await page.getByTestId("weekly-open").click();
+    await expectNoOverflow(page);
+    await page.getByRole("tab", { name: "스킬" }).click();
     await page.getByTestId("skills-section").getByTestId("skill-more").first().click();
     await expectNoOverflow(page);
-    await page.getByRole("tab", { name: "시작 전 준비" }).click();
+    await page.getByRole("tab", { name: "준비" }).click();
     await expectNoOverflow(page);
     await page.goto(`/skills?l=practitioner#${SKILLS[0].id}`);
     await expectNoOverflow(page);
@@ -189,13 +211,16 @@ test.describe("좁은 화면·접근성", () => {
 for (const scheme of ["light", "dark"] as const) {
   test.describe(`axe · ${scheme} · 실습·스킬`, () => {
     test.use({ colorScheme: scheme });
-    test("결과: 실습·이번 주 미션·스킬 펼침", async ({ page }) => {
+    test("결과: 카드 펼침·실습 미션 펼침·스킬 펼침", async ({ page }) => {
       await page.goto(`/result?${NON_BEGINNER}`);
-      await page.getByTestId("weekly-mission").getByRole("button", { name: "미션 펼쳐 보기" }).click();
       await page.locator("article").first().getByRole("button", { name: "자세히 보기" }).click();
       await page.waitForTimeout(800);
-      await axeCheck(page, `결과 펼침(실습)/${scheme}`);
-      await page.getByRole("tab", { name: "다음 스킬" }).click();
+      await axeCheck(page, `결과 카드 펼침/${scheme}`);
+      await page.getByRole("tab", { name: "실습" }).click();
+      await page.getByTestId("weekly-open").click();
+      await page.waitForTimeout(800);
+      await axeCheck(page, `결과 실습 펼침/${scheme}`);
+      await page.getByRole("tab", { name: "스킬" }).click();
       await page.getByTestId("skills-section").getByTestId("skill-more").first().click();
       await page.waitForTimeout(800);
       await axeCheck(page, `결과 다음 스킬 탭/${scheme}`);

@@ -4,7 +4,7 @@ import { useEffect, useRef, type KeyboardEvent, type ReactNode } from "react";
 import { cn } from "@/components/ui";
 import { setLocationHash, useLocationHash } from "./use-location-hash";
 
-export type ResultTabId = "lectures" | "prep" | "skills";
+export type ResultTabId = "lectures" | "practice" | "prep" | "skills";
 
 export interface ResultTab {
   id: ResultTabId;
@@ -25,10 +25,10 @@ function tabOfElement(el: Element | null): ResultTabId | null {
 type Pending = { kind: "tab" } | { kind: "el"; id: string } | null;
 
 /**
- * 결과 화면 탭 (추천 강의 · 시작 전 준비 · 다음 스킬).
- * - 모든 패널을 서버에서 그려 두고 `hidden`으로만 숨긴다 → 패널 안 앵커(#lecture-…)가 항상 DOM에 있다.
- * - 선택된 탭은 주소 해시(#lectures 기본, #prep, #skills)로 정해진다. 서버·하이드레이션에서는 기본 탭.
- * - 숨은 패널 안의 앵커로 가는 링크(#roadmap, #lecture-…)를 누르면 그 탭으로 바꾼 뒤 스크롤한다.
+ * 결과 화면 탭 (강의 · 실습 · 준비 · 스킬).
+ * - 모든 패널을 서버에서 그려 두고 `hidden`으로만 숨긴다 → 패널 안 앵커(#lecture-…, #mission-…)가 항상 DOM에 있다.
+ * - 선택된 탭은 주소 해시(#lectures 기본, #practice, #prep, #skills)로 정해진다. 서버·하이드레이션에서는 기본 탭.
+ * - 숨은 패널 안의 앵커로 가는 링크(#roadmap, #lecture-…, #mission-…)를 누르면 그 탭으로 바꾼 뒤 스크롤한다.
  * - 탭을 누르면 방문 기록에 남아 뒤로 가기로 이전 탭으로 돌아간다.
  */
 export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[]; label?: string }) {
@@ -79,7 +79,7 @@ export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[
     if (p?.kind === "el") return scrollToElement(p.id);
     if (!target) return;
     if ((ids as string[]).includes(target)) {
-      // 공유 링크(#prep, #skills)로 처음 열면 그 탭 내용이 보이게
+      // 공유 링크(#practice, #prep, #skills)로 처음 열면 그 탭 내용이 보이게
       if (isFirst && target !== DEFAULT_RESULT_TAB && window.scrollY === 0) scrollToTabs(true);
       return;
     }
@@ -157,7 +157,10 @@ export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[
           role="tablist"
           aria-label={label}
           onKeyDown={onKeyDown}
-          className={cn("mx-auto grid max-w-content gap-1 px-5 py-2", tabs.length === 3 ? "grid-cols-3" : "grid-cols-2")}
+          className={cn(
+            "mx-auto grid max-w-content gap-1 px-5 py-2 max-[359px]:px-3",
+            tabs.length === 4 ? "grid-cols-4" : tabs.length === 3 ? "grid-cols-3" : "grid-cols-2",
+          )}
         >
           {tabs.map((t) => {
             const selected = t.id === active;
@@ -175,7 +178,7 @@ export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[
                 tabIndex={selected ? 0 : -1}
                 onClick={() => select(t.id)}
                 className={cn(
-                  "inline-flex min-h-11 items-center justify-center rounded-full px-2 text-[14px] font-medium whitespace-nowrap transition-colors duration-200",
+                  "inline-flex min-h-11 items-center justify-center rounded-full px-2 text-[15px] font-medium whitespace-nowrap transition-colors duration-200",
                   selected ? "bg-ink text-ink-fg" : "text-fg-muted hover:bg-surface-2 hover:text-fg",
                 )}
               >
