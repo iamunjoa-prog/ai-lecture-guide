@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 
 /** pushState/replaceState로 해시를 바꿨을 때 알리는 이벤트 (브라우저는 이때 hashchange를 보내지 않는다) */
-const HASH_EVENT = "aig:hash";
+export const HASH_EVENT = "aig:hash";
 
 function subscribe(cb: () => void) {
   window.addEventListener("hashchange", cb);

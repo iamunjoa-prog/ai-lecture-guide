@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Slide } from "@/components/ui";
+import { SiteFooterLinks } from "@/components/SiteFooterLinks";
 import { SiteHeaderBar } from "@/components/SiteHeaderBar";
 import { readAdEnv } from "@/lib/ads";
 import type { AffiliateItem } from "@/lib/affiliate";
@@ -159,6 +160,7 @@ export default function PrivacyPage() {
         <Link href="/" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
           처음 화면으로
         </Link>
+        <SiteFooterLinks exclude={["home", "privacy"]} className="mt-1" />
       </Slide>
     </main>
   );

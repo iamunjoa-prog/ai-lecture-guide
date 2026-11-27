@@ -1,6 +1,6 @@
 import { expect, RESULT_QUERY, test } from "./fixtures";
 
-/** 결과 화면 '시작 전 준비' 탭의 '강의 보기 전 3분 이론'과 /theory 페이지 */
+/** 결과 화면 '시작 전 준비' 탭의 '강의 보기 전 3분 이론'과 용어집 '3분 이론' 탭 (예전 /theory) */
 test.describe("결과: 3분 이론", () => {
   test("개념 3개, 첫 개념만 펼쳐져 있고 다른 개념도 펼칠 수 있다", async ({ page, consoleErrors }) => {
     await page.goto(`/result?${RESULT_QUERY}#prep`);
@@ -79,9 +79,9 @@ test.describe("결과: 3분 이론", () => {
     }
   });
 
-  test("'이론 전체 보기'는 /theory로, '이론은 나중에'는 '강의' 탭으로", async ({ page }) => {
+  test("'이론 전체 보기'는 용어집 3분 이론 탭으로, '이론은 나중에'는 '강의' 탭으로", async ({ page }) => {
     await page.goto(`/result?l=beginner&d=education&g=understand&ko=1#prep`);
-    await expect(page.getByRole("link", { name: /이론 전체 보기/ })).toHaveAttribute("href", "/theory?l=beginner");
+    await expect(page.getByRole("link", { name: /이론 전체 보기/ })).toHaveAttribute("href", "/glossary?tab=theory&l=beginner");
     await page.getByRole("link", { name: /이론은 나중에, 강의 바로 보기/ }).click();
     await expect(page).toHaveURL(/#lectures$/);
     await expect(page.getByRole("tab", { name: "강의" })).toHaveAttribute("aria-selected", "true");
@@ -95,31 +95,70 @@ test.describe("결과: 3분 이론", () => {
   });
 });
 
-test.describe("/theory", () => {
+test.describe("용어집 3분 이론 탭 (예전 /theory)", () => {
+  const theoryTab = (page: import("@playwright/test").Page) => page.getByRole("tab", { name: "3분 이론" });
+
   test("수준별 4개 구역과 빠른 이동, 개념 23개", async ({ page, consoleErrors }) => {
-    await page.goto("/theory");
-    await expect(page).toHaveTitle(/3분 이론/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("3분 이론");
+    await page.goto("/glossary?tab=theory");
+    await expect(page).toHaveTitle(/용어집/);
+    await expect(theoryTab(page)).toHaveAttribute("aria-selected", "true");
+    const panel = page.getByRole("tabpanel", { name: "3분 이론" });
     for (const t of ["입문 이론", "활용 이론", "실무 이론", "개발 이론"]) {
-      await expect(page.getByRole("heading", { level: 2, name: t })).toBeVisible();
+      await expect(panel.getByRole("heading", { level: 2, name: t })).toBeVisible();
     }
-    await expect(page.getByRole("navigation", { name: "수준별 바로가기" }).getByRole("link")).toHaveCount(4);
-    await expect(page.getByTestId("theory-concept")).toHaveCount(23);
+    await expect(page.getByRole("navigation", { name: "3분 이론 수준별 바로가기" }).getByRole("link")).toHaveCount(4);
+    await expect(panel.getByTestId("theory-concept")).toHaveCount(23);
     expect(consoleErrors).toEqual([]);
   });
 
-  test("해시 딥링크가 해당 개념을 펼친다 (로드·hashchange)", async ({ page }) => {
-    await page.goto("/theory#rag-search-then-answer");
-    await expect(page.locator("details#rag-search-then-answer")).toHaveAttribute("open", "");
-    await expect(page.locator("details#rag-search-then-answer summary")).toBeInViewport();
-    await page.evaluate(() => (window.location.hash = "#agent-loop"));
-    await expect(page.locator("details#agent-loop")).toHaveAttribute("open", "");
+  test("예전 /theory 주소는 3분 이론 탭으로 넘어간다 (?l= 유지)", async ({ page }) => {
+    await page.goto("/theory?l=practitioner");
+    await expect(page).toHaveURL(/\/glossary\?(?=.*tab=theory)(?=.*l=practitioner)/);
+    await expect(theoryTab(page)).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator("#theory-level-practitioner")).toBeInViewport();
   });
 
-  test("랜딩과 용어집 바닥글에서 /theory로 갈 수 있다", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.getByRole("navigation", { name: "바닥글" }).getByRole("link", { name: "3분 이론" })).toHaveAttribute("href", "/theory");
+  test("해시 딥링크가 해당 개념을 펼친다 (예전 /theory#id · 새 #theory-id · hashchange)", async ({ page }) => {
+    await page.goto("/theory#rag-search-then-answer");
+    await expect(page).toHaveURL(/\/glossary\?tab=theory#rag-search-then-answer$/);
+    await expect(page.locator("details#theory-rag-search-then-answer")).toHaveAttribute("open", "");
+    await expect(page.locator("details#theory-rag-search-then-answer summary")).toBeInViewport();
+    // 용어 id와 겹치는 개념(agent-loop)도 이론 탭에서는 개념을 연다
+    await page.evaluate(() => (window.location.hash = "#agent-loop"));
+    await expect(page.locator("details#theory-agent-loop")).toHaveAttribute("open", "");
+    await expect(theoryTab(page)).toHaveAttribute("aria-selected", "true");
+    // 탭 지정 없이 개념 해시만 있어도 이론 탭이 열린다
+    await page.goto("/glossary#theory-context-engineering");
+    await expect(theoryTab(page)).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator("details#theory-context-engineering")).toHaveAttribute("open", "");
+  });
+
+  test("탭 전환은 주소에 남고 뒤로 가기로 돌아간다, #theory 해시도 탭을 연다", async ({ page }) => {
     await page.goto("/glossary");
-    await expect(page.getByRole("link", { name: "3분 이론" })).toHaveAttribute("href", "/theory");
+    await expect(page.getByTestId("glossary-tabs")).toHaveAttribute("data-ready", "");
+    await expect(page.getByRole("tab", { name: "용어" })).toHaveAttribute("aria-selected", "true");
+    await theoryTab(page).click();
+    await expect(page).toHaveURL(/\/glossary\?tab=theory$/);
+    await expect(page.getByRole("tabpanel", { name: "3분 이론" })).toBeVisible();
+    await page.keyboard.press("ArrowLeft");
+    await expect(page.getByRole("tab", { name: "용어" })).toBeFocused();
+    await expect(page).toHaveURL(/\/glossary$/);
+    await page.goBack();
+    await expect(theoryTab(page)).toHaveAttribute("aria-selected", "true");
+    await page.goBack();
+    await expect(page.getByRole("tab", { name: "용어" })).toHaveAttribute("aria-selected", "true");
+    await page.goto("/glossary#theory");
+    await expect(theoryTab(page)).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("바닥글: 용어집·실습 모음·스킬에서 3분 이론 탭으로 갈 수 있다 (랜딩 바닥글은 예전 주소로 넘어간다)", async ({ page }) => {
+    for (const p of ["/practice", "/skills", "/saved", "/privacy"]) {
+      await page.goto(p);
+      await expect(page.getByRole("navigation", { name: "바닥글" }).getByRole("link", { name: "3분 이론" }), p).toHaveAttribute("href", "/glossary?tab=theory");
+    }
+    await page.goto("/");
+    await page.getByRole("navigation", { name: "바닥글" }).getByRole("link", { name: "3분 이론" }).click();
+    await expect(page).toHaveURL(/\/glossary\?tab=theory$/);
+    await expect(theoryTab(page)).toHaveAttribute("aria-selected", "true");
   });
 });

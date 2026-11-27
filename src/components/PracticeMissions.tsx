@@ -1,17 +1,20 @@
 "use client";
 
 import { useId, useState } from "react";
-import { cn, IconArrowRight, IconChevronDown } from "@/components/ui";
+import { cn, IconArrowRight, IconArrowUpRight, IconChevronDown } from "@/components/ui";
 import { missionAnchorId } from "@/lib/journey";
 import type { PracticeMission } from "@/lib/practice";
 import { lectureAnchorId } from "@/lib/theory";
-import { MissionActions, MissionIntro, PracticeMissionBody, type ResolvedPrompt } from "./PracticeMissionBlock";
+import { MissionActions, MissionIntro, MissionReadyLabel, PracticeMissionBody, type ResolvedPrompt } from "./PracticeMissionBlock";
 import { MissionDoneToggle } from "./saved/SaveToggle";
 import { useLocationHash } from "./use-location-hash";
 
 export interface MissionLecture {
   id: string;
   title: string;
+  /** 있으면 같은 화면 강의 카드 대신 유튜브를 새 탭으로 여는 '(선택) 관련 강의 보기' (실습 모음 전용) */
+  url?: string;
+  instructorName?: string;
 }
 
 export interface MissionItemProps {
@@ -20,6 +23,8 @@ export interface MissionItemProps {
   lecture: MissionLecture;
   /** 이번 주 실습 미션이면 작은 표시 */
   weekly?: boolean;
+  /** 제목 단계 (기본 h4) */
+  titleAs?: "h3" | "h4";
 }
 
 /**
@@ -28,7 +33,7 @@ export interface MissionItemProps {
  * 펼침: 순서 · 프롬프트(복사) · 성공 기준 · 주의.
  * 주소 해시가 #mission-{강의 id}이면 펼친다 (강의 카드의 '실습하기'로 왔을 때).
  */
-export function MissionItem({ mission, prompts, lecture, weekly = false }: MissionItemProps) {
+export function MissionItem({ mission, prompts, lecture, weekly = false, titleAs: Title = "h4" }: MissionItemProps) {
   const uid = useId();
   const anchor = missionAnchorId(mission.videoId);
   const hash = useLocationHash();
@@ -53,23 +58,26 @@ export function MissionItem({ mission, prompts, lecture, weekly = false }: Missi
       data-open={open ? "" : undefined}
     >
       {weekly && <p className="eyebrow-ko mb-1 text-accent-ink">이번 주 미션</p>}
-      <h4 id={`${uid}-title`} className="text-[17px] font-semibold leading-snug tracking-[-0.015em] text-fg">
+      <MissionReadyLabel mission={mission} className="mb-1.5" />
+      <Title id={`${uid}-title`} className="text-[17px] font-semibold leading-snug tracking-[-0.015em] text-fg">
         {mission.title}
-      </h4>
-      <MissionIntro mission={mission} className="mt-1.5" />
-      <a
-        href={`#${lectureAnchorId(lecture.id)}`}
-        className="mt-1 flex min-h-11 items-center gap-2 text-[14px] leading-snug text-fg-muted"
-        data-testid="mission-lecture-link"
-      >
-        <span className="min-w-0 flex-1">
-          <span className="font-semibold text-fg">강의</span> ·{" "}
-          <span className="underline decoration-border-strong underline-offset-4">{lecture.title}</span>
-        </span>
-        <span aria-hidden="true" className="flex shrink-0 text-accent-ink">
-          <IconArrowRight size={16} strokeWidth={2} />
-        </span>
-      </a>
+      </Title>
+      <MissionIntro mission={mission} hideTool className="mt-1.5" />
+      {!lecture.url && (
+        <a
+          href={`#${lectureAnchorId(lecture.id)}`}
+          className="mt-1 flex min-h-11 items-center gap-2 text-[14px] leading-snug text-fg-muted"
+          data-testid="mission-lecture-link"
+        >
+          <span className="min-w-0 flex-1">
+            <span className="font-semibold text-fg">강의</span> ·{" "}
+            <span className="underline decoration-border-strong underline-offset-4">{lecture.title}</span>
+          </span>
+          <span aria-hidden="true" className="flex shrink-0 text-accent-ink">
+            <IconArrowRight size={16} strokeWidth={2} />
+          </span>
+        </a>
+      )}
       <MissionActions videoId={mission.videoId} title={mission.title} className="mt-2" />
       <div className="mt-3 border-t border-border pt-1">
         <button
@@ -89,6 +97,25 @@ export function MissionItem({ mission, prompts, lecture, weekly = false }: Missi
       <div id={`${uid}-body`} hidden={!open} className="pt-2 pb-1">
         <PracticeMissionBody mission={mission} prompts={prompts} hideIntro />
       </div>
+      {lecture.url && (
+        <a
+          href={lecture.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 flex min-h-11 items-center gap-2 border-t border-border pt-2 text-[13px] leading-snug text-fg-muted"
+          data-testid="mission-video-link"
+        >
+          <span className="min-w-0 flex-1">
+            (선택) 관련 강의 보기 ·{" "}
+            <span className="font-medium text-fg underline decoration-border-strong underline-offset-4">{lecture.title}</span>
+            {lecture.instructorName && <> · {lecture.instructorName}</>}
+            <span className="sr-only"> (유튜브, 새 탭)</span>
+          </span>
+          <span aria-hidden="true" className="flex shrink-0">
+            <IconArrowUpRight size={15} strokeWidth={2} />
+          </span>
+        </a>
+      )}
     </section>
   );
 }

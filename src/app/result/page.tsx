@@ -27,6 +27,7 @@ import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
 import affiliateJson from "@data/affiliate.json";
 import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
 import { lectureAnchorId, selectTheory } from "@/lib/theory";
+import { theoryHref } from "@/lib/glossary-tabs";
 import { journeyInputs, missionAnchorId, STEP_SUMMARIES, stepAnchorId, summaryLine } from "@/lib/journey";
 
 export const metadata: Metadata = {
@@ -188,6 +189,12 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
         <CriteriaSheet className="mt-2" />
       </section>
       <p className="mt-6 flex flex-wrap gap-x-5 text-[13px] text-fg-muted">
+        <Link href={`/practice?l=${diagnosis.level}`} className="inline-flex min-h-11 items-center underline underline-offset-4">
+          실습 모음
+        </Link>
+        <Link href="/glossary" className="inline-flex min-h-11 items-center underline underline-offset-4">
+          용어집
+        </Link>
         <Link href="/saved" className="inline-flex min-h-11 items-center underline underline-offset-4">
           내 학습함
         </Link>
@@ -228,7 +235,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
         <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">이 로드맵에는 아직 실습 미션이 없어요. 강의부터 시작해 보세요.</p>
       ) : (
         <>
-          <h2 className="mt-8 text-[19px] font-bold tracking-[-0.02em] text-fg">강의 보고 해보기</h2>
+          <h2 className="mt-8 text-[19px] font-bold tracking-[-0.02em] text-fg">직접 해보기</h2>
           <p className="mt-0.5 text-[14px] leading-relaxed text-fg-muted">
             강의를 본 뒤 직접 해 보면 오래 남아요. 완료하면 학습 여정에 표시돼요.
           </p>
@@ -252,6 +259,17 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           ))}
         </>
       )}
+      <div className="mt-8 border-t border-border pt-4">
+        <p className="text-[14px] leading-relaxed text-fg-muted">로드맵 밖의 실습도 수준·목표·도구별로 골라 해 볼 수 있어요.</p>
+        <Link
+          href={`/practice?l=${diagnosis.level}`}
+          className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-full text-[15px] font-semibold text-accent-ink"
+          data-testid="practice-all-link"
+        >
+          실습 전체 모음 보기
+          <IconArrowRight size={16} strokeWidth={2} />
+        </Link>
+      </div>
     </Slide>
   );
 
@@ -272,7 +290,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
             allVideos={videos}
             instructors={instructors}
             levelLabel={levelLabel}
-            theoryHref={`/theory?l=${diagnosis.level}`}
+            theoryHref={theoryHref({ level: diagnosis.level })}
           />
           {!hasPrep && (
             <Slide tone="light" innerClassName="py-12">

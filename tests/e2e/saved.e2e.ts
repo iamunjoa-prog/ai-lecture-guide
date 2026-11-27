@@ -150,7 +150,8 @@ test.describe("저장 버튼과 내 학습함", () => {
     await page.goto("/");
     await page.evaluate(([k, v]) => localStorage.setItem(k, v), [SAVED_KEY, JSON.stringify(state)]);
     await page.goto("/saved");
-    await expect(page.getByTestId("saved-count")).toHaveCount(0); // /saved에는 헤더 배지가 없다
+    // /saved에서도 머리글에 내 학습함(지금 페이지)이 보인다
+    await expect(page.getByRole("navigation", { name: "내 메뉴" }).getByRole("link", { name: /^내 학습함/ })).toHaveAttribute("aria-current", "page");
     const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "내보내기" }).click()]);
     expect(download.suggestedFilename()).toMatch(/^ai-lecture-guide-saved-\d{4}-\d{2}-\d{2}\.json$/);
     const file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "aig-saved-")), "saved.json");

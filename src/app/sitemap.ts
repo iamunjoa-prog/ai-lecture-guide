@@ -6,8 +6,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${site}/`, changeFrequency: "monthly", priority: 1 },
     { url: `${site}/diagnosis`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site}/practice`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${site}/glossary`, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${site}/theory`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${site}/skills`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${site}/privacy`, changeFrequency: "yearly", priority: 0.2 },
   ];

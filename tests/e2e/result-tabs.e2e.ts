@@ -379,7 +379,7 @@ test.describe("결과 탭 · 좁은 화면과 움직임 줄이기", () => {
         await expectNoOverflow(page);
       }
     }
-    for (const p of ["/", "/glossary", "/skills", "/saved"]) {
+    for (const p of ["/", "/glossary", "/glossary?tab=theory", "/skills", "/saved", "/practice"]) {
       await page.goto(p);
       await expectNoOverflow(page);
       expect((await page.getByTestId("site-header").boundingBox())!.height, p).toBeLessThanOrEqual(64);
