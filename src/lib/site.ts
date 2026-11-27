@@ -33,3 +33,5 @@ export function getSiteUrl(env: Record<string, string | undefined> = process.env
     DEFAULT_SITE_URL
   );
 }
+
+export const REPO_URL = "https://github.com/iamunjoa-prog/ai-lecture-guide";

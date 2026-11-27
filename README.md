@@ -102,10 +102,68 @@ npm run dev      # http://localhost:3000
 
 Vercel Web Analytics(`@vercel/analytics`)만 사용합니다. 쿠키를 쓰지 않고 개인을 식별하지 않는 방문 통계로, Vercel에 배포된 빌드에서만 켜지며 로컬·다른 서버에서는 아무것도 보내지 않습니다. 다른 추적 도구는 넣지 않았습니다. 통계를 보려면 Vercel 프로젝트의 Analytics 탭에서 Enable 하세요.
 
+## 수익화(광고·제휴)
+
+**광고와 제휴 링크는 기본적으로 꺼져 있습니다.** 이 서비스의 가치는 "검증해서 고른 강의"이므로, 광고가 추천처럼 보이지 않도록 아래 원칙을 지킵니다.
+
+### 배치 원칙
+
+- 광고는 **/result의 마지막 강의 카드 아래(선별 기준 안내 위)**, **/glossary 맨 아래** 두 곳에만 들어갑니다(`AdSlot`).
+- 허용하지 않는 곳: 진단 화면, 랜딩, 히어로 슬라이드, 강의 카드 사이, 404·오류 화면, 진단 정보가 없는 결과 화면.
+- 광고는 항상 "광고" 라벨이 달린 별도 카드에 들어가며, 높이를 미리 확보해 화면이 밀리지 않습니다. 라벨은 숨길 수 없습니다.
+- 광고·제휴 여부는 강의 선정과 순서에 영향을 주지 않습니다. 개인정보 처리방침(/privacy)에도 같은 내용을 밝혔습니다.
+
+### 광고 켜는 순서
+
+1. 광고 업체에 사이트를 신청합니다: [Kakao AdFit](https://adfit.kakao.com) 또는 [Google AdSense](https://adsense.google.com). 승인에는 보통 충분한 콘텐츠와 방문자가 필요하고, 커스텀 도메인을 요구하는 경우가 많습니다. 공용 `*.vercel.app` 주소는 거절될 수 있으니 **업체의 현재 정책을 확인**하세요.
+2. 승인 후 광고 단위를 만듭니다. 코드 스니펫의 세부 형식은 업체가 바꿀 수 있으므로 **가입 시점의 대시보드 안내와 `src/components/ads/AdfitAd.tsx`, `AdsenseAd.tsx`가 맞는지 대조**하세요. 어댑터는 업체별로 작게 분리해 두었습니다.
+3. Vercel 프로젝트 → Settings → Environment Variables에 아래 값을 넣고 **다시 배포**합니다(`NEXT_PUBLIC_*`는 빌드 때 박히므로 재배포가 필요합니다).
+4. 켜기 전에 `/privacy`를 직접 읽고 사실과 맞는지 검토합니다. 광고를 켜면 "광고 서비스 이용" 항목이 자동으로 나타납니다.
+5. 끄려면 `NEXT_PUBLIC_AD_PROVIDER`를 지우고 다시 배포합니다.
+
+| 변수 | 설명 |
+|---|---|
+| `NEXT_PUBLIC_AD_PROVIDER` | `adfit` 또는 `adsense`. 비우면 전부 꺼짐 |
+| `NEXT_PUBLIC_ADFIT_UNIT_RESULT` / `_GLOSSARY` | AdFit 광고 단위 ID(`DAN-...`). 자리별로 따로 넣으며, 비운 자리는 광고가 나오지 않음 |
+| `NEXT_PUBLIC_ADFIT_WIDTH` / `_HEIGHT` | AdFit 크기. 기본 320x100 (320x50, 300x250 등 업체가 지원하는 크기) |
+| `NEXT_PUBLIC_ADSENSE_CLIENT` | `ca-pub-...` |
+| `NEXT_PUBLIC_ADSENSE_SLOT_RESULT` / `_GLOSSARY` | AdSense 광고 단위 슬롯(숫자) |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | (선택) 개인정보 처리방침 문의처. 비우면 GitHub 이슈 안내 |
+
+필요한 값이 하나라도 빠지거나 형식이 틀리면 해당 자리는 아무것도 그리지 않습니다(`src/lib/ads.ts`, 단위 테스트 있음).
+
+> TODO(운영자): 유럽(EEA) 방문자를 대상으로 한다면 AdSense의 동의 관리(CMP) 배너 등 쿠키 동의 절차가 필요합니다. 이 프로젝트에는 아직 없습니다.
+
+### 제휴 링크
+
+`data/affiliate.json`은 기본이 빈 배열(`[]`)이며, 항목이 있고 진단 결과와 맞을 때만 결과 화면에 "더 깊이 배우고 싶다면 (제휴 링크)" 블록이 나옵니다(최대 2개, 수준 일치 > 목표 일치 순). 링크는 `rel="sponsored noopener noreferrer"`로 열리고, 고지 문구가 항상 보입니다. 무료 유튜브 강의가 항상 먼저이며 제휴 항목은 "참고용 추천"입니다.
+
+항목 예시(실제 파일에 넣을 때는 본인이 확인한 https 링크만 사용하세요):
+
+```json
+[
+  {
+    "id": "example-book",
+    "title": "예시 도서 제목",
+    "description": "프롬프트 작성을 체계적으로 정리한 입문서입니다.",
+    "url": "https://example.com/affiliate-link",
+    "label": "책",
+    "merchant": "예시서점",
+    "levels": ["beginner", "user"],
+    "goals": ["understand"],
+    "disclosure": "(선택) 제휴 프로그램이 요구하는 고지 문구"
+  }
+]
+```
+
+- `label`은 `책`·`유료 강의`·`도구` 중 하나입니다. `levels`·`goals`를 생략하면 모든 방문자에게 해당합니다.
+- `disclosure`가 있으면 기본 고지 문구에 **더해** 표시됩니다. 제휴 프로그램마다 요구하는 표기(예: 쿠팡 파트너스의 지정 문구)가 다르므로 **각 프로그램의 약관과 국내 표시·광고 관련 규정을 확인하고 지키는 책임은 운영자에게 있습니다.**
+- 제휴 항목이 하나라도 있으면 개인정보 처리방침에 제휴 링크 항목이 자동으로 나타납니다.
+
 ## 폴더 구조
 
 ```
-src/app/          페이지(/, /diagnosis, /result, /glossary), 메타데이터(robots, sitemap, manifest, 아이콘)
+src/app/          페이지(/, /diagnosis, /result, /glossary, /privacy), 메타데이터(robots, sitemap, manifest, 아이콘)
 src/components/   화면 컴포넌트 (ui/ 는 디자인 시스템 부품)
 src/lib/          질문지·진단 URL 변환·추천 알고리즘·용어 선택 (순수 함수 + 단위 테스트)
 data/             강사·강의·용어 JSON

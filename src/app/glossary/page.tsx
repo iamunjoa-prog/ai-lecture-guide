@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdSlot } from "@/components/ads/AdSlot";
 import { GlossaryHashOpener } from "@/components/GlossaryHashOpener";
 import { TermAccordion } from "@/components/TermAccordion";
 import { glossary } from "@/components/catalog";
@@ -79,9 +80,16 @@ export default function GlossaryPage() {
         </Slide>
       ))}
 
-      <Slide tone="light" innerClassName="py-12 pb-[max(48px,env(safe-area-inset-bottom))]">
+      <Slide tone="light" innerClassName="pb-6">
+        <AdSlot placement="glossary-bottom" className="mt-4" />
+      </Slide>
+
+      <Slide tone="light" as="footer" innerClassName="py-12 pb-[max(48px,env(safe-area-inset-bottom))]">
         <Link href="/" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
           처음 화면으로
+        </Link>
+        <Link href="/privacy" className="ml-5 inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
+          개인정보 처리방침
         </Link>
       </Slide>
     </main>

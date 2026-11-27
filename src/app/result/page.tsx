@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AppShell, LectureCard, ResultHero, RoadmapStep, Slide, type ResultHeroChip } from "@/components/ui";
+import { AdSlot } from "@/components/ads/AdSlot";
+import { AffiliateBlock } from "@/components/AffiliateBlock";
 import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { ResultActions } from "@/components/ResultActions";
 import { ResultEmptyState } from "@/components/ResultEmptyState";
@@ -9,6 +11,8 @@ import { credentialBadge, glossary, instructors, thumbnailFor, videos } from "@/
 import { decodeDiagnosis, type SearchParamsRecord } from "@/lib/diagnosis-state";
 import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_DESCRIPTIONS, LEVEL_LABELS } from "@/lib/questions";
 import { glossaryById, selectStarterTerms, termsForVideo } from "@/lib/glossary";
+import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
+import affiliateJson from "@data/affiliate.json";
 import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
 
 export const metadata: Metadata = {
@@ -40,6 +44,8 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
   const byId = glossaryById(glossary);
   const roadmapVideos = roadmap.steps.flatMap((st) => st.items.map((it) => it.video));
   const starterTerms = selectStarterTerms(diagnosis, glossary, roadmapVideos);
+
+  const affiliateItems = selectAffiliate(diagnosis, affiliateJson as unknown as AffiliateItem[], 2);
 
   const chips: ResultHeroChip[] = [
     { label: levelLabel },
@@ -146,6 +152,14 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           </ol>
         )}
 
+        {roadmap.steps.length > 0 && (
+          <>
+            {/* 광고·제휴는 마지막 강의 카드 아래, 선별 기준 안내 위에만 둔다 */}
+            <AdSlot placement="result-bottom" />
+            <AffiliateBlock items={affiliateItems} />
+          </>
+        )}
+
         <section className="mt-4 rounded-xl bg-surface-2 px-6 py-6">
           <p className="eyebrow text-fg-muted">Selection</p>
           <p className="mt-2 text-[15px] leading-relaxed text-fg">
@@ -154,6 +168,11 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           </p>
           <CriteriaSheet className="mt-2" />
         </section>
+        <p className="mt-6 text-[13px] text-fg-muted">
+          <Link href="/privacy" className="inline-flex min-h-11 items-center underline underline-offset-4">
+            개인정보 처리방침
+          </Link>
+        </p>
       </Slide>
 
       <ResultActions />
