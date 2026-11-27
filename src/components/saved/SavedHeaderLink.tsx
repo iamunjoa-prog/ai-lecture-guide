@@ -31,10 +31,13 @@ export function useSavedPrune(known: KnownIdLists | undefined) {
 export function SavedHeaderLink({
   known,
   onStage = true,
+  current = false,
   className,
 }: {
   known?: KnownIdLists;
   onStage?: boolean;
+  /** 지금 내 학습함을 보고 있으면 true (aria-current) */
+  current?: boolean;
   className?: string;
 }) {
   useSavedPrune(known);
@@ -43,10 +46,12 @@ export function SavedHeaderLink({
   return (
     <Link
       href="/saved"
+      aria-current={current ? "page" : undefined}
       className={cn(
-        "relative inline-flex min-h-11 items-center rounded-full pr-4 pl-2 text-[15px] font-medium transition-colors duration-200",
-        onStage ? "text-stage-muted hover:text-stage-fg" : "text-fg-muted hover:text-fg",
-        className,
+        "relative",
+        // className을 넘기면 기본 크기·여백 대신 그것을 쓴다 (cn은 클래스를 합치기만 해서 겹치면 어느 쪽이 이길지 모른다)
+        className ?? "inline-flex min-h-11 items-center rounded-full pr-4 pl-2 text-[15px] font-medium transition-colors duration-200",
+        onStage ? (current ? "text-stage-fg" : "text-stage-muted hover:text-stage-fg") : current ? "text-fg" : "text-fg-muted hover:text-fg",
       )}
       data-testid="saved-link"
     >

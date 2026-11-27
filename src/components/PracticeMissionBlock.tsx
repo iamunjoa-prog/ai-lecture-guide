@@ -1,5 +1,6 @@
 import { cn, IconCheck, IconInfo } from "@/components/ui";
 import { PRACTICE_TOOL_LABELS, resolvePrompt, type PracticeMission } from "@/lib/practice";
+import { toolOf } from "@/lib/practice-browse";
 import type { Domain } from "@/types";
 import { PromptBox } from "./saved/CopyPrompt";
 import { MissionDoneToggle, SaveToggle } from "./saved/SaveToggle";
@@ -22,12 +23,36 @@ export interface PracticeMissionBodyProps {
   className?: string;
 }
 
-/** 목표 · 준비물 */
-export function MissionIntro({ mission, className }: { mission: PracticeMission; className?: string }) {
+/** 미션에 무엇이 필요한지 한 줄: 챗봇만 있으면 "강의 없이 바로 해볼 수 있어요", 아니면 필요한 도구 */
+export const READY_LABELS = {
+  chat: "강의 없이 바로 해볼 수 있어요",
+  coding: "코딩 환경과 코딩 AI가 있어야 해요",
+  automation: "자동화·에이전트 도구가 있어야 해요",
+} as const;
+
+export function MissionReadyLabel({ mission, className }: { mission: Pick<PracticeMission, "needsTool">; className?: string }) {
+  const tool = toolOf(mission);
+  const chat = tool === "chat";
+  return (
+    <p
+      className={cn("flex items-center gap-1.5 text-[13px] font-semibold", chat ? "text-accent-ink" : "text-fg-muted", className)}
+      data-testid="mission-ready"
+      data-tool={tool}
+    >
+      <span aria-hidden="true" className="flex shrink-0">
+        {chat ? <IconCheck size={14} strokeWidth={2.25} /> : <IconInfo size={14} />}
+      </span>
+      {READY_LABELS[tool]}
+    </p>
+  );
+}
+
+/** 목표 · 준비물 (`hideTool`: 위에 MissionReadyLabel로 필요한 도구를 이미 말했으면 코딩·자동화 준비물 줄은 뺀다) */
+export function MissionIntro({ mission, hideTool = false, className }: { mission: PracticeMission; hideTool?: boolean; className?: string }) {
   return (
     <div className={className}>
       <p className="text-[15px] leading-relaxed text-fg">{mission.goal}</p>
-      {mission.needsTool && (
+      {mission.needsTool && !(hideTool && mission.needsTool !== "chat") && (
         <p className="mt-1.5 text-[13px] text-fg-muted">
           <span className="font-semibold text-fg">준비물</span> · {PRACTICE_TOOL_LABELS[mission.needsTool]}
         </p>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteFooterLinks } from "@/components/SiteFooterLinks";
 import { SiteHeaderBar } from "@/components/SiteHeaderBar";
 import { glossary, instructors, knownIdLists, practice, skills, theory, videos } from "@/components/catalog";
 import { SavedHeroStatus, SavedView, type SavedCatalog } from "@/components/saved/SavedView";
@@ -43,7 +44,7 @@ export default function SavedPage() {
   return (
     <main className="flex min-h-dvh flex-col bg-bg">
       <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
-        <SiteHeaderBar showSaved={false} current="saved" />
+        <SiteHeaderBar current="saved" />
         <div className="animate-fade-in pt-12 pb-12">
           <p className="eyebrow text-stage-muted">My shelf</p>
           <h1 className="display mt-4 text-[clamp(36px,11vw,52px)] text-stage-fg">내 학습함</h1>
@@ -57,17 +58,13 @@ export default function SavedPage() {
       <SavedView catalog={buildCatalog()} />
 
       <Slide tone="light" as="footer" innerClassName="pt-2 pb-[max(48px,env(safe-area-inset-bottom))]">
-        <div className="flex flex-wrap items-center gap-x-5">
-          <Link href="/" className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4">
-            처음 화면으로
-          </Link>
-          <Link href="/skills" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
-            AI 스킬
-          </Link>
-          <Link href="/privacy#p-saved" className="inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
-            저장 기능 안내
-          </Link>
-        </div>
+        <Link
+          href="/privacy#p-saved"
+          className="inline-flex min-h-11 items-center rounded-full text-[15px] font-medium text-accent-ink underline underline-offset-4"
+        >
+          저장 기능 안내
+        </Link>
+        <SiteFooterLinks exclude={["saved"]} className="mt-1" />
       </Slide>
     </main>
   );

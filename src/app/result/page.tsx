@@ -188,6 +188,12 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
         <CriteriaSheet className="mt-2" />
       </section>
       <p className="mt-6 flex flex-wrap gap-x-5 text-[13px] text-fg-muted">
+        <Link href={`/practice?l=${diagnosis.level}`} className="inline-flex min-h-11 items-center underline underline-offset-4">
+          실습 모음
+        </Link>
+        <Link href="/glossary" className="inline-flex min-h-11 items-center underline underline-offset-4">
+          용어집
+        </Link>
         <Link href="/saved" className="inline-flex min-h-11 items-center underline underline-offset-4">
           내 학습함
         </Link>
@@ -252,6 +258,17 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           ))}
         </>
       )}
+      <div className="mt-8 border-t border-border pt-4">
+        <p className="text-[14px] leading-relaxed text-fg-muted">로드맵 밖의 실습도 수준·목표·도구별로 골라 해 볼 수 있어요.</p>
+        <Link
+          href={`/practice?l=${diagnosis.level}`}
+          className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-full text-[15px] font-semibold text-accent-ink"
+          data-testid="practice-all-link"
+        >
+          실습 전체 모음 보기
+          <IconArrowRight size={16} strokeWidth={2} />
+        </Link>
+      </div>
     </Slide>
   );
 

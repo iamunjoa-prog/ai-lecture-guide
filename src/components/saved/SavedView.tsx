@@ -250,7 +250,7 @@ export function SavedView({ catalog }: { catalog: SavedCatalog }) {
             {!ready || t.id !== tab ? null : t.id === "lectures" ? (
               <LecturesPanel state={state} catalog={catalog} onGoMission={goMission} emptyCta={emptyCta} />
             ) : t.id === "missions" ? (
-              <MissionsPanel state={state} catalog={catalog} domains={domains} focusId={focusMission} emptyCta={emptyCta} />
+              <MissionsPanel state={state} catalog={catalog} domains={domains} focusId={focusMission} />
             ) : t.id === "skills" ? (
               <SkillsPanel state={state} catalog={catalog} />
             ) : t.id === "theory" ? (
@@ -398,20 +398,18 @@ function MissionsPanel({
   catalog,
   domains,
   focusId,
-  emptyCta,
 }: {
   state: SavedState;
   catalog: SavedCatalog;
   domains: Parameters<typeof resolvePrompts>[1];
   focusId: string | null;
-  emptyCta: { href: string; label: string };
 }) {
   if (state.missions.length === 0) {
     return (
       <EmptyState
         title="저장한 실습이 없어요"
-        desc="강의 카드의 '자세히 보기'에서 '실습 저장'을 누르거나, 다 본 강의에서 실습을 시작해 보세요."
-        cta={emptyCta}
+        desc="강의 없이 바로 해볼 수 있는 실습이 많아요. 실습 모음에서 마음에 드는 실습을 저장해 보세요."
+        cta={{ href: "/practice", label: "실습 모음에서 골라 보기" }}
       />
     );
   }
