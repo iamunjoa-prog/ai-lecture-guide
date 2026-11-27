@@ -15,7 +15,7 @@ AI 강의 길잡이의 강사·강의 정보를 **독립적으로 다시 점검*
 | 이름 표기 | 「앤드류 응」→「앤드루 응」(외래어 표기법 및 국내 언론 다수 표기), 데이터 전체 일치 |
 
 ## 가장 중요한 오류 (솔직하게)
-1. **앤드루 응 강사 이름으로 올라온 강의 2개는 그가 가르친 강의가 아니었어요.** 「Full Course: Spec-Driven Development with Coding Agents」(강사: JetBrains의 Paul Everitt), 「Full Course: AI Coding Workflows From Cloud to Local」(Paul Everitt, JetBrains 협업)은 DeepLearning.AI 채널의 강의지만 앤드루 응이 강사가 아니에요. 요약에 "앤드류 응" 큐레이션 근거를 붙여 오해를 줄 수 있어 **제거**했어요.
+1. **앤드루 응 강사 이름으로 올라온 강의 2개는 그가 가르친 강의가 아니었어요.** 「Full Course: Spec-Driven Development with Coding Agents」(강사: JetBrains의 Paul Everitt), 「Full Course: AI Coding Workflows From Cloud to Local」(Paul Everitt, JetBrains 협업)은 DeepLearning.AI 채널의 강의지만 앤드루 응이 강사가 아니에요. 앤드루 응의 강의로 오해를 줄 수 있어 **제거**했어요.
 2. **안드레이 카파시의 소속이 낡았어요.** 2026년 5월 19일 Anthropic 사전학습(pre-training) 팀에 합류했다는 보도가 여러 곳에서 확인돼요. 이력을 갱신했고, 영상은 합류 이전 본인 채널 영상임을 명시했어요.
 3. **얀 르쿤 소속이 낡았어요.** Meta를 떠나 AMI Labs를 세웠고(집행 의장) 뉴욕대 Silver Professor는 유지해요. 제목을 갱신했어요.
 4. **Microsoft 제품명이 바뀌었어요.** Azure AI Foundry는 2025년 11월(Ignite 2025) Microsoft Foundry로 이름이 바뀌었어요.
@@ -66,7 +66,7 @@ AI 강의 길잡이의 강사·강의 정보를 **독립적으로 다시 점검*
 - **OpenAI DevDay 「Harness-as-a-Service」**: Agents API(Codex와 같은 하네스를 API로, OpenAI 관리형 하네스+개발자가 고른 실행 환경)는 OpenAI 공지로 확인. 제목의 "Harness-as-a-Service"가 공식 용어인지는 확인 못함. "오래 걸리는 작업을 제품 기능으로" 삭제.
 - **앤드루 응 2개**: 「AI Prompting for Everyone」(조사·브레인스토밍·글쓰기·멀티미디어·코드 프롬프트)과 「Build with Andrew」(코딩 없이 웹앱, 생일 카드 생성기 예시, 공유)를 공식 코스 페이지 서술에 맞춰 수정. 「Opportunities in AI - 2023」은 "2023년 강연" 명시.
 - **힌턴 로마네스 강연**: 옥스퍼드 공식 소개(디지털 초지능이 통제를 벗어날 위험 경고)에 맞춰 수정.
-- **페이페이 리 TED**: "1,500만 장 사진 데이터베이스" 서술은 TED 페이지로 확인(요약에는 "수천만 장 규모"에서 정확히 "대규모"로 일반화).
+- **페이페이 리 TED**: "1,500만 장 사진 데이터베이스" 서술은 TED 페이지로 확인(takeaway에 "약 1,500만 장"으로 반영).
 - **김성훈 영상 2개·모두를 위한 딥러닝**: 「모두를 위한 딥러닝 시즌 1」은 구버전 TensorFlow 기준이라 실습 코드가 낡았다는 경고를 요약에 추가하고 "가장 많이 본" 삭제.
 - **카카오·네이버 세션**: 제목에서 읽히는 내용만 남기고 행사명·소속 팀 등 확인 불가 서술 삭제. 네이버 「Playwright E2E 하네스」는 NAVER ENGINEERING DAY 2026 발표임을 네이버페이 기술 블로그로 확인.
 - **Google·Microsoft 제품 영상**: 명령어·단계·기능 목록 같은 세부(adk run·adk web, 코드랩, 시작 조건·변수 등)를 제목 수준으로 일반화. "New in…"/"new" 제목 영상은 "공개 시점 기준"이라고 표기.
