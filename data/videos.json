@@ -1306,5 +1306,645 @@
       "AI 제품의 인프라 설계 방향을 잡을 수 있어요"
     ],
     "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "AkUUeePtbe4",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=AkUUeePtbe4",
+    "title": "Build custom AI agents in Workspace Studio to automate tasks using plain language.",
+    "instructorId": "google-workspace",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 4,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "automation"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "코드 없이 평범한 말로 Google Workspace Studio에 나만의 업무 에이전트를 만드는 4분 공식 레슨이에요.",
+    "takeaways": [
+      "시작 조건·단계·변수로 에이전트 흐름을 짤 수 있어요",
+      "회의 후속 정리처럼 반복 업무를 에이전트에 맡길 수 있어요",
+      "Gmail·Drive 등 여러 앱을 잇는 자동화를 만들 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "qtO940hejdE",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=qtO940hejdE",
+    "title": "How to Use Gmail for Help Me Write, AI Summaries & Build Custom Gems | Gemini at Work - Lesson 5",
+    "instructorId": "google-workspace",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 10,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "automation",
+      "marketing"
+    ],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
+    "summary": "Google 공식 「Gemini at Work」 5강으로, Gmail의 AI 글쓰기·요약을 써 보고 나만의 Gem(맞춤 AI 비서)을 만들어요.",
+    "takeaways": [
+      "Gmail에서 Help me write와 AI 요약을 바로 쓸 수 있어요",
+      "자주 하는 일을 지시문으로 정리해 Gem을 만들 수 있어요",
+      "만든 Gem을 반복 업무에 다시 불러 쓸 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "dlS2meHJWAk",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=dlS2meHJWAk",
+    "title": "Create agents fast with Agent Builder in Copilot",
+    "instructorId": "microsoft",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 10,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "automation",
+      "data"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "Microsoft 제품팀이 Copilot Agent Builder로 코드 한 줄 없이 전문 에이전트를 만드는 과정을 시연해요.",
+    "takeaways": [
+      "원하는 에이전트를 한 문장으로 설명해 초안을 만들 수 있어요",
+      "지시문·지식 자료·기능을 직접 다듬을 수 있어요",
+      "만든 에이전트를 동료와 공유해 함께 쓸 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "kktBVmjA19A",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=kktBVmjA19A",
+    "title": "Build Hour: Workspace agents in ChatGPT",
+    "instructorId": "openai",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 38,
+    "levels": [
+      "user",
+      "practitioner"
+    ],
+    "domains": [
+      "automation",
+      "startup"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "팀의 업무 노하우를 ChatGPT 안의 공유 에이전트로 만드는 OpenAI 공식 Build Hour 라이브 세션이에요.",
+    "takeaways": [
+      "팀의 모범 업무 절차를 에이전트 지시문으로 옮길 수 있어요",
+      "여러 업무 도구를 오가며 일하는 에이전트를 설정할 수 있어요",
+      "만든 에이전트를 팀 전체가 같이 쓰도록 공유할 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "bjdBVZa66oU",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=bjdBVZa66oU",
+    "title": "What are skills?",
+    "instructorId": "anthropic",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 3,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "automation",
+      "marketing",
+      "data"
+    ],
+    "goals": [
+      "build_agents",
+      "use_tools"
+    ],
+    "summary": "Claude에게 일하는 방법을 한 번 가르쳐 두면 알아서 다시 쓰는 '스킬'을 3분 만에 소개하는 공식 영상이에요.",
+    "takeaways": [
+      "스킬이 무엇이고 프롬프트와 어떻게 다른지 알 수 있어요",
+      "내 업무 방식을 Claude가 기억해 반복하게 만들 수 있어요",
+      "어떤 일을 스킬로 만들면 좋을지 고를 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "tYOI-WoLS_o",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=tYOI-WoLS_o",
+    "title": "Delegate and schedule tasks in Claude Cowork",
+    "instructorId": "anthropic",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 4,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "automation"
+    ],
+    "goals": [
+      "use_tools",
+      "build_agents"
+    ],
+    "summary": "Claude Cowork에 일을 맡기고 반복 작업을 예약해 두는 방법을 보여 주는 4분 공식 튜토리얼이에요.",
+    "takeaways": [
+      "회의 준비 같은 일을 Cowork에 통째로 맡길 수 있어요",
+      "매일·매시간 도는 반복 작업을 예약할 수 있어요",
+      "사람이 확인할 지점을 정해 안전하게 위임할 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "iLcH1Yp0vTw",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=iLcH1Yp0vTw",
+    "title": "[MABC 2026]  예선 교육 웨비나",
+    "instructorId": "upstage",
+    "language": "ko",
+    "hasKoreanSubtitle": true,
+    "durationMin": 104,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "automation",
+      "startup"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "코딩이 처음이어도 나만의 AI 에이전트를 만들어 보는 업스테이지 공식 AI 챌린지(MABC 2026) 교육 웨비나예요.",
+    "takeaways": [
+      "아이디어를 AI 에이전트 기획으로 구체화할 수 있어요",
+      "업스테이지 도구로 에이전트를 직접 만들어 볼 수 있어요",
+      "완성한 에이전트를 평가 기준에 맞춰 다듬을 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "44C8u0CDtSo",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=44C8u0CDtSo",
+    "title": "Getting started with Agent Development Kit",
+    "instructorId": "google-for-developers",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 19,
+    "levels": [
+      "developer"
+    ],
+    "domains": [
+      "coding",
+      "automation"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "Google의 오픈소스 에이전트 개발 키트(ADK)로 첫 에이전트를 만들어 실행하는 공식 입문 실습이에요.",
+    "takeaways": [
+      "ADK의 LLM 에이전트 구조를 이해할 수 있어요",
+      "도구를 붙인 에이전트를 직접 코드로 만들 수 있어요",
+      "adk run·adk web으로 에이전트를 실행하고 확인할 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "jDCkirAz4-E",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=jDCkirAz4-E",
+    "title": "Prototype to Production with ADK",
+    "instructorId": "google-for-developers",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 46,
+    "levels": [
+      "developer"
+    ],
+    "domains": [
+      "coding"
+    ],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
+    "summary": "ADK로 만든 에이전트 시제품을 실제 서비스로 배포하기까지의 과정을 Google 개발팀이 설명해요.",
+    "takeaways": [
+      "시제품 에이전트를 운영 환경으로 옮기는 단계를 알 수 있어요",
+      "에이전트 평가·관측·배포에 필요한 요소를 챙길 수 있어요",
+      "팀 서비스에 넣을 에이전트 구조를 설계할 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "tK32trvj_b4",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=tK32trvj_b4",
+    "title": "Build Hour: Agents SDK",
+    "instructorId": "openai",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 48,
+    "levels": [
+      "developer"
+    ],
+    "domains": [
+      "coding",
+      "automation"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "새 Agents SDK로 오래 실행되는 에이전트를 만드는 법을 OpenAI 엔지니어가 라이브로 보여 주는 Build Hour예요.",
+    "takeaways": [
+      "Agents SDK로 에이전트와 도구를 정의할 수 있어요",
+      "오래 걸리는 작업을 이어 가는 에이전트를 설계할 수 있어요",
+      "실제 데모 코드를 보며 구현 흐름을 익힐 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "b7l_Dhe1h8M",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=b7l_Dhe1h8M",
+    "title": "Harness-as-a-Service: Building with the Agents API | DevDay 2026",
+    "instructorId": "openai",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 20,
+    "levels": [
+      "developer"
+    ],
+    "domains": [
+      "coding"
+    ],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
+    "summary": "OpenAI DevDay 2026 세션으로, Agents API로 Codex 하네스를 내 서비스 환경에서 돌리는 방법을 다뤄요.",
+    "takeaways": [
+      "Agents API가 어떤 인프라를 대신 맡아 주는지 알 수 있어요",
+      "내 환경에서 에이전트를 실행·유지하는 구조를 잡을 수 있어요",
+      "오래 걸리는 작업을 제품 기능으로 넣을 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "OhI005_aJkA",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=OhI005_aJkA",
+    "title": "Full Course (Lessons 1-10) AI Agents for Beginners",
+    "instructorId": "microsoft",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 64,
+    "levels": [
+      "practitioner",
+      "developer"
+    ],
+    "domains": [
+      "coding",
+      "automation"
+    ],
+    "goals": [
+      "understand",
+      "build_agents"
+    ],
+    "summary": "Microsoft의 무료 강좌 「AI Agents for Beginners」 10개 레슨을 한 번에 모은 1시간짜리 전체 강의예요.",
+    "takeaways": [
+      "에이전트의 기본 개념과 프레임워크 선택 기준을 알 수 있어요",
+      "도구 사용·계획·멀티 에이전트 설계 패턴을 익힐 수 있어요",
+      "공개 코드 예제로 에이전트를 직접 만들어 볼 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "k4V44dn_TQo",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=k4V44dn_TQo",
+    "title": "Build Automated Agents, Workflows, and Apps - New in Copilot Studio",
+    "instructorId": "microsoft",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 10,
+    "levels": [
+      "user",
+      "practitioner"
+    ],
+    "domains": [
+      "automation",
+      "data"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "Copilot Studio에서 업무 프로세스를 에이전트·워크플로·앱으로 만드는 최신 기능을 Microsoft가 시연해요.",
+    "takeaways": [
+      "필요한 에이전트를 설명만으로 생성할 수 있어요",
+      "여러 단계 업무를 워크플로로 묶을 수 있어요",
+      "커넥터·지식 자료를 붙여 실제 업무에 쓸 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "Zqno_vux6d8",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=Zqno_vux6d8",
+    "title": "AI agents explained: Build your first agent in 8 minutes",
+    "instructorId": "google-cloud-tech",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 8,
+    "levels": [
+      "practitioner",
+      "developer"
+    ],
+    "domains": [
+      "coding"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "AI 에이전트가 무엇인지 짚고 ADK로 첫 에이전트를 8분 만에 만들어 보는 Google Cloud 공식 영상이에요.",
+    "takeaways": [
+      "챗봇과 에이전트의 차이를 설명할 수 있어요",
+      "코드랩을 따라 첫 에이전트를 만들 수 있어요",
+      "에이전트에 도구를 붙이는 기본기를 익힐 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "gJYZE9UXiHk",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=gJYZE9UXiHk",
+    "title": "Google AI Studio's new full-stack vibe coding experience",
+    "instructorId": "google-for-developers",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 8,
+    "levels": [
+      "beginner",
+      "user",
+      "practitioner"
+    ],
+    "domains": [
+      "startup",
+      "coding"
+    ],
+    "goals": [
+      "build_products"
+    ],
+    "summary": "Google AI Studio에서 말로 설명해 화면부터 서버까지 갖춘 앱을 만드는 '바이브 코딩'을 공식 시연해요.",
+    "takeaways": [
+      "아이디어를 설명만으로 동작하는 앱으로 만들 수 있어요",
+      "만든 앱을 대화로 고쳐 가며 다듬을 수 있어요",
+      "시제품을 빠르게 만들어 주변에 보여 줄 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "8zH_O74hZBw",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=8zH_O74hZBw",
+    "title": "Build and publish web apps directly in ChatGPT",
+    "instructorId": "openai",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 2,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "startup",
+      "marketing"
+    ],
+    "goals": [
+      "build_products"
+    ],
+    "summary": "ChatGPT에서 말로 웹앱을 만들고 바로 게시하는 흐름을 2분 만에 보여 주는 OpenAI 공식 영상이에요.",
+    "takeaways": [
+      "원하는 웹앱을 평범한 말로 주문할 수 있어요",
+      "첫 버전을 써 보고 바꿀 점을 말로 고칠 수 있어요",
+      "완성한 앱을 링크로 게시해 공유할 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "7dsaxBUZPII",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=7dsaxBUZPII",
+    "title": "Turn your drawings into working marketing apps in minutes with Gemini Canvas",
+    "instructorId": "google-workspace",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 3,
+    "levels": [
+      "beginner",
+      "user"
+    ],
+    "domains": [
+      "marketing"
+    ],
+    "goals": [
+      "build_products"
+    ],
+    "summary": "손그림 스케치를 Gemini Canvas로 실제 동작하는 마케팅 앱으로 바꾸는 Google 공식 3분 레슨이에요.",
+    "takeaways": [
+      "스케치나 아이디어를 앱 화면으로 옮길 수 있어요",
+      "마케팅에 쓸 간단한 인터랙티브 도구를 만들 수 있어요",
+      "코딩 없이 시제품을 만들어 팀과 나눌 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "DRghWwm3dt8",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=DRghWwm3dt8",
+    "title": "운영자의 시간을 아끼는 AI 에이전트 2부 - MCP 부터 Agent 설계까지",
+    "instructorId": "naver-d2",
+    "language": "ko",
+    "hasKoreanSubtitle": true,
+    "durationMin": 27,
+    "levels": [
+      "developer"
+    ],
+    "domains": [
+      "automation",
+      "coding"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "네이버 개발자가 운영 업무를 돕는 AI 에이전트를 MCP부터 에이전트 설계까지 어떻게 만들었는지 한국어로 발표해요.",
+    "takeaways": [
+      "사내 시스템을 MCP 도구로 연결하는 방법을 알 수 있어요",
+      "운영 업무에 맞는 에이전트 구조를 설계할 수 있어요",
+      "실제 도입 과정의 시행착오를 미리 알 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "UjvgpPG1XTU",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=UjvgpPG1XTU",
+    "title": "에이전트, 개념부터 같이 정리해봐요",
+    "instructorId": "naver-d2",
+    "language": "ko",
+    "hasKoreanSubtitle": true,
+    "durationMin": 66,
+    "levels": [
+      "practitioner",
+      "developer"
+    ],
+    "domains": [
+      "automation",
+      "coding"
+    ],
+    "goals": [
+      "understand",
+      "build_agents"
+    ],
+    "summary": "에이전트를 만들 때 헷갈리는 개념(도구·워크플로·메모리 등)을 네이버 사내 밋업 인기 세션으로 한국어로 정리해요.",
+    "takeaways": [
+      "팀 안에서 '에이전트'를 같은 뜻으로 이야기할 수 있어요",
+      "워크플로와 에이전트를 언제 나눠 쓸지 판단할 수 있어요",
+      "에이전트 설계 회의에서 쓸 개념 지도를 얻을 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "wo0Rsh9hlTo",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=wo0Rsh9hlTo",
+    "title": "AI 에이전트를 위한 Playwright E2E 테스트 하네스 구축하기",
+    "instructorId": "naver-d2",
+    "language": "ko",
+    "hasKoreanSubtitle": true,
+    "durationMin": 32,
+    "levels": [
+      "developer"
+    ],
+    "domains": [
+      "coding"
+    ],
+    "goals": [
+      "use_tools",
+      "build_products"
+    ],
+    "summary": "AI 코딩 에이전트가 짠 코드를 Playwright E2E 테스트로 검증하는 하네스를 만든 네이버 개발자의 실전 발표예요.",
+    "takeaways": [
+      "코딩 에이전트 결과물을 자동으로 검증하는 구조를 알 수 있어요",
+      "Playwright로 E2E 테스트 환경을 꾸릴 수 있어요",
+      "에이전트와 함께 개발할 때 품질을 지키는 방법을 익힐 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "NPIi9XaNIHs",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=NPIi9XaNIHs",
+    "title": "하나의 AI 를 넘어, 도메인 전문가를 연결하는 Workmate: A2A로 협업하고 확장하는 사내 AI 비서 | Model & Agent",
+    "instructorId": "kakao-tech",
+    "language": "ko",
+    "hasKoreanSubtitle": true,
+    "durationMin": 24,
+    "levels": [
+      "developer"
+    ],
+    "domains": [
+      "automation"
+    ],
+    "goals": [
+      "build_agents"
+    ],
+    "summary": "카카오가 여러 도메인 전문 에이전트를 A2A로 연결해 사내 AI 비서 Workmate를 만든 경험을 한국어로 발표해요.",
+    "takeaways": [
+      "만능 AI 대신 전문 에이전트를 나눠 연결하는 이유를 알 수 있어요",
+      "A2A로 에이전트끼리 협업시키는 구조를 설계할 수 있어요",
+      "사내 AI 비서를 확장할 때 고려할 점을 챙길 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "2v6zhEFh3HI",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=2v6zhEFh3HI",
+    "title": "김대리, SQL 팡션? 사용하지 마세요. MCP 쓰세요: AI 기술을 이용한 데이터 민주화",
+    "instructorId": "kakao-tech",
+    "language": "ko",
+    "hasKoreanSubtitle": true,
+    "durationMin": 19,
+    "levels": [
+      "practitioner",
+      "developer"
+    ],
+    "domains": [
+      "data"
+    ],
+    "goals": [
+      "build_agents",
+      "use_tools"
+    ],
+    "summary": "카카오게임즈가 MCP 서버를 만들어 SQL 없이 자연어로 데이터를 조회하게 한 사례를 if(kakao)25에서 발표했어요.",
+    "takeaways": [
+      "데이터 조회용 MCP 서버를 만드는 흐름을 알 수 있어요",
+      "쿼리 저장소와 AI를 묶어 비개발자도 데이터를 보게 할 수 있어요",
+      "팀의 데이터 민주화 도입 계획을 세울 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
+  },
+  {
+    "id": "KiJcZlqJKuE",
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=KiJcZlqJKuE",
+    "title": "Vibe code conversational agents in AI Studio",
+    "instructorId": "google-for-developers",
+    "language": "en",
+    "hasKoreanSubtitle": false,
+    "durationMin": 8,
+    "levels": [
+      "user",
+      "practitioner"
+    ],
+    "domains": [
+      "coding",
+      "startup"
+    ],
+    "goals": [
+      "build_agents",
+      "build_products"
+    ],
+    "summary": "Google AI Studio에서 말과 음성으로 설명해 실시간 대화형 에이전트 앱을 만들고 공개 URL로 게시하는 공식 시연이에요.",
+    "takeaways": [
+      "만들고 싶은 대화형 에이전트를 자연어로 설명해 만들 수 있어요",
+      "대화로 고쳐 가며 에이전트 앱을 다듬을 수 있어요",
+      "완성한 앱을 공개 URL로 게시해 공유할 수 있어요"
+    ],
+    "verifiedAt": "2026-11-27"
   }
 ]

@@ -163,5 +163,60 @@
     ],
     "credentialNote": "서울대학교 AI연구원 공식 채널이에요. 장병탁·윤성로·곽노준·전병곤 교수 등 서울대 컴퓨터공학·전기정보공학 교수진의 공개 강의를 올려요.",
     "channelUrl": "https://www.youtube.com/@AI-xi1ci"
+  },
+  {
+    "id": "google-for-developers",
+    "name": "Google for Developers",
+    "nameEn": "Google for Developers",
+    "title": "Google 공식 개발자 채널 · Gemini API·AI Studio·ADK 제작사",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "Google이 운영하는 공식 개발자 채널이에요. Gemini API, Google AI Studio, 에이전트 개발 키트(ADK)를 만든 팀이 직접 사용법과 구축 과정을 보여 줘요.",
+    "channelUrl": "https://www.youtube.com/@GoogleDevelopers"
+  },
+  {
+    "id": "google-workspace",
+    "name": "Google Workspace 공식 채널",
+    "nameEn": "Google Workspace",
+    "title": "Gmail·문서·스프레드시트를 만드는 Google 업무 도구 공식 채널",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "Google Workspace 공식 채널이에요. Gemini·Gems·Workspace Studio로 업무를 자동화하는 방법을 Google이 직접 짧은 레슨으로 알려 줘요. 비개발자 대상이라 개발자 채널(Google for Developers)과 따로 묶었어요.",
+    "channelUrl": "https://www.youtube.com/@googleworkspace"
+  },
+  {
+    "id": "microsoft",
+    "name": "Microsoft 공식 채널",
+    "nameEn": "Microsoft",
+    "title": "Copilot·Azure AI Foundry를 만드는 기업 · OpenAI 핵심 파트너",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "Microsoft가 운영하는 공식 채널들이에요. 개발자 채널(Microsoft Developer)의 무료 강좌 「AI Agents for Beginners」와, Microsoft 제품팀이 직접 시연하는 Microsoft Mechanics 채널의 Copilot 에이전트 만들기 영상을 골랐어요.",
+    "channelUrl": "https://www.youtube.com/@MicrosoftDeveloper"
+  },
+  {
+    "id": "naver-d2",
+    "name": "NAVER D2",
+    "nameEn": "NAVER D2",
+    "title": "네이버 공식 개발자 채널 · DEVIEW·NAVER ENGINEERING DAY 발표",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "하이퍼클로바X를 만든 네이버의 공식 기술 채널이에요. 네이버 개발자가 사내 기술 행사(NAVER ENGINEERING DAY)에서 발표한 AI 에이전트 구축 경험을 한국어로 공개해요.",
+    "channelUrl": "https://www.youtube.com/@naver_d2"
+  },
+  {
+    "id": "kakao-tech",
+    "name": "카카오 기술 채널 (kakao tech)",
+    "nameEn": "kakao tech",
+    "title": "카카오 공식 기술 채널 · if(kakao) 개발자 콘퍼런스",
+    "credentials": [
+      "official_channel"
+    ],
+    "credentialNote": "카나나 모델과 카카오톡 AI 에이전트를 만드는 카카오의 공식 기술 채널이에요. 카카오 개발자 콘퍼런스 if(kakao)의 에이전트·MCP 세션을 한국어로 볼 수 있어요.",
+    "channelUrl": "https://www.youtube.com/@kakaotech"
   }
 ]
