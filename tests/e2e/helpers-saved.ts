@@ -5,7 +5,7 @@ import { expect, type Page } from "@playwright/test";
 
 /** 데이터는 바뀔 수 있으므로 테스트는 실제 JSON에서 id를 고른다 */
 const read = <T,>(f: string): T => JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", f), "utf8")) as T;
-export const SKILLS = read<{ id: string; name: string; lectureIds: string[] }[]>("skills.json");
+export const SKILLS = read<{ id: string; name: string; lectureIds: string[]; levels: string[]; firstStep: { label: string; prompt: string } }[]>("skills.json");
 export const PRACTICE = read<{ videoId: string; title: string }[]>("practice.json");
 export const VIDEOS = read<{ id: string; title: string }[]>("videos.json");
 export const GLOSSARY = read<{ id: string; term: string; short: string }[]>("glossary.json");

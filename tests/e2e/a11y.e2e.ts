@@ -50,8 +50,11 @@ for (const scheme of ["light", "dark"] as const) {
     });
 
     test("결과: 용어 행·카드 펼침", async ({ page }) => {
-      await page.goto(`/result?${RESULT_QUERY}`);
+      await page.goto(`/result?${RESULT_QUERY}#prep`);
       await page.getByTestId("starter-terms").locator("summary").first().click();
+      await page.waitForTimeout(800);
+      await check(page, `결과 용어 펼침/${scheme}`);
+      await page.getByRole("tab", { name: "추천 강의" }).click();
       const card = page.locator("article").first();
       await card.getByRole("button", { name: "자세히 보기" }).click();
       await card.getByTestId("card-terms").locator("button[aria-pressed]").first().click();
@@ -66,7 +69,7 @@ for (const scheme of ["light", "dark"] as const) {
     });
 
     test("3분 이론: 결과 화면 개념 펼침 · 이론 페이지 딥링크", async ({ page }) => {
-      await page.goto(`/result?${RESULT_QUERY}`);
+      await page.goto(`/result?${RESULT_QUERY}#prep`);
       const items = page.getByTestId("theory-list").getByTestId("theory-concept");
       await items.nth(1).locator("summary").click();
       await items.nth(2).locator("summary").click();

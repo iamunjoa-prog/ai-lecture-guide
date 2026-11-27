@@ -19,14 +19,13 @@ test.describe("기본 빌드: 광고 없음", () => {
     });
   }
 
-  test("결과: 제휴 영역도 없고 로드맵(스킬 안내 포함) 끝과 선별 기준 사이에 빈 틈이 없다", async ({ page }) => {
+  test("결과: 제휴 영역도 없고 로드맵 끝과 선별 기준 사이에 빈 틈이 없다", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}`);
     await expect(page.getByText("제휴 링크")).toHaveCount(0);
     const gap = await page.evaluate(() => {
-      // 광고 자리는 로드맵 끝(요즘 주목받는 AI 스킬 또는 그 안내 한 줄) 바로 아래
+      // 광고 자리는 '추천 강의' 탭의 마지막 로드맵 단계 바로 아래 (스킬은 '다음 스킬' 탭으로 옮겼다)
       const items = document.querySelectorAll("#roadmap ol:not([aria-label]) > li");
-      const skills = document.querySelector('[data-testid="skills-section"], [data-testid="skills-hint"]');
-      const last = (skills ?? items[items.length - 1]).getBoundingClientRect();
+      const last = items[items.length - 1].getBoundingClientRect();
       const sel = [...document.querySelectorAll("#roadmap section")].find((s) => s.textContent?.includes("Selection"))!.getBoundingClientRect();
       return sel.top - last.bottom;
     });
