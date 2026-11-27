@@ -104,10 +104,17 @@ describe("selectTheory (실제 데이터)", () => {
     }
   }
 
-  it("입문자는 어떤 목표든 '할루시네이션' 개념을 본다", () => {
+  it("입문자 안전 개념: 업무 도구는 '개인정보', 그 외 목표는 '할루시네이션'을 본다", () => {
     for (const goal of GOALS) {
-      expect(selectTheory({ level: "beginner", goal }, theory).map((c) => c.id)).toContain("ai-can-be-wrong");
+      const ids = selectTheory({ level: "beginner", goal }, theory).map((c) => c.id);
+      expect(ids).toContain(goal === "use_tools" ? "do-not-share-sensitive-info" : "ai-can-be-wrong");
     }
+  });
+
+  it("실무자 에이전트 목표는 '가드레일과 사람 검토'를 본다", () => {
+    expect(selectTheory({ level: "practitioner", goal: "build_agents" }, theory).map((c) => c.id)).toContain(
+      "guardrails-and-human-review",
+    );
   });
 
   it("결과가 결정적이다 (같은 입력 → 같은 출력)", () => {

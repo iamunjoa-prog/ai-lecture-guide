@@ -48,7 +48,6 @@
     "core": false,
     "goals": [
       "understand",
-      "use_tools",
       "build_agents",
       "build_products"
     ],
@@ -566,8 +565,7 @@
     "level": "practitioner",
     "core": false,
     "goals": [
-      "build_products",
-      "build_agents"
+      "build_products"
     ],
     "title": "평가: '잘 되는지' 확인하는 법",
     "summary": "느낌 말고 시험지로. 미리 정한 질문과 기준으로 AI의 결과를 채점해요.",
