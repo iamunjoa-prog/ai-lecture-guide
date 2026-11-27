@@ -1,11 +1,7 @@
-import { chooseSingle, expect, RESULT_QUERY, test } from "./fixtures";
+import { chooseSingle, expect, LEVEL_TITLES, RESULT_QUERY, test } from "./fixtures";
 
 const Q = {
-  frequency: "ChatGPT나 Claude 같은 AI, 얼마나 자주 쓰세요?",
-  prompt: "AI에게 질문할 때 어떻게 하세요?",
-  work: "업무나 공부에 AI를 어떻게 쓰고 있나요?",
-  automation: "API나 자동화 도구를 써본 적 있나요?",
-  coding: "코딩은 어느 정도 하세요?",
+  ...LEVEL_TITLES,
   domains: "어떤 분야에 AI를 쓰고 싶으세요?",
   goal: "AI로 이루고 싶은 목표는 무엇인가요?",
   language: "한국어로 들을 수 있는 강의가 좋으세요?",
@@ -19,7 +15,7 @@ test.describe("랜딩", () => {
     await expect(page.locator("dl")).toContainText(/검증된 강사\s*\d+명/);
     await expect(page.locator("dl")).toContainText(/선별한 유튜브 강의\s*\d+개/);
 
-    const cta = page.getByRole("link", { name: /1분 진단 시작하기/ });
+    const cta = page.getByRole("link", { name: /\d분 진단 시작하기/ });
     await expect(cta).toBeVisible();
     await cta.click();
     await expect(page).toHaveURL(/\/diagnosis$/);
@@ -36,11 +32,12 @@ test.describe("진단", () => {
     await expect(page.getByRole("progressbar")).toBeVisible();
 
     // 단일 선택은 고르면 자동으로 다음 질문으로 넘어간다
-    await chooseSingle(page, /거의 매일 써요/, Q.prompt);
-    await chooseSingle(page, /양식으로 만들어 둬요/, Q.work);
-    await chooseSingle(page, /여러 AI 도구를 상황에 맞게/, Q.automation);
-    await chooseSingle(page, /AI API를 직접 호출해 봤어요/, Q.coding);
-    await chooseSingle(page, /개발이 제 일이에요/, Q.domains);
+    await chooseSingle(page, /^거의 매일 써요/, Q.prompt);
+    await chooseSingle(page, /^잘 되는 요청을 저장해/, Q.work);
+    await chooseSingle(page, /^일에 맞게 여러 AI 도구를 골라 써요/, Q.connect);
+    await chooseSingle(page, /^AI API를 코드로 직접/, Q.coding);
+    await chooseSingle(page, /^개발이 직업이에요/, Q.aiCoding);
+    await chooseSingle(page, /^AI 코딩 도구로 작업해 봤어요/, Q.domains);
 
     // 다중 선택: 아무것도 안 고르면 다음으로 못 간다
     const next = page.getByRole("button", { name: "다음", exact: true });
@@ -52,8 +49,8 @@ test.describe("진단", () => {
 
     // 뒤로 가도 이전 답이 남아 있다
     await page.getByRole("button", { name: "이전 단계로" }).click();
-    await expect(h1).toHaveText(Q.coding);
-    await expect(page.getByRole("radio", { name: /개발이 제 일이에요/ })).toHaveAttribute("aria-checked", "true");
+    await expect(h1).toHaveText(Q.aiCoding);
+    await expect(page.getByRole("radio", { name: /^AI 코딩 도구로 작업해 봤어요/ })).toHaveAttribute("aria-checked", "true");
     await page.getByRole("button", { name: "다음", exact: true }).click();
     await expect(h1).toHaveText(Q.domains);
     await expect(page.getByRole("checkbox", { name: /^코딩/ })).toHaveAttribute("aria-checked", "true");
@@ -75,7 +72,15 @@ test.describe("진단", () => {
     await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(3);
     await next.click();
 
-    await chooseSingle(page, /^나만의 에이전트 만들기/, Q.language);
+    // 목표: 여러 개, 고른 순서 = 우선순위
+    await expect(h1).toHaveText(Q.goal);
+    await page.getByRole("checkbox", { name: /^나만의 에이전트 만들기/ }).click();
+    await page.getByRole("checkbox", { name: /^업무 도구로 쓰기/ }).click();
+    await expect(h1).toHaveText(Q.goal); // 다중 선택은 자동으로 넘어가지 않는다
+    await expect(page.getByRole("checkbox", { name: /^나만의 에이전트 만들기.*1순위/ })).toHaveAttribute("aria-checked", "true");
+    await expect(page.getByRole("checkbox", { name: /^업무 도구로 쓰기.*2순위/ })).toHaveAttribute("aria-checked", "true");
+    await next.click();
+    await expect(h1).toHaveText(Q.language);
     await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
 
     // 로딩 연출(약 1.2초) 후 결과 화면
@@ -84,7 +89,7 @@ test.describe("진단", () => {
     expect(Object.fromEntries(url.searchParams)).toEqual({
       l: "developer",
       d: "coding,automation,data",
-      g: "build_agents",
+      g: "build_agents,use_tools",
       ko: "0",
     });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("개발자 맞춤 학습 로드맵");
@@ -147,7 +152,7 @@ test.describe("결과", () => {
       await page.goto(`/result${query}`);
       await expect(page.getByRole("heading", { level: 1 })).toHaveText("아직 진단 결과가 없어요");
       await expect(page.locator("article")).toHaveCount(0);
-      await expect(page.getByRole("link", { name: /1분 진단 시작하기/ })).toHaveAttribute("href", "/diagnosis");
+      await expect(page.getByRole("link", { name: /\d분 진단 시작하기/ })).toHaveAttribute("href", "/diagnosis");
       expect(consoleErrors).toEqual([]);
     });
   }

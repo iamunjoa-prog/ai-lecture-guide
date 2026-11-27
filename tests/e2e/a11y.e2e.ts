@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, RESULT_QUERY, test } from "./fixtures";
+import { answerLevelQuestionsLow, expect, LEVEL_ANSWERS_HIGH, RESULT_QUERY, test } from "./fixtures";
 
 /**
  * 접근성 점검 (axe-core, WCAG 2.1 A/AA).
@@ -30,22 +30,14 @@ for (const scheme of ["light", "dark"] as const) {
     }
 
     test("진단: 분야 질문(다중 선택, 일부 비활성)", async ({ page }) => {
-      await page.goto("/diagnosis");
-      for (const name of [/거의 매일 써요/, /양식으로 만들어 둬요/, /여러 AI 도구를/, /AI API를 직접/, /개발이 제 일이에요/]) {
-        await page.getByRole("radio", { name }).click();
-        await page.waitForTimeout(650);
-      }
+      await answerLevelQuestionsLow(page, LEVEL_ANSWERS_HIGH);
       for (const name of [/^코딩/, /^업무 자동화/, /^데이터 분석/]) await page.getByRole("checkbox", { name }).click();
       await page.waitForTimeout(800);
       await check(page, `분야 질문/${scheme}`);
     });
 
     test("진단: '잘 모르겠어요' 선택 상태", async ({ page }) => {
-      await page.goto("/diagnosis");
-      for (const name of [/아직 거의 안 써봤어요/, /그냥 궁금한 걸/, /아직 써본 적 없어요/, /처음 들어봐요/, /전혀 못 해요/]) {
-        await page.getByRole("radio", { name }).click();
-        await page.waitForTimeout(650);
-      }
+      await answerLevelQuestionsLow(page);
       await page.getByRole("checkbox", { name: /^잘 모르겠어요/ }).click();
       await page.waitForTimeout(800);
       await check(page, `분야 미정/${scheme}`);
