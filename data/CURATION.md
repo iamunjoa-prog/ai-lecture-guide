@@ -1,6 +1,8 @@
 # 큐레이션 노트 (Agent A)
 
-검증일: 2026-11-27 · 강사 19명 · 강의 68개 (영상 54 · 재생목록 14, 한국어 14개) — 2차 보강 반영
+검증일: 2026-11-27 · 강사 19명 · 강의 65개 (영상 51 · 재생목록 14, 한국어 13개) — 2차 보강 + 사실 검증(2026-11-27) 반영
+
+> **사실 검증 반영**: 아래 표·기록은 검증 전 작성본이라 일부가 옛 내용이에요(예: 제거된 강의, 「앤드루 응」 표기). 최신 판단은 [`VERIFICATION.md`](./VERIFICATION.md)를 따르세요.
 
 ## 검증 방법
 - 모든 URL은 YouTube oEmbed(`/oembed?url=...&format=json`)로 200 응답과 `author_name`을 확인했어요. 영상 `title`은 oEmbed 제목을 그대로 썼어요.
@@ -31,7 +33,7 @@
 | naver-d2 | official_channel | (2차) 네이버 공식 기술 채널(@naver_d2). NAVER ENGINEERING DAY 등 사내 기술 행사 발표 |
 | kakao-tech | official_channel | (2차) 카카오 공식 기술 채널(@kakaotech). if(kakao) 개발자 콘퍼런스 세션 |
 
-참고: 강사 한 명에 `channelUrl`은 하나라서, 개인 채널이 없는 강사(힌턴, 페이페이 리)는 대표 강의가 있는 기관 채널을 적었어요. 앤드류 응·김성훈은 영상마다 실제 업로드 채널이 다를 수 있어요(위 표 참고).
+참고: 강사 한 명에 `channelUrl`은 하나라서, 개인 채널이 없는 강사(힌턴, 페이페이 리)는 대표 강의가 있는 기관 채널을 적었어요. 앤드루 응·김성훈은 영상마다 실제 업로드 채널이 다를 수 있어요(위 표 참고).
 
 ## 탈락시킨 후보와 이유
 - **일리야 수츠케버** — NeurIPS 2024 강연(`1yvBqasHLZs`)이 개인 채널(João Tomé)에 올라온 재업로드였어요. 공식 출처를 찾지 못해 강사에서 뺐어요.
@@ -66,13 +68,13 @@
 
 | | understand | use_tools | build_agents | build_products |
 |---|---|---|---|---|
-| beginner | 10 (10) | 12 (9) | **6 (0)** | **4 (1)** |
-| user | 15 (15) | 16 (13) | **9 (0)** | 8 (4) |
-| practitioner | 18 (16) | 10 (9) | 11 (4) | 12 (10) |
-| developer | 12 (10) | 7 (5) | 16 (6) | 12 (9) |
+| beginner | 10 (10) | 12 (9) | **5 (0)** | **4 (1)** |
+| user | 15 (15) | 16 (13) | **8 (0)** | 8 (4) |
+| practitioner | 18 (16) | 8 (9) | 11 (4) | 10 (10) |
+| developer | 12 (10) | 5 (5) | 16 (6) | 10 (9) |
 
-분야별: automation 39 (25) · coding 35 (24) · data 28 (24) · education 14 (14) · marketing 18 (14) · startup 25 (20)
-한국어 친화 강의 15개 (9개)
+분야별: automation 38 (25) · coding 33 (24) · data 28 (24) · education 14 (14) · marketing 18 (14) · startup 24 (20)
+한국어 친화 강의 14개 (9개) — 사실 검증 후 값(`npm run report -- --summary`)
 
 ## 태그 보정 기록 (Agent E, 2026-11-27)
 `npm run report`(수준 4 × 목표 4 × 분야 조합 9 × 한국어 선호 2 = 288개 페르소나)로 로드맵을 훑어보고, 강의 내용과 대상이 태그와 어긋난 곳을 고쳤어요. 재생목록은 목록 페이지의 실제 레슨 제목을 보고 판단했어요. 링크·제목·요약·takeaways는 바꾸지 않았어요.
@@ -87,7 +89,6 @@
 | AI Fluency for nonprofits | goals use_tools만 · domains에서 education 제외 | 조사·글쓰기·데이터 분석·업무 보강 레슨. 교육 분야 내용 아님 |
 | Claude Code 101 | levels user,practitioner → practitioner,developer · goals use_tools, build_products | 설치·CLAUDE.md·Explore→Plan→Code→Commit 등 개발 워크플로 입문. 터미널을 쓰는 실무자·개발자 대상 |
 | Prompting 101 \| Code w/ Claude | levels → practitioner,developer · domains → automation,coding,data | 개발자 행사 세션, API 앱용 프롬프트(문서 분석 사례)를 다룸. 마케팅·교육과 거리가 멂 |
-| Spec-Driven Development with Coding Agents (Andrew Ng) | levels + practitioner · domains coding만 · goals use_tools, build_products | 코딩 에이전트를 **써서** 소프트웨어를 만드는 강의. 에이전트를 만드는 강의가 아님 |
 | Mastering Claude Code in 30 minutes | domains coding만 | 코딩 도구 사용법 |
 | Lessons from building agents on the Claude Platform | domains에서 startup 제외 | 개발자 관점의 구현 교훈 |
 | How teams use Claude | domains에서 marketing 제외 | 사례가 법무·고객지원·검색·앱 빌더(Notion·Lyft·HubSpot·Figma) 중심 |
@@ -126,7 +127,6 @@ QA가 찾은 콘텐츠 공백을 채우려고 23개를 추가했어요. 모두 �
 | Build Hour: Workspace agents in ChatGPT (`kktBVmjA19A`) | openai | user,practitioner | 팀 공유 에이전트 |
 | What are skills? (`bjdBVZa66oU`) | anthropic (@claude) | beginner,user | |
 | Delegate and schedule tasks in Claude Cowork (`tYOI-WoLS_o`) | anthropic (@claude) | beginner,user | use_tools + build_agents |
-| [MABC 2026] 예선 교육 웨비나 (`iLcH1Yp0vTw`) | upstage | beginner,user | 한국어, "코딩이 처음인 분도 나만의 AI 에이전트" 대상 |
 
 **② Anthropic 외 에이전트 개발 강의 (실무자·개발자)** — 8개
 | 강의 | 강사 | 수준 |
@@ -171,5 +171,12 @@ QA가 찾은 콘텐츠 공백을 채우려고 23개를 추가했어요. 모두 �
 ### 남은 공백
 - 입문자·에이전트 + 분야 3개 선택 페르소나는 "실전 활용" 칸이 여전히 범용 사용법 강의예요. 노코드 에이전트 강의는 대부분 자동화 한 분야라, 분야 일치 점수(2점×3)가 목표 점수(3점)보다 커요. 태그를 부풀리지 않고 남겨 뒀어요 (알고리즘 쪽 판단 필요).
 - 교육 분야 전용 강의는 여전히 14개로 늘지 않았어요.
-- 한국어 입문자용 노코드 에이전트 강의는 업스테이지 MABC 웨비나 1개뿐이에요. 공식 채널(Google Korea, OpenAI Korea 등)에 한국어 사용법 강의가 없어요.
+- 한국어 입문자용 노코드 에이전트 강의는 업스테이지 MABC 웨비나 1개뿐이에요. 공식 채널(Google Korea, OpenAI Korea 등)에 한국어 사용법 강의가 없어요. (→ 사실 검증에서 제거됨: 종료된 챌린지용이라서)
 - 한 번도 추천되지 않는 강의: AI Fluency for nonprofits, Prompting for Agents, Mastering Claude Code(모두 Anthropic 상한), Zero to Hero·NYU DL(길이).
+
+
+## 사실 검증 (2026-11-27)
+강사·강의 정보를 독립적으로 다시 점검했어요(제3자 출처 검색 + YouTube oEmbed 재확인). 자세한 근거·변경 내역·검증하지 못한 항목은 [`VERIFICATION.md`](./VERIFICATION.md)에 있어요.
+- 강사 19명: ✅ 7 · ⚠️ 수정 12 · ❌ 제외 0
+- 강의: 3개 제거(DeepLearning.AI 코스 2개는 앤드루 응이 강사가 아님, MABC 웨비나는 종료된 챌린지용), 63개의 요약·takeaways를 제목·공식 정보 기준으로 보수적으로 재작성
+- 요약문은 영상을 직접 시청해 확인한 것이 아니에요.
