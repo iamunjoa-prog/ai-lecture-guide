@@ -5,6 +5,7 @@ import { GlossaryHashOpener } from "@/components/GlossaryHashOpener";
 import { TermAccordion } from "@/components/TermAccordion";
 import { glossary } from "@/components/catalog";
 import { Slide } from "@/components/ui";
+import { SiteHeaderBar } from "@/components/SiteHeaderBar";
 import { glossaryById, groupByLevel } from "@/lib/glossary";
 import { LEVEL_DESCRIPTIONS } from "@/lib/questions";
 
@@ -22,15 +23,7 @@ export default function GlossaryPage() {
     <main className="flex min-h-dvh flex-col bg-bg">
       <GlossaryHashOpener />
       <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
-        <div className="flex h-14 items-center">
-          <Link
-            href="/"
-            aria-label="처음 화면으로"
-            className="-ml-1 inline-flex min-h-11 items-center rounded-full px-1 text-[15px] font-semibold tracking-[-0.01em] text-stage-fg"
-          >
-            AI 강의 길잡이
-          </Link>
-        </div>
+        <SiteHeaderBar />
         <div className="animate-fade-in pt-14 pb-14">
           <p className="eyebrow text-stage-muted">Glossary</p>
           <h1 className="display mt-4 text-[clamp(36px,11vw,52px)] text-stage-fg">용어집</h1>
@@ -90,6 +83,9 @@ export default function GlossaryPage() {
         </Link>
         <Link href="/theory" className="ml-5 inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
           3분 이론
+        </Link>
+        <Link href="/skills" className="ml-5 inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
+          AI 스킬
         </Link>
         <Link href="/privacy" className="ml-5 inline-flex min-h-11 items-center rounded-full text-[14px] text-fg-muted underline underline-offset-4">
           개인정보 처리방침
