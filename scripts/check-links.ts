@@ -5,6 +5,7 @@
  *    + 용어집(data/glossary.json): id 중복·형식, 필수 필드, related 참조, 강의 terms 참조
  *    + 3분 이론(data/theory.json): id 중복·형식, 수준별 core 1개, 필수 필드·길이, termIds 참조, 출처 형식
  *      (출처 URL은 형식만 본다. 네트워크 점검 대상이 아니다)
+ *    + 실습 미션(data/practice.json): 강의와 1:1, 길이·개수, 자리표시자 최대 1개, domainVariants 키, needsTool 값
  * 2) 링크 점검: 모든 강의 URL을 YouTube oEmbed로 호출해
  *    - 200 응답인지
  *    - 업로드 채널(author_url)이 강사의 channelUrl과 같은지,
@@ -21,6 +22,7 @@ import instructorsJson from "../data/instructors.json";
 import videosJson from "../data/videos.json";
 import glossaryJson from "../data/glossary.json";
 import theoryJson from "../data/theory.json";
+import practiceJson from "../data/practice.json";
 import type { CredentialType, Domain, Goal, GlossaryTerm, Instructor, Language, Level, TheoryConcept, Video } from "../src/types";
 
 // Node 내장 fetch는 HTTPS_PROXY를 기본으로 따르지 않는다. 프록시 환경이면
@@ -231,6 +233,46 @@ for (const l of LEVELS) {
   if (theory.filter((c) => c.level === l).length < 3) bad(`theory-level:${l}`, "개념이 3개 미만");
 }
 
+// 실습 미션 (형식만 점검. 규칙은 src/lib/practice.ts와 같다)
+{
+  const missions = practiceJson as unknown as Record<string, unknown>[];
+  const len = (v: unknown) => (typeof v === "string" ? [...v].length : 0);
+  const seen = new Set<string>();
+  for (const m of missions) {
+    const id = String(m.videoId);
+    const where = `practice:${id}`;
+    if (!videoIds.has(id)) bad(where, "videoId인 강의가 없음");
+    if (seen.has(id)) bad(where, "videoId 중복");
+    seen.add(id);
+    for (const [f, max] of [["title", 30], ["goal", 60], ["success", 60]] as const) {
+      if (!isNonEmptyString(m[f])) bad(where, `${f} 누락`);
+      else if (len(m[f]) > max) bad(where, `${f}가 ${max}자 초과 (${len(m[f])}자)`);
+    }
+    if (m.caution !== undefined && !isNonEmptyString(m.caution)) bad(where, "caution이 빈 문자열");
+    if (m.needsTool !== undefined && !["chat", "coding", "automation"].includes(String(m.needsTool))) bad(where, `needsTool이 이상함: ${String(m.needsTool)}`);
+    const steps = m.steps;
+    if (!Array.isArray(steps) || steps.length < 2 || steps.length > 4 || !steps.every(isNonEmptyString)) bad(where, "steps는 비어 있지 않은 문자열 2~4개여야 함");
+    const prompts = m.prompts as { label?: unknown; text?: unknown; domainVariants?: Record<string, unknown> }[];
+    if (!Array.isArray(prompts) || prompts.length < 1 || prompts.length > 3) {
+      bad(where, "prompts는 1~3개여야 함");
+      continue;
+    }
+    for (const p of prompts) {
+      if (!isNonEmptyString(p.label)) bad(where, "prompt label 누락");
+      const texts: unknown[] = [p.text, ...Object.values(p.domainVariants ?? {})];
+      for (const k of Object.keys(p.domainVariants ?? {})) if (!DOMAINS.includes(k as Domain)) bad(where, `domainVariants 키가 이상함: ${k}`);
+      for (const t of texts) {
+        if (!isNonEmptyString(t)) bad(where, "빈 프롬프트 문구");
+        else {
+          if (len(t) > 350) bad(where, `프롬프트가 350자 초과 (${len(t)}자)`);
+          if ((t.match(/\[[^[\]\n]+\]/g) ?? []).length > 1) bad(where, "프롬프트 자리표시자 [..]가 2개 이상");
+        }
+      }
+    }
+  }
+  for (const v of videos) if (!seen.has(v.id)) bad(`practice:${v.id}`, "이 강의의 실습 미션이 없음");
+}
+
 // ---------------------------------------------------------------------------
 // 2) 링크 점검
 // ---------------------------------------------------------------------------
@@ -333,7 +375,7 @@ const pad = (s: string, n: number) => {
 const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
 async function main() {
-  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개 · 용어 ${glossary.length}개 · 이론 ${theory.length}개\n`);
+  console.log(`데이터 점검 — 강사 ${instructors.length}명 · 강의 ${videos.length}개 · 용어 ${glossary.length}개 · 이론 ${theory.length}개 · 실습 ${(practiceJson as unknown[]).length}개\n`);
 
   console.log("① 스키마");
   if (schemaProblems.length === 0) console.log("  통과");
