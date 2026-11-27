@@ -1,0 +1,18 @@
+[
+  {
+    "id": "MOCK0000001",
+    "kind": "video",
+    "url": "https://www.youtube.com/",
+    "title": "목업 강의: AI 입문",
+    "instructorId": "mock-instructor",
+    "language": "ko",
+    "hasKoreanSubtitle": true,
+    "durationMin": 30,
+    "levels": ["beginner", "user"],
+    "domains": ["automation", "marketing", "coding", "data", "education", "startup"],
+    "goals": ["understand", "use_tools"],
+    "summary": "UI 개발용 샘플 강의",
+    "takeaways": ["샘플 1", "샘플 2", "샘플 3"],
+    "verifiedAt": "2026-11-27"
+  }
+]

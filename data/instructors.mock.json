@@ -1,0 +1,11 @@
+[
+  {
+    "id": "mock-instructor",
+    "name": "목업 강사",
+    "nameEn": "Mock Instructor",
+    "title": "개발용 샘플 데이터 · 실제 강사 아님",
+    "credentials": ["founder"],
+    "credentialNote": "UI 개발용 목업",
+    "channelUrl": "https://www.youtube.com/"
+  }
+]
