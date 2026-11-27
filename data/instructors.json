@@ -8,7 +8,7 @@
       "official_channel",
       "founder"
     ],
-    "credentialNote": "Claude 개발사 Anthropic이 운영하는 공식 채널들(@anthropic-ai, @claude)이에요. 공동창업자 다리오·다니엘라 아모데이가 직접 출연하는 대담, 사내 연구자·엔지니어의 프롬프트·에이전트 강의, Claude와 Claude Code 활용법 강좌가 올라와요.",
+    "credentialNote": "Claude 개발사 Anthropic이 운영하는 공식 채널들(@anthropic-ai, @claude)이에요. 공동창업자들이 출연하는 대담, 사내 팀의 프롬프트·에이전트 관련 영상, Claude와 Claude Code 활용법 강좌가 올라와요.",
     "channelUrl": "https://www.youtube.com/@anthropic-ai"
   },
   {
@@ -19,7 +19,7 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "ChatGPT 개발사 OpenAI의 공식 채널이에요. ChatGPT Work 같은 업무 도구 사용법을 짧은 튜토리얼 재생목록으로 제공해요.",
+    "credentialNote": "ChatGPT 개발사 OpenAI의 공식 채널이에요. ChatGPT Work 같은 업무 도구 사용법 재생목록과 개발자용 Build Hour·DevDay 세션이 올라와요.",
     "channelUrl": "https://www.youtube.com/@OpenAI"
   },
   {
@@ -30,7 +30,7 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "Google이 운영하는 공식 기술 채널로, Google Cloud Skills Boost의 생성형 AI 입문 강의를 무료로 공개하고 있어요.",
+    "credentialNote": "Google이 운영하는 공식 기술 채널로, 생성형 AI 입문 강의와 AI 에이전트 만들기 영상을 공개하고 있어요.",
     "channelUrl": "https://www.youtube.com/@googlecloudtech"
   },
   {
@@ -42,32 +42,32 @@
       "official_channel",
       "founder"
     ],
-    "credentialNote": "Google DeepMind 공식 채널이에요. 공동창업자이자 CEO인 데미스 허사비스(2024 노벨화학상)가 직접 출연하는 인터뷰와 다큐멘터리를 볼 수 있어요.",
+    "credentialNote": "Google DeepMind 공식 채널이에요. 공동창업자이자 CEO인 데미스 허사비스(2024 노벨화학상 공동 수상)가 출연하는 강연과 다큐멘터리를 볼 수 있어요.",
     "channelUrl": "https://www.youtube.com/@googledeepmind"
   },
   {
     "id": "andrej-karpathy",
     "name": "안드레이 카파시",
     "nameEn": "Andrej Karpathy",
-    "title": "OpenAI 공동창업자 · 전 테슬라 AI 총괄 · Eureka Labs 창업자",
+    "title": "OpenAI 공동창업자 · 전 테슬라 AI 디렉터 · Eureka Labs 창업자 · 2026년 5월 Anthropic 합류",
     "credentials": [
       "founder",
       "core_researcher"
     ],
-    "credentialNote": "OpenAI 창립 멤버이자 테슬라 오토파일럿 AI를 이끈 연구자예요. 스탠퍼드 CS231n 강의를 처음 만든 사람 중 한 명이기도 하고, 본인 채널에서 LLM 원리를 가장 쉽게 풀어 주기로 유명해요.",
+    "credentialNote": "OpenAI 창립 멤버이자 테슬라에서 AI·오토파일럿 비전 팀을 이끈 연구자예요. 스탠퍼드 CS231n 강의를 Fei-Fei Li와 함께 설계하고 주 강사를 맡았고, 본인 채널에서 LLM 원리를 차근차근 풀어 주는 강의로 잘 알려져 있어요. 여기 담은 영상은 Anthropic 합류 이전에 본인 채널에 올린 것들이에요.",
     "channelUrl": "https://www.youtube.com/@AndrejKarpathy"
   },
   {
     "id": "andrew-ng",
-    "name": "앤드류 응",
+    "name": "앤드루 응",
     "nameEn": "Andrew Ng",
-    "title": "DeepLearning.AI·Coursera 창업자 · 스탠퍼드 겸임교수 · 전 구글 브레인 공동설립",
+    "title": "DeepLearning.AI 창업자 · Coursera 공동창업자 · 스탠퍼드대 겸임교수 · 구글 브레인 창립 주도",
     "credentials": [
       "founder",
       "professor",
       "core_researcher"
     ],
-    "credentialNote": "구글 브레인을 공동 설립하고 Coursera·DeepLearning.AI·Landing AI를 창업했어요. 스탠퍼드 CS229·CS230 정규 강의를 맡아 온 교수로, 전 세계에서 가장 많은 사람이 들은 AI 강의를 만든 분이에요. 영상은 DeepLearning.AI 공식 채널과 Stanford Online 채널에서 가져왔어요.",
+    "credentialNote": "구글 브레인 창립을 이끌었고 Coursera·DeepLearning.AI·Landing AI를 창업했어요. 스탠퍼드 컴퓨터과학과 겸임교수로 머신러닝·딥러닝 강의를 가르쳐 왔고, 온라인으로 AI를 널리 가르쳐 온 분이에요. 영상은 DeepLearning.AI 공식 채널과 Stanford Online 채널에서 가져왔고, 앤드루 응이 직접 가르치거나 강연하는 것만 담았어요.",
     "channelUrl": "https://www.youtube.com/@Deeplearningai"
   },
   {
@@ -79,44 +79,44 @@
       "core_researcher",
       "professor"
     ],
-    "credentialNote": "역전파·딥러닝 연구를 이끈 핵심 연구자로 튜링상과 노벨물리학상을 받았어요. 개인 채널이 없어 옥스퍼드대학교 공식 채널에 올라온 공개 강연을 골랐어요.",
+    "credentialNote": "역전파·딥러닝 연구를 이끈 핵심 연구자로 튜링상과 2024 노벨물리학상을 받았어요. 본인 채널 대신 옥스퍼드대학교 공식 채널에 올라온 공개 강연(2024년 2월 로마네스 강연)을 골랐어요.",
     "channelUrl": "https://www.youtube.com/@oxforduniversity"
   },
   {
     "id": "fei-fei-li",
     "name": "페이페이 리",
     "nameEn": "Fei-Fei Li",
-    "title": "스탠퍼드대 컴퓨터과학 교수 · ImageNet 창시자 · World Labs 창업자",
+    "title": "스탠퍼드대 컴퓨터과학 교수 · ImageNet 프로젝트 주도 · World Labs 공동창업자",
     "credentials": [
       "professor",
       "core_researcher",
       "founder"
     ],
-    "credentialNote": "컴퓨터 비전 혁명을 연 ImageNet을 만든 스탠퍼드 교수예요. 개인 채널이 없어 TED 공식 채널의 본인 강연을 연결했어요.",
+    "credentialNote": "컴퓨터 비전 발전의 계기가 된 ImageNet을 이끌어 만든 스탠퍼드 교수예요. TED 공식 채널에 올라온 본인 강연을 연결했어요.",
     "channelUrl": "https://www.youtube.com/@TED"
   },
   {
     "id": "yann-lecun",
     "name": "얀 르쿤",
     "nameEn": "Yann LeCun",
-    "title": "합성곱 신경망(CNN) 창시자 · 튜링상 수상 · 뉴욕대 교수",
+    "title": "합성곱 신경망(CNN) 개척자 · 튜링상 수상 · 뉴욕대 교수 · 전 Meta 수석 AI 과학자 · AMI Labs 설립",
     "credentials": [
       "core_researcher",
       "professor"
     ],
-    "credentialNote": "CNN을 고안한 딥러닝 3대 거장 중 한 명이에요. 뉴욕대(NYU) 정규 딥러닝 강의를 공동 강사 알프레도 칸지아니 교수가 공식 공개한 채널에서 볼 수 있어요.",
+    "credentialNote": "CNN 연구로 딥러닝 3대 거장 중 한 명으로 꼽히는 연구자예요. 뉴욕대(NYU) 딥러닝 강의를 공동 강사 알프레도 칸지아니가 직접 운영하는 채널에서 볼 수 있어요.",
     "channelUrl": "https://www.youtube.com/@alfcnz"
   },
   {
     "id": "sung-kim",
     "name": "김성훈",
     "nameEn": "Sung Kim",
-    "title": "업스테이지 공동창업자·CEO · 전 홍콩과기대 교수 · 「모두를 위한 딥러닝」",
+    "title": "업스테이지 공동창업자·CEO · 전 네이버 클로바 AI 헤드 · 홍콩과기대 교수 출신 · 「모두를 위한 딥러닝」",
     "credentials": [
       "founder",
       "professor"
     ],
-    "credentialNote": "한국 AI 기업 업스테이지를 창업했고, 홍콩과기대 교수 시절 만든 무료 강좌 「모두를 위한 딥러닝」으로 국내 AI 입문의 표준을 만든 분이에요. 본인 채널 강좌와 함께, 공공기관·재단 공식 채널에 올라온 본인 강연도 포함했어요.",
+    "credentialNote": "한국 AI 기업 업스테이지를 공동창업해 CEO를 맡고 있고, 홍콩과기대 교수 경력이 있어요. 무료 온라인 강좌 「모두를 위한 딥러닝」으로 국내 AI 입문자에게 널리 알려졌어요. 본인 채널 강좌와 함께, 주최 기관(제주창조경제혁신센터·네이버 커넥트재단) 공식 채널에 올라온 본인 강연도 포함했어요.",
     "channelUrl": "https://www.youtube.com/@hunkims"
   },
   {
@@ -127,7 +127,7 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "국내 대표 AI 기업 업스테이지의 공식 채널이에요. 한국어로 진행하는 실전 활용 웨비나와 고객 사례가 올라와요.",
+    "credentialNote": "국내 대표 AI 기업 업스테이지의 공식 채널이에요. 한국어로 진행하는 실전 활용 웨비나가 올라와요.",
     "channelUrl": "https://www.youtube.com/@upstageai"
   },
   {
@@ -138,7 +138,7 @@
     "credentials": [
       "professor"
     ],
-    "credentialNote": "고려대 산업경영공학부에서 머신러닝·데이터마이닝을 가르치는 교수예요. 정규 강의 내용을 정리한 「핵심 머신러닝」 시리즈를 직접 운영하는 채널에 공개하고 있어요.",
+    "credentialNote": "고려대 산업경영공학부에서 머신러닝·데이터마이닝을 연구하고 가르치는 교수예요. 「핵심 머신러닝」 시리즈를 직접 운영하는 채널에 공개하고 있어요.",
     "channelUrl": "https://www.youtube.com/@%EA%B9%80%EC%84%B1%EB%B2%94%EA%B5%90%EC%88%98%EC%82%B0%EC%97%85%EA%B2%BD%EC%98%81%EA%B3%B5"
   },
   {
@@ -156,23 +156,23 @@
     "id": "snu-ai-institute",
     "name": "서울대학교 AI연구원",
     "nameEn": "Seoul National University AI Institute",
-    "title": "서울대 교수진이 직접 강의하는 대학 공식 AI 연구원",
+    "title": "서울대학교 AI연구원 공식 채널 · 서울대 교수진 강연",
     "credentials": [
       "professor",
       "official_channel"
     ],
-    "credentialNote": "서울대학교 AI연구원 공식 채널이에요. 장병탁·윤성로·곽노준·전병곤 교수 등 서울대 컴퓨터공학·전기정보공학 교수진의 공개 강의를 올려요.",
+    "credentialNote": "서울대학교 AI연구원 공식 채널이에요. 서울대 교수진의 공개 강의와 강연(예: 전병곤 교수의 AI 여름학교 강연)을 올려요.",
     "channelUrl": "https://www.youtube.com/@AI-xi1ci"
   },
   {
     "id": "google-for-developers",
     "name": "Google for Developers",
     "nameEn": "Google for Developers",
-    "title": "Google 공식 개발자 채널 · Gemini API·AI Studio·ADK 제작사",
+    "title": "Google 공식 개발자 채널 · Gemini API·AI Studio·ADK 소개",
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "Google이 운영하는 공식 개발자 채널이에요. Gemini API, Google AI Studio, 에이전트 개발 키트(ADK)를 만든 팀이 직접 사용법과 구축 과정을 보여 줘요.",
+    "credentialNote": "Google이 운영하는 공식 개발자 채널이에요. Gemini API, Google AI Studio, 에이전트 개발 키트(ADK) 등 Google 개발자 제품의 사용법을 소개해요.",
     "channelUrl": "https://www.youtube.com/@GoogleDevelopers"
   },
   {
@@ -183,18 +183,18 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "Google Workspace 공식 채널이에요. Gemini·Gems·Workspace Studio로 업무를 자동화하는 방법을 Google이 직접 짧은 레슨으로 알려 줘요. 비개발자 대상이라 개발자 채널(Google for Developers)과 따로 묶었어요.",
+    "credentialNote": "Google Workspace 공식 채널이에요. Gemini·Gems·Workspace Studio로 업무를 자동화하는 방법을 짧은 영상으로 보여 줘요. 비개발자 대상이라 개발자 채널(Google for Developers)과 따로 묶었어요.",
     "channelUrl": "https://www.youtube.com/@googleworkspace"
   },
   {
     "id": "microsoft",
     "name": "Microsoft 공식 채널",
     "nameEn": "Microsoft",
-    "title": "Copilot·Azure AI Foundry를 만드는 기업 · OpenAI 핵심 파트너",
+    "title": "Copilot·Microsoft Foundry(구 Azure AI Foundry)를 만드는 기업 · OpenAI 파트너",
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "Microsoft가 운영하는 공식 채널들이에요. 개발자 채널(Microsoft Developer)의 무료 강좌 「AI Agents for Beginners」와, Microsoft 제품팀이 직접 시연하는 Microsoft Mechanics 채널의 Copilot 에이전트 만들기 영상을 골랐어요.",
+    "credentialNote": "Microsoft가 운영하는 공식 채널들이에요. 개발자 채널(Microsoft Developer)의 무료 강좌 「AI Agents for Beginners」와, Microsoft 제품 시연 채널 Microsoft Mechanics의 Copilot 에이전트 영상을 골랐어요.",
     "channelUrl": "https://www.youtube.com/@MicrosoftDeveloper"
   },
   {
@@ -205,7 +205,7 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "하이퍼클로바X를 만든 네이버의 공식 기술 채널이에요. 네이버 개발자가 사내 기술 행사(NAVER ENGINEERING DAY)에서 발표한 AI 에이전트 구축 경험을 한국어로 공개해요.",
+    "credentialNote": "하이퍼클로바X를 만든 네이버의 공식 기술 채널이에요. 네이버 개발자들이 NAVER ENGINEERING DAY 같은 기술 행사에서 발표한 AI 에이전트 관련 경험을 한국어로 공개해요.",
     "channelUrl": "https://www.youtube.com/@naver_d2"
   },
   {
@@ -216,7 +216,7 @@
     "credentials": [
       "official_channel"
     ],
-    "credentialNote": "카나나 모델과 카카오톡 AI 에이전트를 만드는 카카오의 공식 기술 채널이에요. 카카오 개발자 콘퍼런스 if(kakao)의 에이전트·MCP 세션을 한국어로 볼 수 있어요.",
+    "credentialNote": "카나나 모델과 카카오톡 AI를 만드는 카카오의 공식 기술 채널이에요. 카카오 개발자 콘퍼런스 if(kakao) 등에서 발표한 에이전트·MCP 세션을 한국어로 볼 수 있어요.",
     "channelUrl": "https://www.youtube.com/@kakaotech"
   }
 ]
