@@ -238,44 +238,6 @@ for (const l of LEVELS) {
   if (theory.filter((c) => c.level === l).length < 3) bad(`theory-level:${l}`, "개념이 3개 미만");
 }
 
-// 실습 미션 (형식만 점검. 규칙은 src/lib/practice.ts와 같다)
-{
-  const missions = practiceJson as unknown as Record<string, unknown>[];
-  const len = (v: unknown) => (typeof v === "string" ? [...v].length : 0);
-  const seen = new Set<string>();
-  for (const m of missions) {
-    const id = String(m.videoId);
-    const where = `practice:${id}`;
-    if (!videoIds.has(id)) bad(where, "videoId인 강의가 없음");
-    if (seen.has(id)) bad(where, "videoId 중복");
-    seen.add(id);
-    for (const [f, max] of [["title", 30], ["goal", 60], ["success", 60]] as const) {
-      if (!isNonEmptyString(m[f])) bad(where, `${f} 누락`);
-      else if (len(m[f]) > max) bad(where, `${f}가 ${max}자 초과 (${len(m[f])}자)`);
-    }
-    if (m.caution !== undefined && !isNonEmptyString(m.caution)) bad(where, "caution이 빈 문자열");
-    if (m.needsTool !== undefined && !["chat", "coding", "automation"].includes(String(m.needsTool))) bad(where, `needsTool이 이상함: ${String(m.needsTool)}`);
-    const steps = m.steps;
-    if (!Array.isArray(steps) || steps.length < 2 || steps.length > 4 || !steps.every(isNonEmptyString)) bad(where, "steps는 비어 있지 않은 문자열 2~4개여야 함");
-    const prompts = m.prompts as { label?: unknown; text?: unknown; domainVariants?: Record<string, unknown> }[];
-    if (!Array.isArray(prompts) || prompts.length < 1 || prompts.length > 3) {
-      bad(where, "prompts는 1~3개여야 함");
-      continue;
-    }
-    for (const p of prompts) {
-      if (!isNonEmptyString(p.label)) bad(where, "prompt label 누락");
-      const texts: unknown[] = [p.text, ...Object.values(p.domainVariants ?? {})];
-      for (const k of Object.keys(p.domainVariants ?? {})) if (!DOMAINS.includes(k as Domain)) bad(where, `domainVariants 키가 이상함: ${k}`);
-      for (const t of texts) {
-        if (!isNonEmptyString(t)) bad(where, "빈 프롬프트 문구");
-        else {
-          if (len(t) > 350) bad(where, `프롬프트가 350자 초과 (${len(t)}자)`);
-          if ((t.match(/\[[^[\]\n]+\]/g) ?? []).length > 1) bad(where, "프롬프트 자리표시자 [..]가 2개 이상");
-        }
-      }
-    }
-  }
-  for (const v of videos) if (!seen.has(v.id)) bad(`practice:${v.id}`, "이 강의의 실습 미션이 없음");
 // 주목받는 AI 스킬 (최소 스키마 점검, 출처 URL은 형식만)
 const skillIds = new Set<string>();
 const SKILL_LEVELS: Level[] = ["user", "practitioner", "developer"];
@@ -317,6 +279,46 @@ for (const s of skills) {
       if (!ok) bad(where, `출처 URL이 https 형식이 아님: ${src.url}`);
     }
   }
+}
+
+// 실습 미션 (형식만 점검. 규칙은 src/lib/practice.ts와 같다)
+{
+  const missions = practiceJson as unknown as Record<string, unknown>[];
+  const len = (v: unknown) => (typeof v === "string" ? [...v].length : 0);
+  const seen = new Set<string>();
+  for (const m of missions) {
+    const id = String(m.videoId);
+    const where = `practice:${id}`;
+    if (!videoIds.has(id)) bad(where, "videoId인 강의가 없음");
+    if (seen.has(id)) bad(where, "videoId 중복");
+    seen.add(id);
+    for (const [f, max] of [["title", 30], ["goal", 60], ["success", 60]] as const) {
+      if (!isNonEmptyString(m[f])) bad(where, `${f} 누락`);
+      else if (len(m[f]) > max) bad(where, `${f}가 ${max}자 초과 (${len(m[f])}자)`);
+    }
+    if (m.caution !== undefined && !isNonEmptyString(m.caution)) bad(where, "caution이 빈 문자열");
+    if (m.needsTool !== undefined && !["chat", "coding", "automation"].includes(String(m.needsTool))) bad(where, `needsTool이 이상함: ${String(m.needsTool)}`);
+    const steps = m.steps;
+    if (!Array.isArray(steps) || steps.length < 2 || steps.length > 4 || !steps.every(isNonEmptyString)) bad(where, "steps는 비어 있지 않은 문자열 2~4개여야 함");
+    const prompts = m.prompts as { label?: unknown; text?: unknown; domainVariants?: Record<string, unknown> }[];
+    if (!Array.isArray(prompts) || prompts.length < 1 || prompts.length > 3) {
+      bad(where, "prompts는 1~3개여야 함");
+      continue;
+    }
+    for (const p of prompts) {
+      if (!isNonEmptyString(p.label)) bad(where, "prompt label 누락");
+      const texts: unknown[] = [p.text, ...Object.values(p.domainVariants ?? {})];
+      for (const k of Object.keys(p.domainVariants ?? {})) if (!DOMAINS.includes(k as Domain)) bad(where, `domainVariants 키가 이상함: ${k}`);
+      for (const t of texts) {
+        if (!isNonEmptyString(t)) bad(where, "빈 프롬프트 문구");
+        else {
+          if (len(t) > 350) bad(where, `프롬프트가 350자 초과 (${len(t)}자)`);
+          if ((t.match(/\[[^[\]\n]+\]/g) ?? []).length > 1) bad(where, "프롬프트 자리표시자 [..]가 2개 이상");
+        }
+      }
+    }
+  }
+  for (const v of videos) if (!seen.has(v.id)) bad(`practice:${v.id}`, "이 강의의 실습 미션이 없음");
 }
 
 // ---------------------------------------------------------------------------
