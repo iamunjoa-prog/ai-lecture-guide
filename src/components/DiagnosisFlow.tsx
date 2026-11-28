@@ -245,7 +245,7 @@ export function DiagnosisFlow() {
         backHref={index === 0 ? "/" : undefined}
         onBack={index === 0 ? undefined : goBack}
       />
-      <div key={question.id} data-question-body="" className={cn("flex animate-fade-in flex-col", showCta ? (confirmSingle ? "pb-6" : "pb-8") : "pb-2")}>
+      <div key={question.id} data-question-body="" className={cn("flex animate-fade-in flex-col", showCta ? (confirmSingle ? (canProceed ? "pb-6" : "pb-3") : "pb-8") : "pb-2")}>
         <QuestionHeader
           id={headingId}
           stepLabel={stepLabel(question, QUESTIONS)}
@@ -313,6 +313,15 @@ export function DiagnosisFlow() {
                     ({selected.length}/{maxSelect})
                   </span>
                 )}
+              </span>
+            ) : confirmSingle && !canProceed ? (
+              // 마지막 화면: '결과 보기'가 왜 흐린지 알려 준다 (고르면 사라진다).
+              // 화면 높이를 늘리지 않도록 버튼 위 빈 띠(본문 아래 여백 + CTA 위 여백)에 겹쳐 놓고, 본문 여백을 그만큼 줄인다
+              <span
+                className="absolute inset-x-0 -top-1 block px-5 text-center text-[13px] leading-5 text-fg-muted"
+                data-testid="confirm-helper"
+              >
+                하나를 골라 주세요
               </span>
             ) : undefined
           }
