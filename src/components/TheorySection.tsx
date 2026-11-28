@@ -3,7 +3,6 @@ import type { Instructor, TheoryConcept, Video } from "@/types";
 import { IconArrowRight, Slide } from "@/components/ui";
 import { lectureAnchorId, lecturesForConcept } from "@/lib/theory";
 import { TheoryConceptCard, type TheoryLectureLink } from "./TheoryConceptCard";
-import { TheoryReadToggle } from "./saved/SaveToggle";
 
 /** 결과 화면 개념 카드 앵커 (용어집 3분 이론 탭과 같은 규칙) */
 export const conceptAnchorId = (conceptId: string) => `theory-${conceptId}`;
@@ -84,36 +83,6 @@ export function TheorySection({
           </a>
         )}
       </div>
-    </Slide>
-  );
-}
-
-/** 개념 탭 맨 위 '이번 주 개념' (개념이 주인공인 공부 방법). 첫 3분 이론 개념 + 읽어 보기 · 읽었어요 */
-export function WeeklyConceptHighlight({ concept }: { concept: TheoryConcept }) {
-  return (
-    <Slide tone="light" innerClassName="pt-6">
-      <section
-        aria-labelledby="weekly-concept-title"
-        className="rounded-xl border-2 border-accent bg-surface-2 px-5 pt-4 pb-4"
-        data-testid="weekly-concept"
-      >
-        <h2 id="weekly-concept-title" className="eyebrow-ko text-[13px] text-accent-ink">
-          이번 주 개념
-        </h2>
-        <p className="mt-1.5 text-[19px] font-bold leading-snug tracking-[-0.02em] text-fg">{concept.title}</p>
-        <p className="mt-1 text-[15px] leading-relaxed text-fg">{concept.summary}</p>
-        <div className="mt-3.5 flex flex-wrap gap-2">
-          <a
-            href={`#${conceptAnchorId(concept.id)}`}
-            className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-ink px-5 text-[14px] font-semibold text-ink-fg transition-colors duration-200 hover:bg-ink-hover"
-            data-testid="weekly-concept-open"
-          >
-            1분 읽어 보기
-            <IconArrowRight size={16} strokeWidth={2} />
-          </a>
-          <TheoryReadToggle conceptId={concept.id} title={concept.title} />
-        </div>
-      </section>
     </Slide>
   );
 }
