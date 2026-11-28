@@ -125,17 +125,24 @@ export function WeeklyMissionHighlight({
   mission,
   lecture,
   stepLabel,
+  prominent = false,
 }: {
   mission: PracticeMission;
   lecture: MissionLecture;
   stepLabel?: string;
+  /** 실습이 주인공인 공부 방법: 테두리를 강조하고 강의는 '관련 강의'로만 적는다 (강의 없이 해도 된다는 뜻) */
+  prominent?: boolean;
 }) {
   const uid = useId();
   return (
     <section
       aria-labelledby={`${uid}-title`}
-      className="rounded-xl border border-border bg-surface-2 px-5 pt-4 pb-4"
+      className={cn(
+        "rounded-xl bg-surface-2 px-5 pt-4 pb-4",
+        prominent ? "border-2 border-accent" : "border border-border",
+      )}
       data-testid="weekly-mission"
+      data-prominent={prominent ? "" : undefined}
     >
       <h2 id={`${uid}-title`} className="eyebrow-ko text-[13px] text-accent-ink">
         이번 주 실습 미션
@@ -144,7 +151,7 @@ export function WeeklyMissionHighlight({
       <p className="mt-1 text-[15px] leading-relaxed text-fg">{mission.goal}</p>
       <p className="mt-1.5 text-[14px] leading-snug text-fg-muted">
         {stepLabel && <span className="font-semibold text-fg">{stepLabel} · </span>}
-        {lecture.title} 강의를 보고 해 보세요
+        {prominent ? `관련 강의 · ${lecture.title}` : `${lecture.title} 강의를 보고 해 보세요`}
       </p>
       <div className="mt-3.5 flex flex-wrap gap-2">
         <a

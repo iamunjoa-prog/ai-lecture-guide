@@ -10,7 +10,7 @@ import { MissionItem, WeeklyMissionHighlight } from "@/components/PracticeMissio
 import { ResultEmptyState } from "@/components/ResultEmptyState";
 import { StarterTerms } from "@/components/StarterTerms";
 import { ResultTabs, type ResultTab } from "@/components/ResultTabs";
-import { TheorySection } from "@/components/TheorySection";
+import { TheorySection, WeeklyConceptHighlight } from "@/components/TheorySection";
 import { credentialBadge, glossary, instructors, practice, skills, theory, thumbnailFor, videos } from "@/components/catalog";
 import { resolvePrompts } from "@/components/PracticeMissionBlock";
 import { SkillsSection } from "@/components/SkillsSection";
@@ -20,7 +20,8 @@ import { RememberDiagnosis } from "@/components/saved/RememberDiagnosis";
 import { decodeDiagnosis, diagnosisHref, type SearchParamsRecord } from "@/lib/diagnosis-state";
 import { practiceById, weeklyMission } from "@/lib/practice";
 import { indexVideos, selectSkills } from "@/lib/skills";
-import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_LABELS } from "@/lib/questions";
+import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_LABELS, STUDY_STYLE_LABELS } from "@/lib/questions";
+import { isPracticeStyle, isTheoryStyle, prepTabLabel, styleLine, tabOrder, theoryCountFor, type ResultTabKey } from "@/lib/study-style";
 import { buildConclusion } from "@/lib/conclusion";
 import { glossaryById, INITIAL_TERMS, selectStarterTerms, termsForVideo } from "@/lib/glossary";
 import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
@@ -29,7 +30,7 @@ import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
 import { findCoverageGaps } from "@/lib/coverage";
 import { lectureAnchorId, selectTheory } from "@/lib/theory";
 import { theoryHref } from "@/lib/glossary-tabs";
-import { journeyInputs, missionAnchorId, STEP_SUMMARIES, stepAnchorId, summaryLine } from "@/lib/journey";
+import { journeyInputs, missionAnchorId, practiceStepAnchorId, STEP_SUMMARIES, stepAnchorId, summaryLine } from "@/lib/journey";
 
 export const metadata: Metadata = {
   title: "맞춤 학습 로드맵",
@@ -48,13 +49,17 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     );
   }
 
-  const roadmap = buildRoadmap(diagnosis, videos, instructors);
+  const style = diagnosis.studyStyle;
+  const missionsById = practiceById(practice);
+  // 챗봇만으로 해볼 수 있는 실습이 있는 강의 (실습 위주 공부 방법의 동점 정리)
+  const easyPracticeIds = new Set(practice.filter((m) => !m.needsTool || m.needsTool === "chat").map((m) => m.videoId));
+  const roadmap = buildRoadmap(diagnosis, videos, instructors, { easyPracticeIds });
   const coverageGaps = findCoverageGaps(diagnosis, videos);
   const levelLabel = LEVEL_LABELS[diagnosis.level];
   const byId = glossaryById(glossary);
   const roadmapVideos = roadmap.steps.flatMap((st) => st.items.map((it) => it.video));
   const starterTerms = selectStarterTerms(diagnosis, glossary, roadmapVideos);
-  const theoryConcepts = selectTheory(diagnosis, theory);
+  const theoryConcepts = selectTheory(diagnosis, theory, theoryCountFor(style));
 
   const affiliateItems = selectAffiliate(diagnosis, affiliateJson as unknown as AffiliateItem[], 2);
 
@@ -74,11 +79,11 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
       })),
     },
   ];
+  chipGroups.push({ label: "공부 방법", chips: [{ label: STUDY_STYLE_LABELS[style] }] });
   if (diagnosis.preferKorean) chipGroups.push({ label: "언어", chips: [{ label: "한국어 우선" }] });
   const conclusion = buildConclusion(diagnosis);
 
   // 이번 주 실습 미션 · 단계별 실습
-  const missionsById = practiceById(practice);
   const practiceStep = roadmap.steps.find((st) => st.label === STEP_LABELS.practice);
   const weekly = weeklyMission(
     diagnosis,
@@ -100,7 +105,14 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     roadmap.steps,
     new Set(missionsById.keys()),
     starterTerms.slice(0, INITIAL_TERMS).map((t) => t.id),
+    theoryConcepts.map((c) => c.id),
   );
+
+  // 탭 순서·기본 탭·여정 위치는 공부 방법이 정한다 (lib/study-style.ts)
+  const order = tabOrder(style, false);
+  const journeyHome: ResultTabKey = roadmap.steps.length === 0 ? "lectures" : order[0];
+  const journey =
+    roadmap.steps.length > 0 ? <LearningJourney level={diagnosis.level} steps={journeySteps} studyStyle={style} /> : null;
 
   const lecturesPanel = (
     <Slide tone="light" id="roadmap" className="scroll-mt-16" innerClassName="pb-10">
@@ -110,7 +122,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
         </p>
       ) : (
         <>
-          <LearningJourney level={diagnosis.level} steps={journeySteps} />
+          {journeyHome === "lectures" && journey}
           {coverageGaps.length > 0 && (
             <p
               data-testid="coverage-note"
@@ -244,8 +256,10 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
           mission={weekly.mission}
           lecture={{ id: weekly.video.id, title: weekly.video.title }}
           stepLabel={weeklyStepIndex >= 0 ? `${weeklyStepIndex + 1}단계` : undefined}
+          prominent={isPracticeStyle(style)}
         />
       )}
+      {journeyHome === "practice" && journey}
       {missionGroups.length === 0 ? (
         <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">이 로드맵에는 아직 실습 미션이 없어요. 강의부터 시작해 보세요.</p>
       ) : (
@@ -255,7 +269,13 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
             강의를 본 뒤 직접 해 보면 오래 남아요. 완료하면 학습 여정에 표시돼요.
           </p>
           {missionGroups.map((g) => (
-            <section key={g.label} aria-labelledby={`practice-step-${g.number}`} className="mt-6" data-testid="practice-step">
+            <section
+              key={g.label}
+              id={practiceStepAnchorId(g.number)}
+              aria-labelledby={`practice-step-${g.number}`}
+              className="mt-6 scroll-mt-20"
+              data-testid="practice-step"
+            >
               <h3 id={`practice-step-${g.number}`} className="text-[15px] font-semibold text-fg-muted">
                 {g.number}단계 · {g.label}
               </h3>
@@ -288,34 +308,55 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     </Slide>
   );
 
-  const tabs: ResultTab[] = [
-    { id: "lectures", label: "강의", content: lecturesPanel },
-    { id: "practice", label: "실습", content: practicePanel },
-    {
-      id: "prep",
-      label: "준비",
-      content: (
+  const theoryFirst = isTheoryStyle(style);
+  const starterBlock = (
+    <StarterTerms terms={starterTerms} byId={byId} glossaryHref={`/glossary?l=${diagnosis.level}`} roadmapHref={null} />
+  );
+  const theoryBlock = (
+    <TheorySection
+      concepts={theoryConcepts}
+      roadmapVideos={roadmapVideos}
+      allVideos={videos}
+      instructors={instructors}
+      levelLabel={levelLabel}
+      theoryHref={theoryHref({ level: diagnosis.level })}
+      leading={theoryFirst}
+    />
+  );
+  const prepPanel = (
+    <>
+      {/* 개념이 주인공이면: 이번 주 개념 → 여정 → 3분 이론 → 용어. 아니면: 시작 전 용어 → 3분 이론 */}
+      {theoryFirst && theoryConcepts[0] && <WeeklyConceptHighlight concept={theoryConcepts[0]} />}
+      {journeyHome === "prep" && journey && (
+        <Slide tone="light" innerClassName="pb-4">
+          {journey}
+        </Slide>
+      )}
+      {theoryFirst ? (
         <>
-          {/* 시작 전에 알아두면 좋은 용어 */}
-          <StarterTerms terms={starterTerms} byId={byId} glossaryHref={`/glossary?l=${diagnosis.level}`} roadmapHref={null} />
-          {/* 강의 보기 전 3분 이론 */}
-          <TheorySection
-            concepts={theoryConcepts}
-            roadmapVideos={roadmapVideos}
-            allVideos={videos}
-            instructors={instructors}
-            levelLabel={levelLabel}
-            theoryHref={theoryHref({ level: diagnosis.level })}
-          />
-          {!hasPrep && (
-            <Slide tone="light" innerClassName="py-12">
-              <p className="text-[15px] leading-relaxed text-fg-muted">이 진단에는 미리 볼 용어와 개념이 따로 없어요. 강의부터 시작해 보세요.</p>
-            </Slide>
-          )}
+          {theoryBlock}
+          {starterBlock}
         </>
-      ),
-    },
-  ];
+      ) : (
+        <>
+          {starterBlock}
+          {theoryBlock}
+        </>
+      )}
+      {!hasPrep && (
+        <Slide tone="light" innerClassName="py-12">
+          <p className="text-[15px] leading-relaxed text-fg-muted">이 진단에는 미리 볼 용어와 개념이 따로 없어요. 강의부터 시작해 보세요.</p>
+        </Slide>
+      )}
+    </>
+  );
+
+  const panels: Record<Exclude<ResultTabKey, "skills">, ResultTab> = {
+    lectures: { id: "lectures", label: "강의", content: lecturesPanel },
+    practice: { id: "practice", label: "실습", content: practicePanel },
+    prep: { id: "prep", label: prepTabLabel(style), content: prepPanel },
+  };
+  const tabs: ResultTab[] = order.map((id) => panels[id as Exclude<ResultTabKey, "skills">]);
   if (showSkills) {
     tabs.push({
       id: "skills",
@@ -348,6 +389,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
             </>
           }
           conclusion={conclusion}
+          styleNote={styleLine(style)}
           summary={summaryLine(
             levelLabel,
             diagnosis.domains.map((d) => DOMAIN_LABELS[d]),
