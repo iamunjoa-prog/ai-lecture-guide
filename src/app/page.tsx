@@ -4,7 +4,7 @@ import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { credentialBadge, instructors, videos } from "@/components/catalog";
 import { SiteHeaderBar } from "@/components/SiteHeaderBar";
 import { CRITERIA, EXCLUDED_NOTE } from "@/components/criteria";
-import { DIAGNOSIS_MINUTES, LEVEL_QUESTIONS, QUESTION_COUNT } from "@/lib/questions";
+import { DIAGNOSIS_MINUTES, LEVEL_QUESTIONS, QUESTION_COUNT, QUESTION_COUNT_TEXT } from "@/lib/questions";
 
 const STEPS = [
   {
@@ -40,7 +40,7 @@ export default function Home() {
             <Button href="/diagnosis" variant="accent" size="lg" trailingIcon={<IconArrowRight size={18} strokeWidth={2} />}>
               {DIAGNOSIS_MINUTES}분 진단 시작하기
             </Button>
-            <p className="text-[14px] text-stage-muted">질문 {QUESTION_COUNT}개 · 약 {DIAGNOSIS_MINUTES}분 · 회원가입 없이 바로 시작합니다</p>
+            <p className="text-[14px] text-stage-muted">질문 {QUESTION_COUNT_TEXT}개 · 약 {DIAGNOSIS_MINUTES}분 · 회원가입 없이 바로 시작합니다</p>
           </div>
         </div>
         <dl className="grid animate-fade-in grid-cols-2 border-t border-stage-border py-6 [animation-delay:320ms]">

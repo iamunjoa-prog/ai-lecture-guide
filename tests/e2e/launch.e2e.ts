@@ -1,8 +1,8 @@
-import { answerLevelQuestionsLow, chooseGoals, expect, openSummary, test } from "./fixtures";
+import { DOMAIN_TITLE, GOAL_TITLE, answerLevelQuestionsLow, chooseGoals, expect, openSummary, submitStudy, test } from "./fixtures";
 
 const Q = {
-  domains: "어떤 분야에 AI를 쓰고 싶으세요?",
-  goal: "AI로 이루고 싶은 목표는 무엇인가요?",
+  domains: DOMAIN_TITLE,
+  goal: GOAL_TITLE,
   language: "한국어로 들을 수 있는 강의가 좋으세요?",
 };
 
@@ -46,7 +46,7 @@ test.describe("'잘 모르겠어요' 선택지", () => {
     // 목표 선택지: '개념 이해'와 '아직 잘 모르겠어요'는 서로 다른 선택지
     await expect(page.getByRole("checkbox", { name: /^개념 이해/ })).toBeVisible();
     await chooseGoals(page, [/^아직 잘 모르겠어요/]);
-    await page.getByRole("radio", { name: /네, 한국어가 편해요/ }).click();
+    await submitStudy(page);
 
     // 로딩 화면 + 건너뛰기 버튼(44px 이상)
     // 로딩은 1.2초뿐이라 문구가 아니라 건너뛰기 버튼이 뜨는 순간을 기다린다
@@ -58,7 +58,7 @@ test.describe("'잘 모르겠어요' 선택지", () => {
     await skip.click();
 
     await page.waitForURL(/\/result\?/, { timeout: 5_000 });
-    expect(Object.fromEntries(new URL(page.url()).searchParams)).toEqual({ l: "beginner", d: "", g: "understand", ko: "1" });
+    expect(Object.fromEntries(new URL(page.url()).searchParams)).toEqual({ l: "beginner", d: "", g: "understand", ko: "1", s: "all" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("입문자 맞춤 학습 로드맵");
     await expect(page.getByTestId("summary-toggle")).toContainText("입문자 · 분야 미정 · 목표 1개");
     await expect(await openSummary(page)).toContainText("분야 미정");
@@ -82,7 +82,7 @@ test.describe("로딩 화면", () => {
     await page.getByRole("checkbox", { name: /^코딩/ }).click();
     await page.getByRole("button", { name: "다음", exact: true }).click();
     await chooseGoals(page, [/^개념 이해/]);
-    await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
+    await submitStudy(page, { korean: false });
   }
 
   test("건너뛰지 않아도 약 1.2초 뒤 결과로 넘어간다", async ({ page }) => {

@@ -1,13 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Page } from "@playwright/test";
-import { answerLevelQuestionsLow, chooseGoals, chooseSingle, expect, LEVEL_TITLES, openSummary, test } from "./fixtures";
+import { DOMAIN_TITLE, GOAL_TITLE, LEVEL_TITLES, answerLevelQuestionsLow, chooseGoals, chooseSingle, expect, openSummary, submitStudy, test } from "./fixtures";
 
 /** 데이터에서 이미지·영상 제작(creative) 분야 강의 id를 읽는다 */
 const VIDEOS = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "videos.json"), "utf8")) as { id: string; domains: string[] }[];
 const CREATIVE_IDS = VIDEOS.filter((v) => v.domains.includes("creative")).map((v) => v.id);
 
-const DOMAIN_TITLE = "어떤 분야에 AI를 쓰고 싶으세요?";
 const DOMAIN_ORDER = ["업무 자동화", "마케팅·콘텐츠", "이미지·영상 제작", "코딩", "데이터 분석", "교육", "창업·비즈니스", "잘 모르겠어요"];
 /** BottomCTA 위 흐림 띠 높이(px, h-6) — 목록 끝은 이만큼 이상 CTA 위에 있어야 한다 */
 const FADE_PX = 24;
@@ -17,7 +16,7 @@ test.describe("이미지·영상 제작 분야", () => {
     await answerLevelQuestionsLow(page);
     const names = await page.getByRole("checkbox").evaluateAll((els) => els.map((e) => e.querySelector("span span")?.textContent?.trim() ?? ""));
     expect(names).toEqual(DOMAIN_ORDER);
-    await expect(page.getByRole("checkbox", { name: /^이미지·영상 제작/ })).toContainText("그림, 썸네일, 짧은 영상을 AI로 만들고 싶어요");
+    await expect(page.getByRole("checkbox", { name: /^이미지·영상 제작/ })).toContainText("그림·썸네일·짧은 영상");
   });
 
   test("이미지·영상 제작을 고르면 d=creative 결과에 creative 강의와 칩이 나온다", async ({ page, consoleErrors }) => {
@@ -26,7 +25,7 @@ test.describe("이미지·영상 제작 분야", () => {
     await expect(page.getByText("(1/3)")).toBeVisible();
     await page.getByRole("button", { name: "다음", exact: true }).click();
     await chooseGoals(page, [/^업무 도구로 쓰기/]);
-    await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
+    await submitStudy(page, { korean: false });
     await page.getByRole("button", { name: "건너뛰기" }).click();
     await page.waitForURL(/\/result\?/, { timeout: 5_000 });
     expect(new URL(page.url()).searchParams.get("d")).toBe("creative");
@@ -112,7 +111,7 @@ for (const scheme of ["light", "dark"] as const) {
 
         await page.getByRole("checkbox", { name: /^이미지·영상 제작/ }).click();
         await page.getByRole("button", { name: "다음", exact: true }).click();
-        await expect(page.getByRole("heading", { level: 1 })).toHaveText("AI로 이루고 싶은 목표는 무엇인가요?");
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(GOAL_TITLE);
         await expectCtaOpaqueAndClear(page, { helper: true });
         await expectLastOptionClear(page, "checkbox");
       });
@@ -121,13 +120,13 @@ for (const scheme of ["light", "dark"] as const) {
         await page.goto("/diagnosis");
         await chooseSingle(page, /^아직 거의 안 써 봤어요/, LEVEL_TITLES.prompt);
         await chooseSingle(page, /^궁금한 걸 바로 물어봐요/, LEVEL_TITLES.work);
-        await chooseSingle(page, /^아직 써 본 적 없어요/, LEVEL_TITLES.connect);
+        await chooseSingle(page, /^아직 안 써 봤어요/, LEVEL_TITLES.connect);
         // 선택지가 가장 많은 '활용 깊이' 질문으로 돌아온다 (이미 답해서 '다음' CTA가 보인다)
         await page.getByRole("button", { name: "이전 단계로" }).click();
         await expect(page.getByRole("heading", { level: 1 })).toHaveText(LEVEL_TITLES.work);
         await expectCtaOpaqueAndClear(page, { helper: false });
         await expectLastOptionClear(page, "radio");
-        await chooseSingle(page, /^아직 써 본 적 없어요/, LEVEL_TITLES.connect);
+        await chooseSingle(page, /^아직 안 써 봤어요/, LEVEL_TITLES.connect);
       });
     });
   }
