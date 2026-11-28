@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { answerLevelQuestionsLow, expect, LEVEL_ANSWERS_HIGH, RESULT_QUERY, test } from "./fixtures";
+import { answerLevelQuestionsLow, expect, LEVEL_ANSWERS_HIGH, preferListView, RESULT_QUERY, test } from "./fixtures";
 
 /**
  * 접근성 점검 (axe-core, WCAG 2.1 A/AA).
@@ -50,7 +50,8 @@ for (const scheme of ["light", "dark"] as const) {
       await check(page, `404/${scheme}`);
     });
 
-    test("결과: 용어 행·카드 펼침", async ({ page }) => {
+    test("결과: 용어 행·카드 펼침 (전체 목록 보기)", async ({ page }) => {
+      await preferListView(page, ["prep"]);
       await page.goto(`/result?${RESULT_QUERY}#prep`);
       await page.getByTestId("starter-terms").locator("summary").first().click();
       await page.waitForTimeout(800);
@@ -69,7 +70,8 @@ for (const scheme of ["light", "dark"] as const) {
       await check(page, `용어집 펼침/${scheme}`);
     });
 
-    test("3분 이론: 결과 화면 개념 펼침 · 이론 페이지 딥링크", async ({ page }) => {
+    test("3분 이론: 결과 화면 개념 펼침(전체 목록 보기) · 이론 페이지 딥링크", async ({ page }) => {
+      await preferListView(page, ["prep"]);
       await page.goto(`/result?${RESULT_QUERY}#prep`);
       const items = page.getByTestId("theory-list").getByTestId("theory-concept");
       await items.nth(1).locator("summary").click();

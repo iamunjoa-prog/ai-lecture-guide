@@ -121,3 +121,21 @@ export async function openSummary(page: Page) {
   await expect(toggle).toHaveAttribute("aria-expanded", "true");
   return page.getByRole("group", { name: "진단 요약" });
 }
+
+/** 카드 덱 기억 저장 키 (src/lib/card-deck.ts와 같다) */
+export const DECK_KEY = "aig:deck:v1";
+
+/**
+ * 결과 화면 실습·준비 탭을 '전체 목록 보기'로 연다 (예전 목록 동작을 검사하는 테스트).
+ * 기본은 한 장씩 보는 카드 덱이다. 이미 저장된 값이 있으면 건드리지 않는다(새로고침해도 사용자가 바꾼 값 유지).
+ */
+export async function preferListView(page: Page, kinds: ("practice" | "prep")[] = ["practice", "prep"]) {
+  await page.addInitScript(
+    ([k, list]) => {
+      if (!localStorage.getItem(k)) {
+        localStorage.setItem(k, JSON.stringify({ version: 1, positions: {}, views: Object.fromEntries(list.map((x) => [x, "list"])) }));
+      }
+    },
+    [DECK_KEY, kinds] as const,
+  );
+}

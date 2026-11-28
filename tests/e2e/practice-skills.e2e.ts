@@ -1,4 +1,4 @@
-import { chipLabels, expect, openSummary, RESULT_QUERY, test } from "./fixtures";
+import { chipLabels, expect, openSummary, preferListView, RESULT_QUERY, test } from "./fixtures";
 import { axeCheck, expectNoOverflow, SKILLS } from "./helpers-saved";
 
 /** 실습 탭(강의 보고 해보기 · 이번 주 실습 미션) · 요즘 주목받는 AI 스킬 · 결과 칩 */
@@ -7,7 +7,8 @@ const NON_BEGINNER = "l=practitioner&d=automation&g=use_tools,build_agents&ko=1"
 test.describe("실습 탭", () => {
   test.use({ permissions: ["clipboard-read", "clipboard-write"] });
 
-  test("강의 카드 안에는 긴 미션이 없고, 실습 탭에 단계별로 접혀 있다. 펼치면 프롬프트 복사가 된다 (자리표시자 강조)", async ({ page, consoleErrors }) => {
+  test("강의 카드 안에는 긴 미션이 없고, 실습 탭 전체 목록에 단계별로 접혀 있다. 펼치면 프롬프트 복사가 된다 (자리표시자 강조)", async ({ page, consoleErrors }) => {
+    await preferListView(page, ["practice"]);
     await page.goto(`/result?${RESULT_QUERY}`);
     const card = page.locator("article").first();
     await card.getByRole("button", { name: "자세히 보기" }).click();
@@ -50,7 +51,8 @@ test.describe("실습 탭", () => {
   });
 });
 
-test.describe("이번 주 실습 미션", () => {
+test.describe("이번 주 실습 미션 (전체 목록 보기)", () => {
+  test.beforeEach(async ({ page }) => preferListView(page, ["practice"]));
   test("실습 탭 맨 위에 있고, '미션 펼쳐 보기'가 목록의 미션을 펼친다. 완료는 목록과 같은 상태", async ({ page }) => {
     await page.goto(`/result?${NON_BEGINNER}#practice`);
     const weekly = page.getByTestId("weekly-mission");
@@ -196,6 +198,9 @@ test.describe("좁은 화면·접근성", () => {
     await page.locator("article").first().getByRole("button", { name: "자세히 보기" }).click();
     await expectNoOverflow(page);
     await page.getByRole("tab", { name: "실습" }).click();
+    await expect(page.getByTestId("result-panel-practice").getByTestId("card-deck")).toBeVisible();
+    await expectNoOverflow(page);
+    await page.getByTestId("result-panel-practice").getByTestId("deck-view-toggle").click();
     await page.getByTestId("weekly-open").click();
     await expectNoOverflow(page);
     await page.getByRole("tab", { name: "스킬" }).click();
@@ -211,7 +216,8 @@ test.describe("좁은 화면·접근성", () => {
 for (const scheme of ["light", "dark"] as const) {
   test.describe(`axe · ${scheme} · 실습·스킬`, () => {
     test.use({ colorScheme: scheme });
-    test("결과: 카드 펼침·실습 미션 펼침·스킬 펼침", async ({ page }) => {
+    test("결과: 카드 펼침·실습 미션 펼침(전체 목록 보기)·스킬 펼침", async ({ page }) => {
+      await preferListView(page, ["practice"]);
       await page.goto(`/result?${NON_BEGINNER}`);
       await page.locator("article").first().getByRole("button", { name: "자세히 보기" }).click();
       await page.waitForTimeout(800);

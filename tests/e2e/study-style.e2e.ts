@@ -75,39 +75,57 @@ test.describe("공부 방법별 결과 탭", () => {
     await expect(page).toHaveURL(/#lectures$/);
   });
 
-  test("실습 위주: 이번 주 실습 미션이 맨 위에 크게, 여정의 '이 단계 실습 보기'는 실습 탭 단계로", async ({ page }) => {
+  test("실습 위주: 첫 화면에 오늘의 실습 카드(1단계, 이번 주 미션), 여정의 '이 단계 실습 보기'는 그 단계 첫 카드로", async ({ page }) => {
     await page.goto(`/result?${BASE}&s=practice`);
     const panel = page.getByTestId("result-panel-practice");
-    const weekly = panel.getByTestId("weekly-mission");
-    await expect(weekly).toHaveAttribute("data-prominent", "");
-    await expect(weekly).toContainText("관련 강의");
-    await expect(weekly).toBeInViewport();
+    const deck = panel.getByTestId("card-deck");
+    await expect(deck.getByTestId("deck-counter")).toBeInViewport();
+    const first = deck.getByTestId("deck-card").first();
+    await expect(first).toBeVisible();
+    await expect(first).toContainText("이번 주 미션 · 1단계");
     await expect(panel.getByTestId("journey-hint")).toContainText("완료했어요");
+    // 다른 카드로 옮긴 뒤 여정의 '이 단계 실습 보기'를 누르면 1단계 첫 카드로 돌아온다
+    await expect(page.getByTestId("result-tabs")).toHaveAttribute("data-ready", "");
+    await deck.getByTestId("deck-next").click();
+    await expect(first).toBeHidden();
     const go = panel.getByTestId("journey-goto");
     await expect(go).toHaveText(/이 단계 실습 보기/);
     await go.click();
     await expect(page).toHaveURL(/#practice-group-1$/);
     await expect(page.getByTestId("result-panel-practice")).toBeVisible();
+    await expect(first).toBeVisible();
+    await expect(first).toBeInViewport();
   });
 
-  test("개념 위주: 이번 주 개념이 맨 위, 3분 이론 4개, '읽었어요'가 여정 진행에 들어간다", async ({ page }) => {
+  test("개념 위주: 개념 덱이 첫 화면, 개념 4개가 먼저(이번 주 개념), '읽었어요'가 여정 진행에 들어간다", async ({ page }) => {
     await page.goto(`/result?${BASE}&s=theory`);
     const panel = page.getByTestId("result-panel-prep");
-    await expect(panel.getByTestId("weekly-concept")).toBeInViewport();
-    await expect(panel.getByTestId("theory-concept")).toHaveCount(4);
-    await expect(panel.getByRole("heading", { name: "먼저 읽는 3분 이론" })).toBeVisible();
+    const deck = panel.getByTestId("card-deck");
+    await expect(deck.getByTestId("deck-counter")).toBeInViewport();
+    // 덱 순서: 개념 4개 → 용어
+    const kinds = await deck
+      .getByTestId("deck-card")
+      .evaluateAll((els) => els.map((e) => (e.querySelector("[data-testid=concept-card]") ? "concept" : "term")));
+    expect(kinds.slice(0, 4)).toEqual(["concept", "concept", "concept", "concept"]);
+    expect(kinds.slice(4).every((k) => k === "term")).toBe(true);
+    // '이번 주 개념'은 따로 카드 없이 덱의 첫 안 읽은 개념에
+    await expect(panel.getByTestId("weekly-concept")).toHaveCount(0);
+    await expect(deck.getByTestId("deck-card").first()).toContainText("이번 주 개념");
     await expect(page.getByTestId("journey")).toHaveAttribute("data-ready", "");
     const before = await page.getByTestId("journey-total").innerText();
-    await panel.getByTestId("weekly-concept").getByTestId("theory-read").click();
-    await expect(panel.getByTestId("weekly-concept").getByTestId("theory-read")).toHaveAttribute("aria-pressed", "true");
+    await deck.getByTestId("deck-complete").click();
     await expect(page.getByTestId("journey-total")).not.toHaveText(before);
     await expect(page.getByTestId("journey-total")).toHaveText(/완료 1\//);
     const saved = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), SAVED_KEY);
     expect(saved.version).toBe(2);
     expect(saved.theoryRead).toHaveLength(1);
-    // '1분 읽어 보기'는 그 개념을 펼친다
-    await panel.getByTestId("weekly-concept-open").click();
-    await expect(page.locator("details[id^='theory-']").first()).toHaveAttribute("open", "");
+    // 다음 카드(두 번째 개념)가 이번 주 개념이 된다
+    await expect(deck.getByTestId("deck-card").nth(1)).toBeVisible();
+    await expect(deck.getByTestId("deck-card").nth(1)).toContainText("이번 주 개념");
+    // 목록 보기에는 3분 이론 4개 ('먼저 읽는 3분 이론')
+    await deck.getByTestId("deck-view-toggle").click();
+    await expect(panel.getByRole("heading", { name: "먼저 읽는 3분 이론" })).toBeVisible();
+    await expect(panel.getByTestId("theory-concept")).toHaveCount(4);
   });
 
   test("예전 v1 저장(version 1)도 그대로 읽히고 v2로 올라간다", async ({ page }) => {
@@ -118,7 +136,8 @@ test.describe("공부 방법별 결과 탭", () => {
     }, SAVED_KEY);
     await page.goto(`/result?${BASE}&s=theory`);
     await expect(page.getByTestId("journey")).toHaveAttribute("data-ready", "");
-    await page.getByTestId("weekly-concept").getByTestId("theory-read").click();
+    await page.getByTestId("result-panel-prep").getByTestId("deck-complete").click();
+    await expect(page.getByTestId("journey-total")).toHaveText(/완료 1\//);
     const saved = await page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "{}"), SAVED_KEY);
     expect(saved.version).toBe(2);
     expect(saved.terms).toHaveLength(1);
