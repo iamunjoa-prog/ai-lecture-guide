@@ -1,16 +1,18 @@
 /**
  * 내 학습함 (로그인 없이 이 브라우저에만 저장). 순수 함수 코어 + 얇은 저장소 어댑터.
  *
- * 저장 형식 (localStorage `aig:saved:v1`)
+ * 저장 형식 (localStorage `aig:saved:v1` — 키 이름은 예전 그대로, 형식은 v2)
  * {
- *   version: 1,
+ *   version: 2,
  *   lectures: { id, status: "want" | "watching" | "done", savedAt, updatedAt }[],
  *   missions: { videoId, status: "todo" | "done", savedAt, updatedAt }[],
  *   skills:   { id, savedAt }[],
  *   terms:    { id, savedAt }[],
  *   theory:   { id, savedAt }[],
+ *   theoryRead: { id, savedAt }[],   // v2: 3분 이론 '읽었어요' (저장과 따로, 배지 개수에는 넣지 않는다)
  *   lastDiagnosis?: { href, savedAt }
  * }
+ *  - v1(또는 version 없음)은 그대로 읽고 `theoryRead: []`로 올린다(마이그레이션). 그보다 새 버전은 빈 상태.
  *  - 시각은 ISO 문자열. 배열 순서 = 저장한 순서(오래된 것이 앞).
  *  - 읽을 때 항상 검증한다: 형식이 틀린 항목·중복 id는 버리고, 나머지는 살린다(부분 복구).
  *  - 데이터(강의·용어 등)가 바뀌어 없어진 id는 `pruneSaved`로 조용히 정리한다.
@@ -18,7 +20,9 @@
  */
 
 export const SAVED_STORAGE_KEY = "aig:saved:v1";
-export const SAVED_VERSION = 1;
+export const SAVED_VERSION = 2;
+/** 읽을 수 있는 예전 형식 버전 */
+export const SAVED_LEGACY_VERSIONS: readonly number[] = [1];
 /** 종류별 최대 보관 개수 (가져오기로 지나치게 큰 파일이 들어오는 것 방지) */
 export const SAVED_MAX_PER_KIND = 500;
 
@@ -60,11 +64,13 @@ export interface SavedState {
   skills: SavedRef[];
   terms: SavedRef[];
   theory: SavedRef[];
+  /** 3분 이론 '읽었어요' (v2) */
+  theoryRead: SavedRef[];
   lastDiagnosis?: { href: string; savedAt: string };
 }
 
 /** id 하나만 있는 저장 종류 */
-export type RefKind = "skills" | "terms" | "theory";
+export type RefKind = "skills" | "terms" | "theory" | "theoryRead";
 export type SavedKind = "lectures" | "missions" | RefKind;
 
 export const EMPTY_SAVED: SavedState = Object.freeze({
@@ -74,10 +80,11 @@ export const EMPTY_SAVED: SavedState = Object.freeze({
   skills: [],
   terms: [],
   theory: [],
+  theoryRead: [],
 }) as SavedState;
 
 export function emptySaved(): SavedState {
-  return { version: SAVED_VERSION, lectures: [], missions: [], skills: [], terms: [], theory: [] };
+  return { version: SAVED_VERSION, lectures: [], missions: [], skills: [], terms: [], theory: [], theoryRead: [] };
 }
 
 // ---------------------------------------------------------------------------
@@ -138,7 +145,9 @@ export function parseSaved(input: unknown, now: string = new Date(0).toISOString
     }
   }
   if (!isRecord(raw)) return emptySaved();
-  if (raw.version !== undefined && raw.version !== SAVED_VERSION) return emptySaved();
+  if (raw.version !== undefined && raw.version !== SAVED_VERSION && !SAVED_LEGACY_VERSIONS.includes(raw.version as number)) {
+    return emptySaved();
+  }
 
   const lectures = parseList<SavedLecture>(
     raw.lectures,
@@ -174,6 +183,7 @@ export function parseSaved(input: unknown, now: string = new Date(0).toISOString
     skills: ref(raw.skills),
     terms: ref(raw.terms),
     theory: ref(raw.theory),
+    theoryRead: ref(raw.theoryRead), // v1에는 없다 → []
   };
   const ld = raw.lastDiagnosis;
   if (isRecord(ld) && isResultHref(ld.href)) state.lastDiagnosis = { href: ld.href, savedAt: isoOr(ld.savedAt, now) };
@@ -309,13 +319,15 @@ export function pruneSaved(state: SavedState, known: KnownIds): SavedState {
   const skills = state.skills.filter((r) => known.skills.has(r.id));
   const terms = state.terms.filter((r) => known.terms.has(r.id));
   const theory = state.theory.filter((r) => known.theory.has(r.id));
+  const theoryRead = state.theoryRead.filter((r) => known.theory.has(r.id));
   const same =
     lectures.length === state.lectures.length &&
     missions.length === state.missions.length &&
     skills.length === state.skills.length &&
     terms.length === state.terms.length &&
-    theory.length === state.theory.length;
-  return same ? state : { ...state, lectures, missions, skills, terms, theory };
+    theory.length === state.theory.length &&
+    theoryRead.length === state.theoryRead.length;
+  return same ? state : { ...state, lectures, missions, skills, terms, theory, theoryRead };
 }
 
 /**
@@ -373,6 +385,7 @@ export function mergeSaved(base: SavedState, incoming: SavedState): { state: Sav
     skills: mergeRefs(base.skills, incoming.skills),
     terms: mergeRefs(base.terms, incoming.terms),
     theory: mergeRefs(base.theory, incoming.theory),
+    theoryRead: mergeRefs(base.theoryRead, incoming.theoryRead),
   };
   const a = base.lastDiagnosis;
   const b = incoming.lastDiagnosis;

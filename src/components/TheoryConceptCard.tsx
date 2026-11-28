@@ -1,6 +1,6 @@
 import type { TheoryConcept } from "@/types";
 import { cn, IconArrowRight, IconArrowUpRight, IconChevronDown } from "@/components/ui";
-import { SaveToggle } from "./saved/SaveToggle";
+import { SaveToggle, TheoryReadToggle } from "./saved/SaveToggle";
 
 export interface TheoryLectureLink {
   videoId: string;
@@ -91,6 +91,8 @@ export function TheoryConceptCard({
               <p className="mt-0.5 text-[15px] leading-relaxed text-fg-muted">{concept.tryIt}</p>
             </div>
           )}
+
+          {savable && <TheoryReadToggle conceptId={concept.id} title={concept.title} className="mt-4" />}
 
           {lectures.length > 0 && (
             <div className="mt-6">

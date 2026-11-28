@@ -2,8 +2,16 @@
 
 import { useId, useState } from "react";
 import { cn, IconArrowRight, IconCheck } from "@/components/ui";
-import { buildJourney, stepAccessibleName, stepAnchorId, stepDetailLine, type JourneyStepInput } from "@/lib/journey";
-import type { Level } from "@/types";
+import {
+  buildJourney,
+  practiceStepAnchorId,
+  stepAccessibleName,
+  stepAnchorId,
+  stepDetailLine,
+  type JourneyStepInput,
+} from "@/lib/journey";
+import { journeyTarget, PROGRESS_HINTS } from "@/lib/study-style";
+import type { Level, StudyStyle } from "@/types";
 import { RestartDiagnosisButton } from "./ResultHeroActions";
 import { useSaved } from "./saved/use-saved";
 
@@ -11,14 +19,24 @@ type Selection = number | "next";
 
 /**
  * 내 학습 여정: [지금] → [1단계] → [2단계] → [3단계] → [다음 위치]
- * - 진행은 이 브라우저의 내 학습함(강의 '다 봤어요', 실습 '완료')으로 센다. 서버·하이드레이션 중에는 0
+ * - 진행은 이 브라우저의 내 학습함(강의 '다 봤어요', 실습 '완료', 3분 이론 '읽었어요')으로 센다.
+ *   무엇을 세는지는 공부 방법이 정한다(lib/study-style.ts). 서버·하이드레이션 중에는 0
  * - 단계 노드를 누르면 아래 상세가 그 단계로 바뀌고, '이 단계 강의 보기'로 그 단계 구역으로 간다
  * - 모두 마치면 '다음 위치'가 켜지고 다시 진단을 권한다
  */
-export function LearningJourney({ level, steps }: { level: Level; steps: JourneyStepInput[] }) {
+export function LearningJourney({
+  level,
+  steps,
+  studyStyle = "all",
+}: {
+  level: Level;
+  steps: JourneyStepInput[];
+  studyStyle?: StudyStyle;
+}) {
   const uid = useId();
   const { state, ready, available } = useSaved();
-  const journey = buildJourney(level, steps, ready && available ? state : null);
+  const journey = buildJourney(level, steps, ready && available ? state : null, studyStyle);
+  const toPractice = journeyTarget(studyStyle) === "practice";
   // 고른 노드는 '모두 마침' 여부가 같을 때만 유지 (마지막 단계를 끝내면 다음 위치를 보여 준다)
   const [picked, setPicked] = useState<{ sel: Selection; allDone: boolean } | null>(null);
   const selected: Selection =
@@ -175,7 +193,7 @@ export function LearningJourney({ level, steps }: { level: Level; steps: Journey
             </p>
             {journey.done === 0 && (
               <p className="mt-1 text-[13px] leading-relaxed text-fg-muted" data-testid="journey-hint">
-                강의를 보면 &lsquo;다 봤어요&rsquo;, 실습을 마치면 &lsquo;완료했어요&rsquo;를 눌러 표시해 보세요.
+                {PROGRESS_HINTS[studyStyle]}
               </p>
             )}
             <div aria-hidden="true" className="mt-2 h-1 overflow-hidden rounded-full bg-border">
@@ -185,13 +203,13 @@ export function LearningJourney({ level, steps }: { level: Level; steps: Journey
               />
             </div>
             {/* 처음 화면에서 1단계는 바로 아래에 있으므로, 노드를 눌렀거나 2단계 이후일 때만 */}
-            {picked || step.number > 1 ? (
+            {picked || step.number > 1 || toPractice ? (
               <a
-                href={`#${stepAnchorId(step.number)}`}
+                href={`#${toPractice && step.missions > 0 ? practiceStepAnchorId(step.number) : stepAnchorId(step.number)}`}
                 className="mt-1 inline-flex min-h-11 items-center gap-1 text-[14px] font-semibold text-accent-ink"
                 data-testid="journey-goto"
               >
-                이 단계 강의 보기
+                {toPractice && step.missions > 0 ? "이 단계 실습 보기" : "이 단계 강의 보기"}
                 <IconArrowRight size={15} strokeWidth={2} />
               </a>
             ) : (
@@ -208,7 +226,7 @@ export function LearningJourney({ level, steps }: { level: Level; steps: Journey
           <div className="pb-3">
             <p className="text-[15px] font-semibold text-fg">다음 위치 · {journey.nextLabel}</p>
             <p className="mt-0.5 text-[14px] leading-relaxed text-fg-muted">
-              모든 단계의 강의와 실습을 마치면 닿는 곳이에요. 그때 다시 진단해서 다음 로드맵을 받아 보세요.
+              모든 단계를 마치면 닿는 곳이에요. 그때 다시 진단해서 다음 로드맵을 받아 보세요.
             </p>
           </div>
         )}

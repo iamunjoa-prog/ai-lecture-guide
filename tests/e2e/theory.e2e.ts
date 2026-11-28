@@ -1,7 +1,8 @@
-import { expect, RESULT_QUERY, test } from "./fixtures";
+import { expect, preferListView, RESULT_QUERY, test } from "./fixtures";
 
 /** 결과 화면 '시작 전 준비' 탭의 '강의 보기 전 3분 이론'과 용어집 '3분 이론' 탭 (예전 /theory) */
-test.describe("결과: 3분 이론", () => {
+test.describe("결과: 3분 이론 (전체 목록 보기)", () => {
+  test.beforeEach(async ({ page }) => preferListView(page, ["prep"]));
   test("개념 3개, 첫 개념만 펼쳐져 있고 다른 개념도 펼칠 수 있다", async ({ page, consoleErrors }) => {
     await page.goto(`/result?${RESULT_QUERY}#prep`);
     await expect(page.getByRole("heading", { level: 2, name: "강의 보기 전 3분 이론" })).toBeVisible();
@@ -32,6 +33,7 @@ test.describe("결과: 3분 이론", () => {
   test("강의 링크: 로드맵 강의는 '강의' 탭으로 바꿔 카드로 이동, 아니면 유튜브 새 탭", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}#prep`);
     const items = page.getByTestId("theory-list").getByTestId("theory-concept");
+    await expect(items).toHaveCount(3);
     let internal = 0;
     for (let i = 0; i < 3; i++) {
       const links = items.nth(i).getByTestId("theory-lectures").locator("a");
@@ -68,6 +70,7 @@ test.describe("결과: 3분 이론", () => {
   test("출처는 새 탭 외부 링크(rel noopener)이고 개념마다 2개 이상", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}#prep`);
     const items = page.getByTestId("theory-list").getByTestId("theory-concept");
+    await expect(items).toHaveCount(3);
     for (let i = 0; i < 3; i++) {
       const links = items.nth(i).getByTestId("theory-sources").locator("a");
       expect(await links.count()).toBeGreaterThanOrEqual(2);

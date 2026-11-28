@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, type KeyboardEvent, type ReactNode } from "react";
 import { cn } from "@/components/ui";
+import type { ResultTabKey } from "@/lib/study-style";
 import { setLocationHash, useLocationHash } from "./use-location-hash";
 
-export type ResultTabId = "lectures" | "practice" | "prep" | "skills";
+export type ResultTabId = ResultTabKey;
 
 export interface ResultTab {
   id: ResultTabId;
@@ -12,6 +13,7 @@ export interface ResultTab {
   content: ReactNode;
 }
 
+/** 예전 기본 탭. 지금은 `tabs`의 첫 탭이 기본 탭이다 (공부 방법별 순서: lib/study-style.ts) */
 export const DEFAULT_RESULT_TAB: ResultTabId = "lectures";
 const panelId = (id: ResultTabId) => `result-panel-${id}`;
 const tabId = (id: ResultTabId) => `result-tab-${id}`;
@@ -25,22 +27,23 @@ function tabOfElement(el: Element | null): ResultTabId | null {
 type Pending = { kind: "tab" } | { kind: "el"; id: string } | null;
 
 /**
- * 결과 화면 탭 (강의 · 실습 · 준비 · 스킬).
+ * 결과 화면 탭 (강의 · 실습 · 준비 · 스킬). 순서는 받은 `tabs` 순서이고, 해시가 없으면 첫 탭이 열린다.
  * - 모든 패널을 서버에서 그려 두고 `hidden`으로만 숨긴다 → 패널 안 앵커(#lecture-…, #mission-…)가 항상 DOM에 있다.
- * - 선택된 탭은 주소 해시(#lectures 기본, #practice, #prep, #skills)로 정해진다. 서버·하이드레이션에서는 기본 탭.
+ * - 선택된 탭은 주소 해시(#lectures, #practice, #prep, #skills)로 정해진다. 해시가 없거나 서버·하이드레이션에서는 첫 탭.
  * - 숨은 패널 안의 앵커로 가는 링크(#roadmap, #lecture-…, #mission-…)를 누르면 그 탭으로 바꾼 뒤 스크롤한다.
  * - 탭을 누르면 방문 기록에 남아 뒤로 가기로 이전 탭으로 돌아간다.
  */
 export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[]; label?: string }) {
   const hash = useLocationHash();
   const ids = tabs.map((t) => t.id);
+  const DEFAULT_TAB: ResultTabId = ids[0] ?? DEFAULT_RESULT_TAB;
   const target = decodeURIComponent(hash.slice(1));
   const active: ResultTabId = (() => {
-    if (!target) return DEFAULT_RESULT_TAB;
+    if (!target) return DEFAULT_TAB;
     if ((ids as string[]).includes(target)) return target as ResultTabId;
     // 해시가 패널 안 요소(#roadmap, #lecture-…)를 가리키면 그 패널. 하이드레이션 중에는 hash가 ""라 여기 오지 않는다
     const t = typeof document === "undefined" ? null : tabOfElement(document.getElementById(target));
-    return t && ids.includes(t) ? t : DEFAULT_RESULT_TAB;
+    return t && ids.includes(t) ? t : DEFAULT_TAB;
   })();
 
   const tabRefs = useRef<Partial<Record<ResultTabId, HTMLButtonElement | null>>>({});
@@ -80,7 +83,7 @@ export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[
     if (!target) return;
     if ((ids as string[]).includes(target)) {
       // 공유 링크(#practice, #prep, #skills)로 처음 열면 그 탭 내용이 보이게
-      if (isFirst && target !== DEFAULT_RESULT_TAB && window.scrollY === 0) scrollToTabs(true);
+      if (isFirst && target !== DEFAULT_TAB && window.scrollY === 0) scrollToTabs(true);
       return;
     }
     // 처음 열 때나 주소창·뒤로 가기로 패널 안 앵커에 왔을 때: 화면 밖이면 스크롤
@@ -127,7 +130,7 @@ export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[
 
   const select = (id: ResultTabId, focus = false) => {
     if (focus) tabRefs.current[id]?.focus();
-    if (id === active && (target === id || (!target && id === DEFAULT_RESULT_TAB))) return;
+    if (id === active && (target === id || (!target && id === DEFAULT_TAB))) return;
     pending.current = { kind: "tab" };
     setLocationHash(`#${id}`);
   };
@@ -149,6 +152,7 @@ export function ResultTabs({ tabs, label = "결과 보기" }: { tabs: ResultTab[
       <div ref={anchorRef} aria-hidden="true" />
       <nav
         ref={navRef}
+        data-default-tab={DEFAULT_TAB}
         aria-label="결과 보기 분류"
         className="sticky top-0 z-20 border-b border-border bg-bg"
         data-testid="result-tabs"

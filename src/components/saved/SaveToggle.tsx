@@ -199,3 +199,39 @@ export function LectureDoneToggle({ videoId, title, className }: { videoId: stri
     </button>
   );
 }
+
+/**
+ * 3분 이론 '읽었어요' 토글 (저장과 따로 기록된다: saved.ts `theoryRead`).
+ * 개념을 세는 공부 방법(개념 위주 · 실습+개념)에서는 내 학습 여정 1단계 진행에 들어간다.
+ */
+export function TheoryReadToggle({ conceptId, title, className }: { conceptId: string; title: string; className?: string }) {
+  const { state, available, ready } = useSaved();
+  const read = ready && available && hasRef(state, "theoryRead", conceptId);
+  const onClick = () => {
+    if (!ready) return;
+    if (!available) {
+      showToast(UNAVAILABLE_MESSAGE, "info", 3200);
+      return;
+    }
+    applySaved((s) => toggleRef(s, "theoryRead", conceptId, nowIso()), read ? "읽음 표시를 지웠어요" : "읽은 개념으로 기록했어요");
+  };
+  return (
+    <button
+      type="button"
+      aria-pressed={read}
+      aria-label={`읽었어요: ${title}`}
+      onClick={onClick}
+      data-testid="theory-read"
+      className={cn(
+        "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 text-[14px] font-medium transition-colors duration-200",
+        read ? "border-transparent bg-ink text-ink-fg" : "border-border-strong text-fg-muted hover:text-fg",
+        className,
+      )}
+    >
+      <span aria-hidden="true" className="flex">
+        <IconCheck size={16} strokeWidth={2} />
+      </span>
+      읽었어요
+    </button>
+  );
+}

@@ -2,13 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AppShell, BottomCTA, LoadingPlan, OptionCard, OptionGroup, QuestionHeader, TopBar } from "@/components/ui";
-import { buildDiagnosis, DIAGNOSIS_QUESTIONS, type DiagnosisAnswers, type Question } from "@/lib/questions";
+import { AppShell, BottomCTA, cn, LoadingPlan, OptionCard, OptionGroup, QuestionHeader, TopBar } from "@/components/ui";
+import {
+  buildDiagnosis,
+  KOREAN_TOGGLE,
+  PREFER_KOREAN_ID,
+  visibleQuestions,
+  type DiagnosisAnswers,
+  type Question,
+} from "@/lib/questions";
 import { diagnosisHref, saveDiagnosisToSession } from "@/lib/diagnosis-state";
 import { loadProgress, saveProgress } from "./progress-storage";
 
-const QUESTIONS: readonly Question[] = DIAGNOSIS_QUESTIONS;
-const TOTAL = QUESTIONS.length;
 const AUTO_ADVANCE_MS = 400;
 const LOADING_MS = 1200;
 const NUDGE_MS = 1600;
@@ -17,16 +22,22 @@ const STEP_LABELS: Record<Question["step"], string> = {
   level: "AI 활용 수준",
   domain: "관심 분야",
   goal: "학습 목표",
-  language: "강의 언어",
+  study: "공부 방법",
 };
 
-function stepLabel(q: Question, index: number): string {
+function stepLabel(q: Question, questions: readonly Question[]): string {
   if (q.step === "level") {
-    const levelQs = QUESTIONS.filter((x) => x.step === "level");
+    const levelQs = questions.filter((x) => x.step === "level");
     const n = levelQs.findIndex((x) => x.id === q.id) + 1;
     return `${STEP_LABELS.level} · ${n}/${levelQs.length}`;
   }
-  return index === TOTAL - 1 ? STEP_LABELS.language : STEP_LABELS[q.step];
+  return STEP_LABELS[q.step];
+}
+
+/** 한국어 우선 체크 값 (아직 건드리지 않았으면 기본값) */
+function koreanOn(answers: DiagnosisAnswers): boolean {
+  const v = answers[PREFER_KOREAN_ID]?.[0];
+  return v === undefined ? KOREAN_TOGGLE.defaultOn : v === "yes";
 }
 
 /** 다중 선택 질문 하단 안내 문구 */
@@ -63,11 +74,16 @@ export function DiagnosisFlow() {
   const [nudge, setNudge] = useState(false);
   const nudgeTimer = useRef<number | null>(null);
 
-  const question = QUESTIONS[index];
+  // 코딩을 안 하면 'AI 코딩' 질문이 빠진다. index는 이 목록 안의 위치다
+  const QUESTIONS = visibleQuestions(answers);
+  const TOTAL = QUESTIONS.length;
+  const question = QUESTIONS[Math.min(index, TOTAL - 1)];
   const selected = answers[question.id] ?? [];
   const isMulti = question.type === "multi";
   const maxSelect = isMulti ? (question.maxSelect ?? question.options.length) : 1;
-  const isLast = index === TOTAL - 1;
+  const isLast = index >= TOTAL - 1;
+  /** 마지막 화면(공부 방법)은 아래 '한국어 강의 먼저' 체크가 있어서 자동으로 넘어가지 않고 '결과 보기'를 누른다 */
+  const confirmSingle = isLast && !isMulti;
   const headingId = `q-${question.id}`;
   const helperId = `q-${question.id}-helper`;
   const hintsId = `q-${question.id}-hints`;
@@ -79,8 +95,9 @@ export function DiagnosisFlow() {
     if (saved) {
       setAnswers(saved.answers);
       // 아직 답하지 않은 첫 질문을 넘어가지 않도록 위치를 보정
-      const firstOpen = QUESTIONS.findIndex((q) => !isAnswered(q, saved.answers));
-      const maxIndex = firstOpen === -1 ? TOTAL - 1 : firstOpen;
+      const qs = visibleQuestions(saved.answers);
+      const firstOpen = qs.findIndex((q) => !isAnswered(q, saved.answers));
+      const maxIndex = firstOpen === -1 ? qs.length - 1 : firstOpen;
       setIndex(Math.min(Math.max(0, Math.trunc(saved.index)), maxIndex));
     }
     setHydrated(true);
@@ -111,11 +128,12 @@ export function DiagnosisFlow() {
   }, [headingId]);
 
   const finish = useCallback(
-    (final: DiagnosisAnswers) => {
+    (answered: DiagnosisAnswers) => {
+      const final = { ...answered, [PREFER_KOREAN_ID]: [koreanOn(answered) ? "yes" : "no"] };
       const d = buildDiagnosis(final);
       if (!d) {
         // 정상 흐름에서는 일어나지 않지만, 빠진 질문이 있으면 그 질문으로 돌려보낸다
-        const missing = QUESTIONS.findIndex((q) => q.step !== "level" && !isAnswered(q, final));
+        const missing = visibleQuestions(final).findIndex((q) => q.step !== "level" && !isAnswered(q, final));
         navigated.current = true;
         setIndex(missing === -1 ? 0 : missing);
         return;
@@ -159,12 +177,13 @@ export function DiagnosisFlow() {
   const goNext = useCallback(
     (current: DiagnosisAnswers) => {
       clearTimer();
-      if (index >= TOTAL - 1) {
+      const total = visibleQuestions(current).length;
+      if (index >= total - 1) {
         finish(current);
         return;
       }
       navigated.current = true;
-      setIndex((i) => Math.min(i + 1, TOTAL - 1));
+      setIndex((i) => Math.min(i + 1, total - 1));
     },
     [clearTimer, finish, index],
   );
@@ -198,6 +217,7 @@ export function DiagnosisFlow() {
     const next = { ...answers, [question.id]: [optionId] };
     setAnswers(next);
     clearTimer();
+    if (confirmSingle) return; // 마지막 화면은 '결과 보기'로 넘어간다
     // 단일 선택은 선택 효과를 잠깐 보여 준 뒤 자동으로 다음 질문으로
     setAdvancing(true);
     timer.current = window.setTimeout(() => goNext(next), AUTO_ADVANCE_MS);
@@ -213,6 +233,8 @@ export function DiagnosisFlow() {
 
   const full = isMulti && selected.length >= maxSelect;
   const canProceed = isAnswered(question, answers);
+  // 하단 고정 CTA: 다중 선택 · 마지막 화면 · 이미 답한 단일 선택으로 돌아왔을 때 (아니면 '고르면 넘어가요' 안내)
+  const showCta = isMulti || confirmSingle || (canProceed && !advancing);
   const exclusivePicked = selected.some((id) => question.options.find((o) => o.id === id)?.exclusive);
 
   return (
@@ -223,10 +245,10 @@ export function DiagnosisFlow() {
         backHref={index === 0 ? "/" : undefined}
         onBack={index === 0 ? undefined : goBack}
       />
-      <div key={question.id} data-question-body="" className="flex animate-fade-in flex-col pb-8">
+      <div key={question.id} data-question-body="" className={cn("flex animate-fade-in flex-col", showCta ? (confirmSingle ? (canProceed ? "pb-6" : "pb-3") : "pb-8") : "pb-2")}>
         <QuestionHeader
           id={headingId}
-          stepLabel={stepLabel(question, index)}
+          stepLabel={stepLabel(question, QUESTIONS)}
           title={question.title}
           helper={question.subtitle}
           helperId={helperId}
@@ -253,8 +275,28 @@ export function DiagnosisFlow() {
             );
           })}
         </OptionGroup>
+        {confirmSingle && (
+          <label
+            className="mt-2 flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-1.5"
+            data-testid="korean-toggle"
+          >
+            <input
+              type="checkbox"
+              checked={koreanOn(answers)}
+              onChange={(e) => setAnswers((prev) => ({ ...prev, [PREFER_KOREAN_ID]: [e.target.checked ? "yes" : "no"] }))}
+              className="size-5 shrink-0 accent-[var(--ink)]"
+              aria-describedby={`${headingId}-ko-desc`}
+            />
+            <span className="flex min-w-0 flex-col">
+              <span className="text-[15px] font-semibold leading-snug text-fg">{KOREAN_TOGGLE.label}</span>
+              <span id={`${headingId}-ko-desc`} className="text-[13px] leading-snug text-fg-muted">
+                {KOREAN_TOGGLE.description}
+              </span>
+            </span>
+          </label>
+        )}
       </div>
-      {isMulti || (canProceed && !advancing) ? (
+      {showCta ? (
         <BottomCTA
           label={isLast ? "결과 보기" : "다음"}
           disabled={!canProceed}
@@ -272,12 +314,24 @@ export function DiagnosisFlow() {
                   </span>
                 )}
               </span>
+            ) : confirmSingle && !canProceed ? (
+              // 마지막 화면: '결과 보기'가 왜 흐린지 알려 준다 (고르면 사라진다).
+              // 화면 높이를 늘리지 않도록 버튼 위 빈 띠(본문 아래 여백 + CTA 위 여백)에 겹쳐 놓고, 본문 여백을 그만큼 줄인다
+              <span
+                className="absolute inset-x-0 -top-1 block px-5 text-center text-[13px] leading-5 text-fg-muted"
+                data-testid="confirm-helper"
+              >
+                하나를 골라 주세요
+              </span>
             ) : undefined
           }
         />
       ) : (
-        <p className="mt-auto pt-8 pb-[max(24px,env(safe-area-inset-bottom))] text-center text-[14px] text-fg-muted">
-          {index === 0 ? "고르면 바로 다음 질문으로 넘어가요. 잘못 골랐다면 왼쪽 위 화살표로 돌아올 수 있어요." : "고르면 바로 다음으로 넘어가요."}
+        <p
+          className="mt-auto pt-3 pb-[max(16px,env(safe-area-inset-bottom))] text-center text-[14px] leading-snug text-fg-muted"
+          data-testid="auto-advance-hint"
+        >
+          {index === 0 ? "고르면 바로 넘어가요. 왼쪽 위 화살표로 돌아올 수 있어요." : "고르면 바로 다음으로 넘어가요."}
         </p>
       )}
     </AppShell>

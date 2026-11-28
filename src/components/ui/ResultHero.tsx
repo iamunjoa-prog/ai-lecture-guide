@@ -25,6 +25,8 @@ export interface ResultHeroProps {
   title: ReactNode;
   /** 진단 결론 두 줄: 지금 할 수 있는 것 + 다음 한 걸음 */
   conclusion?: { now: ReactNode; next: ReactNode };
+  /** 공부 방법 한 줄 (결론 아래 작게). 예: "실습 위주로 짰어요. 실습 탭의 이번 주 미션부터 해 보세요." */
+  styleNote?: ReactNode;
   /** 진단 요약 한 줄 (누르면 chipGroups가 펼쳐진다). 예: "입문자 · 업무 자동화 · 목표 1개" */
   summary?: string;
   /** 펼치면 보이는 진단 요약 칩 */
@@ -38,7 +40,7 @@ export interface ResultHeroProps {
  * 결과 화면 상단 (어두운 Slide 안에 둔다). 짧게: 라벨 + 동작 · 제목 · 결론 두 줄 · 요약 한 줄.
  * 요약 한 줄은 펼침 버튼이고, 펼치면 수준·분야·목표(1순위)·언어 칩이 보인다.
  */
-export function ResultHero({ eyebrow, title, conclusion, summary, chipGroups, actions, className }: ResultHeroProps) {
+export function ResultHero({ eyebrow, title, conclusion, styleNote, summary, chipGroups, actions, className }: ResultHeroProps) {
   const uid = useId();
   const [open, setOpen] = useState(false);
   const hasChips = Boolean(chipGroups && chipGroups.length > 0);
@@ -53,6 +55,11 @@ export function ResultHero({ eyebrow, title, conclusion, summary, chipGroups, ac
         <section aria-label="진단 결론" data-testid="diagnosis-conclusion" className="mt-3.5 border-l-2 border-accent pl-3.5">
           <p className="text-[15px] leading-relaxed text-stage-muted">{conclusion.now}</p>
           <p className="mt-0.5 text-[15px] font-semibold leading-relaxed text-stage-fg">{conclusion.next}</p>
+          {styleNote && (
+            <p className="mt-1 text-[14px] leading-snug text-stage-muted" data-testid="style-note">
+              {styleNote}
+            </p>
+          )}
         </section>
       )}
       {summary && (

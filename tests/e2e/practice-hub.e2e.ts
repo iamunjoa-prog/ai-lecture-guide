@@ -216,14 +216,15 @@ test.describe("/practice 실습 모음", () => {
 });
 
 test.describe("결과 화면 실습 탭", () => {
-  test("미션마다 준비 표시, '실습 전체 모음 보기'는 내 수준으로 거른 /practice", async ({ page }) => {
+  test("미션 카드마다 준비 표시, '실습 전체 모음 보기'는 내 수준으로 거른 /practice", async ({ page }) => {
     await page.goto(`/result?${RESULT_QUERY}#practice`);
     const panel = page.getByTestId("result-panel-practice");
-    const items = panel.getByTestId("mission-item");
+    await expect(panel.getByTestId("card-deck")).toBeVisible();
+    const items = panel.getByTestId("deck-card");
     const n = await items.count();
     expect(n).toBeGreaterThan(0);
     for (let i = 0; i < n; i++) {
-      const id = (await items.nth(i).getAttribute("data-video-id"))!;
+      const id = (await items.nth(i).getAttribute("data-id"))!;
       const m = MISSIONS.find((x) => x.videoId === id)!;
       const ready = items.nth(i).getByTestId("mission-ready");
       await expect(ready).toHaveAttribute("data-tool", tool(m));

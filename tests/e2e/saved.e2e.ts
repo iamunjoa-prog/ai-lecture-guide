@@ -157,7 +157,7 @@ test.describe("저장 버튼과 내 학습함", () => {
     const file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "aig-saved-")), "saved.json");
     await download.saveAs(file);
     const exported = JSON.parse(fs.readFileSync(file, "utf8"));
-    expect(exported.version).toBe(1);
+    expect(exported.version).toBe(2);
     expect(exported.lectures).toHaveLength(1);
 
     await page.getByRole("button", { name: "전체 삭제" }).click();

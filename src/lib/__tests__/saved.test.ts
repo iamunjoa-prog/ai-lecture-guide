@@ -5,11 +5,14 @@ import {
   EMPTY_SAVED,
   emptySaved,
   exportSaved,
+  hasRef,
   isResultHref,
   mergeSaved,
   parseSaved,
   pruneSaved,
   SAVED_STORAGE_KEY,
+  SAVED_VERSION,
+  serializeSaved,
   setLastDiagnosis,
   setLectureStatus,
   setMissionStatus,
@@ -106,7 +109,32 @@ describe("검증·이전 형식", () => {
     expect(parseSaved("{not json")).toEqual(emptySaved());
     expect(parseSaved("[]")).toEqual(emptySaved());
     expect(parseSaved(null)).toEqual(emptySaved());
-    expect(parseSaved({ version: 2, lectures: [{ id: "v1" }] })).toEqual(emptySaved());
+    expect(parseSaved({ version: 3, lectures: [{ id: "v1" }] })).toEqual(emptySaved());
+    expect(parseSaved({ version: 0, lectures: [{ id: "v1" }] })).toEqual(emptySaved());
+  });
+
+  it("v1 → v2 마이그레이션: 예전 저장은 그대로 살리고 theoryRead는 빈 목록, 저장하면 version 2", () => {
+    const v1 = { version: 1, lectures: [{ id: "v1", status: "done", savedAt: T0, updatedAt: T0 }], theory: [{ id: "c1", savedAt: T0 }] };
+    const s = parseSaved(JSON.stringify(v1));
+    expect(s.version).toBe(2);
+    expect(SAVED_VERSION).toBe(2);
+    expect(s.lectures).toHaveLength(1);
+    expect(s.theory).toEqual([{ id: "c1", savedAt: T0 }]);
+    expect(s.theoryRead).toEqual([]);
+    expect(JSON.parse(serializeSaved(s)).version).toBe(2);
+  });
+
+  it("v2 '읽었어요'(theoryRead): 토글·저장 개수 제외·정리·병합", () => {
+    let s = toggleRef(emptySaved(), "theoryRead", "c1", T0);
+    expect(hasRef(s, "theoryRead", "c1")).toBe(true);
+    expect(hasRef(s, "theory", "c1")).toBe(false); // 저장과 따로
+    expect(countSaved(s)).toBe(0); // 헤더 배지에는 넣지 않는다
+    s = toggleRef(s, "theoryRead", "gone", T0);
+    expect(pruneSaved(s, known).theoryRead.map((r) => r.id)).toEqual(["c1"]);
+    expect(parseSaved(serializeSaved(s)).theoryRead).toHaveLength(2);
+    const merged = mergeSaved(emptySaved(), parseSaved({ version: 2, theoryRead: [{ id: "c1", savedAt: T0 }] }));
+    expect(merged.state.theoryRead).toEqual([{ id: "c1", savedAt: T0 }]);
+    expect(toggleRef(s, "theoryRead", "c1", T1).theoryRead.map((r) => r.id)).toEqual(["gone"]);
   });
 
   it("틀린 항목만 버리고 나머지는 살린다 (부분 복구)", () => {

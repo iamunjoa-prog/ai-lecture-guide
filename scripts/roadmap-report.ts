@@ -1,7 +1,7 @@
 /**
  * 로드맵 리포트 (E 담당).
  *
- * 여러 페르소나(수준 4 × 목표 조합(단일 4 + 다중 6) × 분야 조합 × 한국어 선호)에 대해 buildRoadmap 결과를 출력하고,
+ * 여러 페르소나(수준 4 × 목표 조합(단일 4 + 다중 6) × 분야 조합 × 한국어 선호 × 공부 방법)에 대해 buildRoadmap 결과를 출력하고,
  * 태그 품질을 가늠할 수 있는 경고를 모은다.
  *
  *   npm run report               # 전체 페르소나 + 경고 요약
@@ -9,6 +9,7 @@
  *   npm run report -- --level developer --goal build_agents --domains coding
  *   npm run report -- --level user --goal use_tools,build_agents --domains marketing   # 다중 목표(우선순위 순)
  *   npm run report -- --level user --goal understand --domains none   # 분야 미정
+ *   npm run report -- --style practice   # 공부 방법 하나만 (기본: all · practice · theory — 추천이 달라지는 세 가지)
  *
  * 경고 종류
  *  - FEW     : 추천이 MIN_TOTAL(3)개 미만
@@ -19,12 +20,16 @@
  */
 import instructorsJson from "../data/instructors.json";
 import videosJson from "../data/videos.json";
+import practiceJson from "../data/practice.json";
 import { buildRoadmap, scoreBreakdown, STEP_LABELS } from "../src/lib/recommend";
 import { DOMAINS, GOALS, LEVELS } from "../src/lib/questions";
-import type { DiagnosisResult, Domain, Goal, Instructor, Level, Video } from "../src/types";
+import type { DiagnosisResult, Domain, Goal, Instructor, Level, StudyStyle, Video } from "../src/types";
 
 const videos = videosJson as unknown as Video[];
 const instructors = instructorsJson as unknown as Instructor[];
+const easyPracticeIds = new Set(
+  (practiceJson as { videoId: string; needsTool?: string }[]).filter((m) => !m.needsTool || m.needsTool === "chat").map((m) => m.videoId),
+);
 
 /** 목표 조합 (앞쪽이 우선순위) */
 const GOAL_SETS: Goal[][] = [
@@ -67,6 +72,9 @@ const onlyGoals = goalArg ? (goalArg.split(",") as Goal[]) : undefined;
 const domainsArg = opt("domains"); // "none" 또는 빈 값 = 분야 미정
 const onlyDomains = domainsArg === undefined ? undefined : domainsArg === "none" || domainsArg === "" ? [] : (domainsArg.split(",") as Domain[]);
 const onlyKo = opt("ko");
+const styleArg = opt("style") as StudyStyle | undefined;
+// lectures는 all과, practice_theory는 practice와 추천이 같아서 기본으로는 세 가지만 돈다
+const styles: StudyStyle[] = styleArg ? [styleArg] : ["all", "practice", "theory"];
 
 const levels = onlyLevel ? [onlyLevel] : [...LEVELS];
 const goalSets = onlyGoals ? [onlyGoals] : GOAL_SETS;
@@ -88,11 +96,11 @@ const short = (s: string, n = 52) => (s.length > n ? s.slice(0, n - 1) + "…" :
 for (const level of levels) {
   for (const goals of goalSets) {
     for (const domains of domainSets) {
-      for (const preferKorean of koValues) {
+      for (const preferKorean of koValues) for (const studyStyle of styles) {
         personaCount++;
-        const d: DiagnosisResult = { level, goals, domains, preferKorean };
-        const persona = `${level}/${goals.join(">")}/${domains.join("+") || "none"}/${preferKorean ? "ko" : "any"}`;
-        const r = buildRoadmap(d, videos, instructors);
+        const d: DiagnosisResult = { level, goals, domains, preferKorean, studyStyle };
+        const persona = `${level}/${goals.join(">")}/${domains.join("+") || "none"}/${preferKorean ? "ko" : "any"}/${studyStyle}`;
+        const r = buildRoadmap(d, videos, instructors, { easyPracticeIds });
         const items = r.steps.flatMap((s) => s.items);
         if (items.length < 3) warnings.push({ persona, kind: "FEW", detail: `${items.length}개` });
         const practice = r.steps.find((s) => s.label === STEP_LABELS.practice)?.items ?? [];

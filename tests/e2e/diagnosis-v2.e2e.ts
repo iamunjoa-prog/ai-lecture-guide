@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { answerLevelQuestionsLow, chipLabels, chooseGoals, chooseSingle, expect, LEVEL_TITLES, openSummary, test } from "./fixtures";
+import { GOAL_TITLE, LEVEL_TITLES, answerLevelQuestionsLow, chipLabels, chooseGoals, chooseSingle, expect, openSummary, submitStudy, test } from "./fixtures";
 
 /** 진단 v2: 용어 한 입 · 세분화된 수준 질문 · 목표 다중 선택 · 진단 결론 */
 
@@ -9,7 +9,7 @@ test.describe("용어 한 입", () => {
     const box = page.getByTestId("term-hints");
     await expect(box).toBeVisible();
     await expect(box).toContainText("챗봇");
-    await expect(box).toContainText("대화하듯 묻고 답을 받는 AI 서비스예요");
+    await expect(box).toContainText("대화하듯 묻고 답을 받는 AI예요");
 
     const group = page.getByRole("radiogroup");
     const describedBy = (await group.getAttribute("aria-describedby")) ?? "";
@@ -37,21 +37,44 @@ test.describe("용어 한 입", () => {
     await popup.close();
   });
 
-  test("수준 질문 6개 모두 용어 한 입이 있고, 코딩 질문은 선택지 6개", async ({ page }) => {
+  test("수준 질문 6개 모두 용어 한 입이 있고(처음엔 1개, 나머지는 '용어 더 보기'), 코딩 질문은 선택지 5개", async ({ page }) => {
     await page.goto("/diagnosis");
     const titles = Object.values(LEVEL_TITLES);
-    const firstOptions = [/^거의 매일 써요/, /^상황과 조건을/, /^내 자료를 올려/, /^챗봇에 캘린더/, /^직접 프로그램을 만들 수 있어요/];
+    const firstOptions = [/^거의 매일 써요/, /^상황과 조건을/, /^내 자료를 올려/, /^챗봇에 메일/, /^직접 프로그램을 만들어요/];
     for (let i = 0; i < titles.length; i++) {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(titles[i]);
-      await expect(page.getByTestId("term-hints")).toBeVisible();
+      const box = page.getByTestId("term-hints");
+      await expect(box).toBeVisible();
+      await expect(box.getByRole("listitem")).toHaveCount(1);
       if (titles[i] === LEVEL_TITLES.coding) {
-        await expect(page.getByRole("radio")).toHaveCount(6);
-        await expect(page.getByTestId("term-hints")).toContainText("배포");
+        await expect(page.getByRole("radio")).toHaveCount(5);
+        await expect(box).toContainText("배포");
+      }
+      if (titles[i] === LEVEL_TITLES.prompt) {
+        const more = page.getByTestId("term-hints-more");
+        await expect(more).toHaveAttribute("aria-expanded", "false");
+        await expect(box).not.toContainText("역할 지정");
+        await more.click();
+        await expect(more).toHaveAttribute("aria-expanded", "true");
+        await expect(box).toContainText("역할 지정");
       }
       if (i < firstOptions.length) await chooseSingle(page, firstOptions[i]);
     }
     await expect(page.getByTestId("term-hints")).toContainText("코딩 에이전트");
     await expect(page.getByText("AI 활용 수준 · 6/6")).toBeVisible();
+  });
+
+  test("코딩을 '전혀 안 해요'면 AI 코딩 질문 없이 분야로 간다 (질문 8개)", async ({ page }) => {
+    await page.goto("/diagnosis");
+    await expect(page.getByText("1 / 9")).toBeVisible();
+    await answerLevelQuestionsLow(page);
+    await expect(page.getByText("6 / 8")).toBeVisible();
+    await page.getByRole("button", { name: "이전 단계로" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(LEVEL_TITLES.coding);
+    await expect(page.getByText("AI 활용 수준 · 5/5")).toBeVisible();
+    // 코딩 답을 바꾸면 AI 코딩 질문이 다시 생긴다
+    await chooseSingle(page, /^코드를 조금 읽고/, LEVEL_TITLES.aiCoding);
+    await expect(page.getByText("6 / 9")).toBeVisible();
   });
 });
 
@@ -60,7 +83,7 @@ test.describe("목표 다중 선택", () => {
     await answerLevelQuestionsLow(page);
     await page.getByRole("checkbox", { name: /^마케팅·콘텐츠/ }).click();
     await page.getByRole("button", { name: "다음", exact: true }).click();
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("AI로 이루고 싶은 목표는 무엇인가요?");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(GOAL_TITLE);
 
     const next = page.getByRole("button", { name: "다음", exact: true });
     const unsure = page.getByRole("checkbox", { name: /^아직 잘 모르겠어요/ });
@@ -97,7 +120,7 @@ test.describe("목표 다중 선택", () => {
     await expect(unsure).toHaveAttribute("aria-checked", "false");
     await agents.click();
     await next.click();
-    await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
+    await submitStudy(page, { korean: false });
     await page.waitForURL(/\/result\?/, { timeout: 10_000 });
     expect(new URL(page.url()).searchParams.get("g")).toBe("build_products,build_agents");
 
@@ -108,17 +131,18 @@ test.describe("목표 다중 선택", () => {
   });
 
   test("여러 목표 전체 흐름 → 결론 · 칩 · 로드맵", async ({ page, consoleErrors }) => {
-    await answerLevelQuestionsLow(page, [/^거의 매일 써요/, /^역할이나 예시를 주고/, /^반복 업무를 AI로 자동화/, /^자동화 서비스로/, /^전혀 안 해요/, /^안 써 봤어요/]);
+    await answerLevelQuestionsLow(page, [/^거의 매일 써요/, /^역할·예시·형식을/, /^AI에게 일을 통째로/, /^자동화 도구로 앱을/, /^전혀 안 해요/]);
     await page.getByRole("checkbox", { name: /^업무 자동화/ }).click();
     await page.getByRole("button", { name: "다음", exact: true }).click();
     await chooseGoals(page, [/^업무 도구로 쓰기/, /^나만의 에이전트 만들기/]);
-    await page.getByRole("radio", { name: /네, 한국어가 편해요/ }).click();
+    await submitStudy(page);
     await page.waitForURL(/\/result\?/, { timeout: 10_000 });
     expect(Object.fromEntries(new URL(page.url()).searchParams)).toEqual({
       l: "practitioner",
       d: "automation",
       g: "use_tools,build_agents",
       ko: "1",
+      s: "all",
     });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("실무자 맞춤 학습 로드맵");
     const conclusion = page.getByRole("region", { name: "진단 결론" });
@@ -172,7 +196,7 @@ test.describe("결과 링크 하위 호환 · 결론", () => {
 
 test("랜딩: 질문 수·예상 시간이 데이터와 맞는다", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText(/질문 9개 · 약 2분/)).toBeVisible();
+  await expect(page.getByText(/질문 8~9개 · 약 2분/)).toBeVisible();
   await expect(page.getByRole("link", { name: /2분 진단 시작하기/ })).toBeVisible();
 });
 

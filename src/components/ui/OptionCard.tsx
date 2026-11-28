@@ -48,7 +48,7 @@ export function OptionCard({
       aria-disabled={disabled || undefined}
       onClick={disabled ? onDisabledClick : onClick}
       className={cn(
-        "relative flex w-full min-h-16 items-center gap-4 rounded-lg px-5 py-4 text-left",
+        "relative flex w-full min-h-14 items-center gap-4 rounded-lg px-4 py-2.5 text-left",
         "transition-[background-color,box-shadow,opacity] duration-200 ease-out",
         "aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
         selected
@@ -62,9 +62,9 @@ export function OptionCard({
           {icon}
         </span>
       )}
-      <span className="flex min-w-0 flex-1 flex-col gap-1">
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="text-[17px] font-semibold leading-snug tracking-[-0.01em] text-fg">{title}</span>
-        {description && <span className="text-sm leading-relaxed text-fg-muted">{description}</span>}
+        {description && <span className="text-sm leading-snug text-fg-muted">{description}</span>}
         {hint && (
           <span className="mt-0.5 border-t border-border pt-1.5 text-[13px] leading-relaxed text-fg-muted">{hint}</span>
         )}
@@ -108,7 +108,7 @@ export function OptionGroup({ variant = "single", labelledBy, describedBy, child
       aria-labelledby={labelledBy}
       aria-describedby={describedBy || undefined}
       aria-label={rest["aria-label"]}
-      className={cn("flex flex-col gap-2.5", className)}
+      className={cn("flex flex-col gap-2", className)}
     >
       {children}
     </div>

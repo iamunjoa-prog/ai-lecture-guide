@@ -25,6 +25,19 @@ import {
   scoreToLevel,
   UNSURE_ID,
 } from "../questions";
+import {
+  AI_CODING_QUESTION_ID,
+  COPY_LIMITS,
+  KOREAN_TOGGLE,
+  OPTION_HINT_MAX_CHARS,
+  QUESTION_COUNT_MIN,
+  QUESTION_COUNT_TEXT,
+  STUDY_OPTIONS,
+  STUDY_QUESTION,
+  STUDY_STYLE_LABELS,
+  STUDY_STYLES,
+  visibleQuestions,
+} from "../questions";
 import type { GlossaryTerm, Level } from "../../types";
 
 const glossaryIds = new Set((realGlossary as GlossaryTerm[]).map((t) => t.id));
@@ -42,11 +55,11 @@ const A = (freq: string, prompt: string, work: string, connect: string, coding: 
 const base = A("never", "simple", "none", "none", "none", "none");
 
 describe("질문지 구조", () => {
-  it("수준 질문은 6개 이하, 질문당 선택지 6개 이하, 옵션 id는 질문 안에서 고유", () => {
+  it("수준 질문은 6개 이하, 질문당 선택지 5개 이하(한 화면), 옵션 id는 질문 안에서 고유", () => {
     expect(LEVEL_QUESTIONS.length).toBeGreaterThanOrEqual(4);
     expect(LEVEL_QUESTIONS.length).toBeLessThanOrEqual(6);
     for (const q of LEVEL_QUESTIONS) {
-      expect(q.options.length, q.id).toBeLessThanOrEqual(6);
+      expect(q.options.length, q.id).toBeLessThanOrEqual(5);
       const ids = q.options.map((o) => o.id);
       expect(new Set(ids).size).toBe(ids.length);
     }
@@ -60,7 +73,7 @@ describe("질문지 구조", () => {
   });
   it("수준 질문 순서: 빈도 → 요청 → 활용 깊이 → 연결·API → 코딩 → AI 코딩", () => {
     expect(LEVEL_QUESTIONS.map((q) => q.id)).toEqual(["lv_frequency", "lv_prompt", "lv_work", "lv_connect", "lv_coding", "lv_ai_coding"]);
-    expect(LEVEL_MAX_SCORE).toBe(26);
+    expect(LEVEL_MAX_SCORE).toBe(24);
   });
   it("선택지는 자기 평가가 아니라 행동 문장이다 ('잘해요'·'능숙' 같은 말을 쓰지 않는다)", () => {
     for (const q of LEVEL_QUESTIONS) for (const o of q.options) expect(o.label).not.toMatch(/잘해요|능숙|전문가 수준|고수/);
@@ -110,6 +123,47 @@ describe("질문지 구조", () => {
   });
 });
 
+describe("한 화면 규칙 (진단 v3)", () => {
+  it(`제목 ≤ ${COPY_LIMITS.title}자, 보조 설명 ≤ ${COPY_LIMITS.subtitle}자, 라벨 ≤ ${COPY_LIMITS.label}자, 설명 ≤ ${COPY_LIMITS.description}자`, () => {
+    for (const q of DIAGNOSIS_QUESTIONS) {
+      expect(len(q.title), q.title).toBeLessThanOrEqual(COPY_LIMITS.title);
+      if (q.subtitle) expect(len(q.subtitle), q.subtitle).toBeLessThanOrEqual(COPY_LIMITS.subtitle);
+      for (const o of q.options) {
+        expect(len(o.label), o.label).toBeLessThanOrEqual(COPY_LIMITS.label);
+        if (o.description) expect(len(o.description), o.description).toBeLessThanOrEqual(COPY_LIMITS.description);
+      }
+    }
+  });
+  it("단일 선택 질문은 선택지 5개 이하, 다중 선택(분야 8 · 목표 5)", () => {
+    for (const q of DIAGNOSIS_QUESTIONS) if (q.type === "single") expect(q.options.length, q.id).toBeLessThanOrEqual(5);
+    expect(DOMAIN_OPTIONS).toHaveLength(8);
+    expect(GOAL_OPTIONS).toHaveLength(5);
+  });
+  it("질문 순서: 수준 6 → 분야 → 목표 → 공부 방법 (언어는 공부 방법 화면의 체크로 합쳤다)", () => {
+    expect(DIAGNOSIS_QUESTIONS.map((q) => q.step)).toEqual(["level", "level", "level", "level", "level", "level", "domain", "goal", "study"]);
+    expect(DIAGNOSIS_QUESTIONS.at(-1)).toBe(STUDY_QUESTION);
+    expect(QUESTION_COUNT).toBe(9);
+    expect(QUESTION_COUNT_MIN).toBe(8);
+    expect(QUESTION_COUNT_TEXT).toBe("8~9");
+    expect(KOREAN_TOGGLE).toMatchObject({ id: "preferKorean", defaultOn: true });
+  });
+  it("코딩을 '전혀 안 해요'면 AI 코딩 질문을 건너뛴다 (답이 없거나 다른 답이면 묻는다)", () => {
+    const ids = (a: Record<string, string[]>) => visibleQuestions(a).map((q) => q.id);
+    expect(ids({})).toContain(AI_CODING_QUESTION_ID);
+    expect(ids({ lv_coding: ["none"] })).not.toContain(AI_CODING_QUESTION_ID);
+    expect(ids({ lv_coding: ["none"] })).toHaveLength(QUESTION_COUNT_MIN);
+    expect(ids({ lv_coding: ["ai_run"] })).toContain(AI_CODING_QUESTION_ID);
+    // 건너뛰면 0점 = '안 써 봤어요'와 같다
+    expect(levelScore({ ...base, lv_ai_coding: undefined })).toBe(levelScore(base));
+  });
+  it("공부 방법: 5개 · URL 값과 같은 id · 짧은 이름", () => {
+    expect(STUDY_OPTIONS.map((o) => o.id)).toEqual([...STUDY_STYLES]);
+    expect(STUDY_OPTIONS.map((o) => o.label)).toEqual(["강의부터 볼래요", "직접 해보며 배울래요", "개념부터 알고 싶어요", "실습하며 개념도 챙길래요", "골고루 다 할래요"]);
+    for (const st of STUDY_STYLES) expect(STUDY_STYLE_LABELS[st]).toBeTruthy();
+    expect(STUDY_STYLE_LABELS.practice).toBe("실습 위주");
+  });
+});
+
 describe("용어 한 입", () => {
   it("수준 질문마다 1~2개", () => {
     for (const q of LEVEL_QUESTIONS) {
@@ -126,7 +180,7 @@ describe("용어 한 입", () => {
         expect(len(h.text), `${q.id}/${h.term}: ${h.text}`).toBeLessThanOrEqual(HINT_MAX_CHARS);
         expect(h.text).toMatch(/[.요]$|[A-Za-z]$/);
       }
-      for (const o of q.options) if (o.hint) expect(len(o.hint), `${q.id}/${o.id}`).toBeLessThanOrEqual(HINT_MAX_CHARS);
+      for (const o of q.options) if (o.hint) expect(len(o.hint), `${q.id}/${o.id}`).toBeLessThanOrEqual(OPTION_HINT_MAX_CHARS);
     }
   });
   it("glossaryId는 모두 data/glossary.json에 있다", () => {
@@ -184,8 +238,8 @@ describe("scoreToLevel — 경계값", () => {
     expect(scoreToLevel(fifteen)).toBe("developer");
   });
   it("코딩 신호 없이는 최고점이어도 developer가 아니다 (노코드 상한 = practitioner)", () => {
-    const max = A("daily", "saved", "workflow", "api", "read", "agent");
-    expect(levelScore(max)).toBe(21);
+    const max = A("daily", "saved", "agent", "api", "read", "agent");
+    expect(levelScore(max)).toBe(20);
     expect(scoreToLevel(max)).toBe("practitioner");
   });
   it("API 직접 호출 + 코드 작성 → 총점과 무관하게 developer", () => {
@@ -196,11 +250,10 @@ describe("scoreToLevel — 경계값", () => {
   it("API만 있으면 override 없음, 배포·현업 개발은 최소 practitioner", () => {
     expect(scoreToLevel({ ...base, lv_connect: "api" })).toBe("user"); // 5
     expect(scoreToLevel({ ...base, lv_coding: "build" })).toBe("user"); // 4
-    expect(scoreToLevel({ ...base, lv_coding: "deploy" })).toBe("practitioner"); // 6, ship
-    expect(scoreToLevel({ ...base, lv_coding: "pro" })).toBe("practitioner"); // 7, ship
+    expect(scoreToLevel({ ...base, lv_coding: "ship" })).toBe("practitioner"); // 6, ship (배포·현업 개발을 합친 선택지)
   });
   it("배열 형태 답도 받는다", () => {
-    expect(scoreToLevel({ lv_connect: ["api"], lv_coding: ["pro"] })).toBe("developer");
+    expect(scoreToLevel({ lv_connect: ["api"], lv_coding: ["ship"] })).toBe("developer");
   });
 });
 
@@ -214,15 +267,15 @@ const PERSONAS: { name: string; answers: ReturnType<typeof A>; score: number; le
   { name: "주 몇 번 요약·번역에 쓰는 사무직", answers: A("weekly", "detailed", "basic", "none", "none", "none"), score: 4, level: "user" },
   { name: "매일 챗봇으로 문서 쓰는 마케터", answers: A("daily", "structured", "files", "none", "none", "none"), score: 7, level: "user" },
   { name: "요청 양식·여러 도구를 쓰지만 연결·자동화는 안 해 본 파워 유저", answers: A("daily", "saved", "multi", "none", "none", "none"), score: 9, level: "user" },
-  { name: "워크플로 자동화를 만든 기획자 (코딩 없음)", answers: A("weekly", "detailed", "workflow", "nocode", "none", "none"), score: 11, level: "practitioner" },
+  { name: "워크플로 자동화를 만든 기획자 (코딩 없음)", answers: A("weekly", "detailed", "agent", "nocode", "none", "none"), score: 10, level: "practitioner" },
   { name: "에이전트에게 조사·보고서를 맡기는 컨설턴트", answers: A("daily", "structured", "agent", "app", "none", "none"), score: 10, level: "practitioner" },
   { name: "AI로 간단한 코드를 짜서 돌려 본 비개발자", answers: A("weekly", "detailed", "files", "none", "ai_run", "paste"), score: 7, level: "user" },
   { name: "코딩 에이전트로 앱을 만들어 보는 비개발자 (배포 전)", answers: A("daily", "structured", "multi", "app", "ai_run", "agent"), score: 13, level: "practitioner" },
-  { name: "노코드 자동화·에이전트를 다 써 본 비개발자", answers: A("daily", "saved", "workflow", "nocode", "read", "agent"), score: 19, level: "practitioner" },
-  { name: "배포까지 해 본 사이드 프로젝트러", answers: A("weekly", "structured", "multi", "app", "deploy", "assistant"), score: 16, level: "developer" },
-  { name: "배포는 해 봤지만 AI는 가볍게 쓰는 사람", answers: A("sometimes", "simple", "basic", "none", "deploy", "paste"), score: 9, level: "practitioner" },
-  { name: "AI를 거의 안 쓰는 현업 개발자", answers: A("sometimes", "simple", "basic", "none", "pro", "none"), score: 9, level: "practitioner" },
-  { name: "코딩 에이전트를 쓰는 현업 개발자", answers: A("daily", "structured", "multi", "none", "pro", "agent"), score: 18, level: "developer" },
+  { name: "노코드 자동화·에이전트를 다 써 본 비개발자", answers: A("daily", "saved", "agent", "nocode", "read", "agent"), score: 18, level: "practitioner" },
+  { name: "배포까지 해 본 사이드 프로젝트러", answers: A("weekly", "structured", "multi", "app", "ship", "assistant"), score: 16, level: "developer" },
+  { name: "배포는 해 봤지만 AI는 가볍게 쓰는 사람", answers: A("sometimes", "simple", "basic", "none", "ship", "paste"), score: 9, level: "practitioner" },
+  { name: "AI를 거의 안 쓰는 현업 개발자", answers: A("sometimes", "simple", "basic", "none", "ship", "none"), score: 8, level: "practitioner" },
+  { name: "코딩 에이전트를 쓰는 현업 개발자", answers: A("daily", "structured", "multi", "none", "ship", "agent"), score: 17, level: "developer" },
   { name: "AI API를 불러 본 코딩하는 학생", answers: A("weekly", "detailed", "basic", "api", "build", "paste"), score: 14, level: "developer" },
   { name: "코딩은 하지만 AI는 가끔 쓰는 학생", answers: A("sometimes", "simple", "basic", "none", "build", "paste"), score: 7, level: "user" },
   { name: "튜토리얼 따라 API를 불러 본 비개발 기획자", answers: A("weekly", "structured", "multi", "api", "ai_run", "paste"), score: 14, level: "practitioner" },
@@ -259,35 +312,42 @@ describe("parseGoals", () => {
 describe("buildDiagnosis", () => {
   it("정상 답 → DiagnosisResult (목표 여러 개, 고른 순서 유지)", () => {
     expect(
-      buildDiagnosis({ lv_frequency: ["daily"], domains: ["marketing", "data"], goal: ["build_agents", "use_tools"], preferKorean: ["yes"] }),
-    ).toEqual({ level: "user", domains: ["marketing", "data"], goals: ["build_agents", "use_tools"], preferKorean: true });
+      buildDiagnosis({ lv_frequency: ["daily"], domains: ["marketing", "data"], goal: ["build_agents", "use_tools"], preferKorean: ["yes"], study: ["all"] }),
+    ).toEqual({ level: "user", domains: ["marketing", "data"], goals: ["build_agents", "use_tools"], preferKorean: true, studyStyle: "all" });
   });
   it("분야 이미지·영상 제작을 다른 분야와 함께 고를 수 있다", () => {
-    const ok = { goal: ["use_tools"], preferKorean: ["no"] };
+    const ok = { goal: ["use_tools"], preferKorean: ["no"], study: ["all"] };
     expect(buildDiagnosis({ ...ok, domains: ["creative"] })?.domains).toEqual(["creative"]);
     expect(buildDiagnosis({ ...ok, domains: ["marketing", "creative", "education"] })?.domains).toEqual(["marketing", "creative", "education"]);
     expect(buildDiagnosis({ ...ok, domains: ["creative", UNSURE_ID] })).toBeNull();
   });
   it("분야 '잘 모르겠어요' → domains []", () => {
-    expect(buildDiagnosis({ domains: ["unsure"], goal: ["use_tools"], preferKorean: ["no"] })).toEqual({
-      level: "beginner", domains: [], goals: ["use_tools"], preferKorean: false,
+    expect(buildDiagnosis({ domains: ["unsure"], goal: ["use_tools"], preferKorean: ["no"], study: ["all"] })).toEqual({
+      level: "beginner", domains: [], goals: ["use_tools"], preferKorean: false, studyStyle: "all",
     });
   });
   it("분야 '잘 모르겠어요'를 다른 분야와 섞거나, 아예 안 고르면 null", () => {
-    const ok = { goal: ["use_tools"], preferKorean: ["no"] };
+    const ok = { goal: ["use_tools"], preferKorean: ["no"], study: ["all"] };
     expect(buildDiagnosis({ ...ok, domains: ["unsure", "coding"] })).toBeNull();
     expect(buildDiagnosis({ ...ok, domains: undefined })).toBeNull();
   });
   it("목표 '아직 잘 모르겠어요' → ['understand']", () => {
-    expect(buildDiagnosis({ domains: ["coding"], goal: ["unsure"], preferKorean: ["yes"] })).toEqual({
-      level: "beginner", domains: ["coding"], goals: ["understand"], preferKorean: true,
+    expect(buildDiagnosis({ domains: ["coding"], goal: ["unsure"], preferKorean: ["yes"], study: ["all"] })).toEqual({
+      level: "beginner", domains: ["coding"], goals: ["understand"], preferKorean: true, studyStyle: "all",
     });
-    expect(buildDiagnosis({ domains: ["unsure"], goal: ["unsure"], preferKorean: ["yes"] })).toMatchObject({
+    expect(buildDiagnosis({ domains: ["unsure"], goal: ["unsure"], preferKorean: ["yes"], study: ["all"] })).toMatchObject({
       domains: [], goals: ["understand"],
     });
   });
+  it("공부 방법: 답대로 들어가고, 없거나 모르는 값이면 null", () => {
+    const ok = { domains: ["marketing"], goal: ["understand"], preferKorean: ["yes"] };
+    expect(buildDiagnosis({ ...ok, study: ["practice"] })?.studyStyle).toBe("practice");
+    expect(buildDiagnosis({ ...ok, study: ["practice_theory"] })?.studyStyle).toBe("practice_theory");
+    expect(buildDiagnosis(ok)).toBeNull();
+    expect(buildDiagnosis({ ...ok, study: ["video"] })).toBeNull();
+  });
   it("분야 0개/4개/모르는 값, 목표 누락·섞임, 한국어 누락 → null", () => {
-    const ok = { domains: ["marketing"], goal: ["understand"], preferKorean: ["no"] };
+    const ok = { domains: ["marketing"], goal: ["understand"], preferKorean: ["no"], study: ["all"] };
     expect(buildDiagnosis(ok)).not.toBeNull();
     expect(buildDiagnosis({ ...ok, domains: [] })).toBeNull();
     expect(buildDiagnosis({ ...ok, domains: ["marketing", "data", "coding", "startup"] })).toBeNull();
@@ -295,10 +355,10 @@ describe("buildDiagnosis", () => {
     expect(buildDiagnosis({ ...ok, goal: undefined })).toBeNull();
     expect(buildDiagnosis({ ...ok, goal: [] })).toBeNull();
     expect(buildDiagnosis({ ...ok, goal: ["unsure", "use_tools"] })).toBeNull();
-    expect(buildDiagnosis({ ...ok, preferKorean: ["maybe"] })).toBeNull();
+    expect(buildDiagnosis({ ...ok, preferKorean: ["maybe"], study: ["all"] })).toBeNull();
   });
   it("수준은 6개 질문 답으로 정한다", () => {
-    const answers = Object.fromEntries(Object.entries(A("daily", "structured", "multi", "none", "pro", "agent")).map(([k, v]) => [k, [v]]));
-    expect(buildDiagnosis({ ...answers, domains: ["coding"], goal: ["build_agents"], preferKorean: ["no"] })?.level).toBe("developer");
+    const answers = Object.fromEntries(Object.entries(A("daily", "structured", "multi", "none", "ship", "agent")).map(([k, v]) => [k, [v]]));
+    expect(buildDiagnosis({ ...answers, domains: ["coding"], goal: ["build_agents"], preferKorean: ["no"], study: ["all"] })?.level).toBe("developer");
   });
 });

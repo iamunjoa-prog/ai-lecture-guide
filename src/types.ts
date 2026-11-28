@@ -89,12 +89,21 @@ export interface TheoryConcept {
   sources: { title: string; url: string; publisher: string }[]; // 근거 출처 2개 이상
 }
 
+/** 선호 공부 방법 */
+export type StudyStyle =
+  | "lectures" // 강의 먼저 본다
+  | "practice" // 실습 위주로 한다
+  | "theory" // 이론(개념·용어) 위주로 본다
+  | "practice_theory" // 실습 + 이론
+  | "all"; // 강의·실습·이론 다 조합
+
 /** 진단 결과 */
 export interface DiagnosisResult {
   level: Level;
   domains: Domain[]; // 0~3개 (비어 있으면 분야 미정)
   goals: Goal[]; // 1~4개, 중복 없음. 첫 번째가 가장 우선 ('잘 모르겠어요' → ["understand"])
   preferKorean: boolean;
+  studyStyle: StudyStyle; // 없던 예전 링크는 "all"로 해석
 }
 
 /** 추천 결과 한 건 */

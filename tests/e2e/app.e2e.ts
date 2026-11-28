@@ -1,10 +1,10 @@
-import { chooseSingle, expect, LEVEL_TITLES, RESULT_QUERY, test } from "./fixtures";
+import { chooseSingle, DOMAIN_TITLE, expect, GOAL_TITLE, LEVEL_TITLES, preferListView, RESULT_QUERY, STUDY_TITLE, test } from "./fixtures";
 
 const Q = {
   ...LEVEL_TITLES,
-  domains: "어떤 분야에 AI를 쓰고 싶으세요?",
-  goal: "AI로 이루고 싶은 목표는 무엇인가요?",
-  language: "한국어로 들을 수 있는 강의가 좋으세요?",
+  domains: DOMAIN_TITLE,
+  goal: GOAL_TITLE,
+  study: STUDY_TITLE,
 };
 
 test.describe("랜딩", () => {
@@ -34,10 +34,10 @@ test.describe("진단", () => {
     // 단일 선택은 고르면 자동으로 다음 질문으로 넘어간다
     await chooseSingle(page, /^거의 매일 써요/, Q.prompt);
     await chooseSingle(page, /^잘 되는 요청을 저장해/, Q.work);
-    await chooseSingle(page, /^일에 맞게 여러 AI 도구를 골라 써요/, Q.connect);
-    await chooseSingle(page, /^AI API를 코드로 직접/, Q.coding);
-    await chooseSingle(page, /^개발이 직업이에요/, Q.aiCoding);
-    await chooseSingle(page, /^AI 코딩 도구로 작업해 봤어요/, Q.domains);
+    await chooseSingle(page, /^일마다 다른 AI 도구를 써요/, Q.connect);
+    await chooseSingle(page, /^API를 코드로 불러 봤어요/, Q.coding);
+    await chooseSingle(page, /^배포해 봤거나 개발이 직업/, Q.aiCoding);
+    await chooseSingle(page, /^AI 코딩 도구를 써 봤어요/, Q.domains);
 
     // 다중 선택: 아무것도 안 고르면 다음으로 못 간다
     const next = page.getByRole("button", { name: "다음", exact: true });
@@ -50,7 +50,7 @@ test.describe("진단", () => {
     // 뒤로 가도 이전 답이 남아 있다
     await page.getByRole("button", { name: "이전 단계로" }).click();
     await expect(h1).toHaveText(Q.aiCoding);
-    await expect(page.getByRole("radio", { name: /^AI 코딩 도구로 작업해 봤어요/ })).toHaveAttribute("aria-checked", "true");
+    await expect(page.getByRole("radio", { name: /^AI 코딩 도구를 써 봤어요/ })).toHaveAttribute("aria-checked", "true");
     await page.getByRole("button", { name: "다음", exact: true }).click();
     await expect(h1).toHaveText(Q.domains);
     await expect(page.getByRole("checkbox", { name: /^코딩/ })).toHaveAttribute("aria-checked", "true");
@@ -80,8 +80,14 @@ test.describe("진단", () => {
     await expect(page.getByRole("checkbox", { name: /^나만의 에이전트 만들기.*1순위/ })).toHaveAttribute("aria-checked", "true");
     await expect(page.getByRole("checkbox", { name: /^업무 도구로 쓰기.*2순위/ })).toHaveAttribute("aria-checked", "true");
     await next.click();
-    await expect(h1).toHaveText(Q.language);
-    await page.getByRole("radio", { name: /영어 강의도 괜찮아요/ }).click();
+    await expect(h1).toHaveText(Q.study);
+    // 마지막 화면은 자동으로 넘어가지 않는다: 공부 방법 + 한국어 체크(기본 켜짐) → 결과 보기
+    await page.getByRole("radio", { name: /^직접 해보며 배울래요/ }).click();
+    await expect(h1).toHaveText(Q.study);
+    const ko = page.getByRole("checkbox", { name: /한국어 강의를 먼저/ });
+    await expect(ko).toBeChecked();
+    await ko.uncheck();
+    await page.getByRole("button", { name: "결과 보기" }).click();
 
     // 로딩 연출(약 1.2초) 후 결과 화면
     await page.waitForURL(/\/result\?/, { timeout: 10_000 });
@@ -91,6 +97,7 @@ test.describe("진단", () => {
       d: "coding,automation,data",
       g: "build_agents,use_tools",
       ko: "0",
+      s: "practice",
     });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("개발자 맞춤 학습 로드맵");
     expect(await page.locator("article").count()).toBeGreaterThanOrEqual(3);
@@ -226,7 +233,8 @@ test("주요 화면에서 콘솔 에러가 없다", async ({ page, consoleErrors
 });
 
 test.describe("결과: 용어와 간결한 카드", () => {
-  test("시작 전 용어는 처음 4개만 보이고 '더 보기'로 나머지를 펼친다", async ({ page }) => {
+  test("시작 전 용어(전체 목록 보기)는 처음 4개만 보이고 '더 보기'로 나머지를 펼친다", async ({ page }) => {
+    await preferListView(page, ["prep"]);
     await page.goto(`/result?${RESULT_QUERY}#prep`);
     await expect(page.getByRole("heading", { level: 2, name: "시작 전에 알아두면 좋은 용어" })).toBeVisible();
     const rows = page.getByTestId("starter-terms").locator("details");

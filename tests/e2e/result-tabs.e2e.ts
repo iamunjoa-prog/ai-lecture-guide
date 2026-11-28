@@ -43,13 +43,14 @@ test.describe("결과 탭", () => {
 
     await tab(page, "실습").click();
     await expect(page).toHaveURL(/#practice$/);
-    await expect(page.getByTestId("result-panel-practice").getByTestId("weekly-mission")).toBeVisible();
+    // 실습 탭은 한 장씩 보는 카드 덱이 기본
+    await expect(page.getByTestId("result-panel-practice").getByTestId("card-deck")).toBeVisible();
 
     await tab(page, "준비").click();
     await expect(page).toHaveURL(/#prep$/);
     await expect(tab(page, "준비")).toHaveAttribute("aria-selected", "true");
-    await expect(page.getByRole("heading", { level: 2, name: "시작 전에 알아두면 좋은 용어" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "강의 보기 전 3분 이론" })).toBeVisible();
+    await expect(page.getByTestId("result-panel-prep").getByTestId("card-deck")).toBeVisible();
+    await expect(page.getByTestId("result-panel-prep").getByTestId("deck-counter")).toContainText("카드 1 /");
     await expect(page.getByTestId("result-panel-lectures")).toBeHidden();
 
     await tab(page, "스킬").click();
@@ -97,7 +98,7 @@ test.describe("결과 탭", () => {
     await page.mouse.wheel(0, 3000);
     await expect.poll(async () => (await page.getByTestId("result-tabs").boundingBox())!.y).toBeLessThanOrEqual(1);
     await tab(page, "준비").click();
-    await expect(page.getByRole("heading", { level: 2, name: "시작 전에 알아두면 좋은 용어" })).toBeInViewport();
+    await expect(page.getByTestId("result-panel-prep").getByTestId("deck-counter")).toBeInViewport();
   });
 
   test("첫 화면에 여정과 1단계 제목이 보이고, 첫 강의 카드는 1.3화면 안에서 시작한다", async ({ page }) => {
@@ -291,10 +292,9 @@ test.describe("내 학습 여정", () => {
     // 강의도 함께 저장된다 (북마크 켜짐)
     await expect(page.locator(`[id="lecture-${ids[0][0]}"]`).getByRole("button", { name: /^강의 저장/ })).toHaveAttribute("aria-pressed", "true");
 
-    // 실습 탭에서 미션 완료 → 여정에 반영
+    // 실습 탭 카드 덱에서 첫 미션 완료 → 여정에 반영
     await tab(page, "실습").click();
-    const mission = page.getByTestId("result-panel-practice").getByTestId("mission-item").first();
-    await mission.getByTestId("mission-done").click();
+    await page.getByTestId("result-panel-practice").getByTestId("deck-complete").click();
     await tab(page, "강의").click();
     await expect(line).toContainText(`완료 2/${total}`);
 
@@ -310,7 +310,10 @@ test.describe("내 학습 여정", () => {
   test("1단계를 모두 마치면 2단계가 지금 할 단계, 모두 마치면 다음 위치가 켜지고 다시 진단을 권한다", async ({ page }) => {
     await page.goto(`/result?${PRACTITIONER}`);
     const ids = await stepLectureIds(page);
-    const missionIds = await page.getByTestId("mission-item").evaluateAll((els) => els.map((e) => e.getAttribute("data-video-id")!));
+    const missionIds = await page
+      .getByTestId("result-panel-practice")
+      .getByTestId("deck-card")
+      .evaluateAll((els) => els.map((e) => e.getAttribute("data-id")!));
     const seed = (lectures: string[]) => {
       const now = new Date().toISOString();
       return JSON.stringify({
@@ -341,20 +344,23 @@ test.describe("내 학습 여정", () => {
     await expect(page).toHaveURL(/\/diagnosis$/);
   });
 
-  test("강의 카드의 '실습하기'는 실습 탭으로 바꾸고 그 미션을 펼친다, 미션의 강의 링크는 카드로 돌아온다", async ({ page }) => {
+  test("강의 카드의 '실습하기'는 실습 탭으로 바꾸고 그 미션 카드를 연다, 카드의 관련 강의 링크는 강의 카드로 돌아온다", async ({ page }) => {
     await page.goto(`/result?${PRACTITIONER}`);
-    const link = page.getByTestId("lecture-practice-link").first();
+    await ready(page);
+    // 두 번째 이후 미션도 열리는지 보기 위해 마지막 '실습하기'
+    const link = page.getByTestId("lecture-practice-link").last();
     const href = (await link.getAttribute("href"))!;
     expect(href).toMatch(/^#mission-/);
     await link.click();
     await expect(tab(page, "실습")).toHaveAttribute("aria-selected", "true");
     const mission = page.locator(`[id="${href.slice(1)}"]`);
+    await expect(mission).toBeVisible();
     await expect(mission).toBeInViewport();
-    await expect(mission.getByTestId("mission-more")).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByTestId("result-panel-practice").getByTestId("deck-card").filter({ visible: true })).toHaveCount(1);
     await expect(mission.getByTestId("prompt-box").first()).toBeVisible();
     await expect(mission.getByText("이렇게 되면 성공")).toBeVisible();
 
-    const back = mission.getByTestId("mission-lecture-link");
+    const back = mission.getByTestId("deck-lecture-link");
     const lectureHref = (await back.getAttribute("href"))!;
     expect(lectureHref).toBe(`#lecture-${href.replace("#mission-", "")}`);
     await back.click();
@@ -398,7 +404,6 @@ for (const scheme of ["light", "dark"] as const) {
       await page.waitForTimeout(800);
       await axeCheck(page, `결과 탭(강의)/${scheme}`);
       await tab(page, "실습").click();
-      await page.getByTestId("mission-more").first().click();
       await page.waitForTimeout(500);
       await axeCheck(page, `결과 탭(실습)/${scheme}`);
       for (const name of ["준비", "스킬"]) {

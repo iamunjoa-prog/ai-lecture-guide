@@ -43,22 +43,25 @@ export const test = base.extend<Fixtures>({
 
 export { expect };
 
-/** 수준 질문 제목 (순서대로) */
+/** 수준 질문 제목 (순서대로). 코딩을 '전혀 안 해요'면 aiCoding은 건너뛴다 */
 export const LEVEL_TITLES = {
   frequency: "AI 챗봇, 얼마나 자주 쓰세요?",
-  prompt: "AI에게 무언가를 부탁할 때 어떻게 말하세요?",
-  work: "업무나 공부에 AI를 어디까지 써 봤나요?",
-  connect: "AI를 다른 앱이나 프로그램과 연결해 본 적 있나요?",
+  prompt: "AI에게 부탁할 때 어떻게 말하세요?",
+  work: "AI를 어디까지 써 봤나요?",
+  connect: "AI를 다른 앱과 연결해 봤나요?",
   coding: "코딩은 어디까지 해 봤나요?",
-  aiCoding: "코드를 만들 때 AI의 도움을 받아 봤나요?",
+  aiCoding: "코딩할 때 AI 도움을 받아 봤나요?",
 } as const;
+export const DOMAIN_TITLE = "어디에 AI를 쓰고 싶으세요?";
+export const GOAL_TITLE = "AI로 무엇을 하고 싶으세요?";
+export const STUDY_TITLE = "어떻게 배우는 게 편하세요?";
 
-/** 수준 질문 6개의 가장 낮은 답 */
-export const LEVEL_ANSWERS_LOW = [/^아직 거의 안 써 봤어요/, /^궁금한 걸 바로 물어봐요/, /^아직 써 본 적 없어요/, /^아직 없어요/, /^전혀 안 해요/, /^안 써 봤어요/];
+/** 수준 질문의 가장 낮은 답 (코딩 '전혀 안 해요' → AI 코딩 질문 없음, 5개) */
+export const LEVEL_ANSWERS_LOW = [/^아직 거의 안 써 봤어요/, /^궁금한 걸 바로 물어봐요/, /^아직 안 써 봤어요/, /^아직 없어요/, /^전혀 안 해요/];
 /** 수준 질문 6개의 가장 높은 답 (→ developer) */
-export const LEVEL_ANSWERS_HIGH = [/^거의 매일 써요/, /^잘 되는 요청을 저장해/, /^반복 업무를 AI로 자동화/, /^AI API를 코드로/, /^개발이 직업이에요/, /^코딩 에이전트에게/];
+export const LEVEL_ANSWERS_HIGH = [/^거의 매일 써요/, /^잘 되는 요청을 저장해/, /^AI에게 일을 통째로/, /^API를 코드로/, /^배포해 봤거나/, /^코딩 에이전트에게/];
 
-/** 단일 선택 질문 6개(수준)를 주어진 답(기본: 가장 낮은 답)으로 넘기고 분야 질문까지 간다 */
+/** 단일 선택 수준 질문을 주어진 답(기본: 가장 낮은 답)으로 넘기고 분야 질문까지 간다 */
 export async function answerLevelQuestionsLow(page: Page, answers: RegExp[] = LEVEL_ANSWERS_LOW) {
   await page.goto("/diagnosis");
   const titles = Object.values(LEVEL_TITLES);
@@ -66,15 +69,34 @@ export async function answerLevelQuestionsLow(page: Page, answers: RegExp[] = LE
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(titles[i]);
     await chooseSingle(page, answers[i]);
   }
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("어떤 분야에 AI를 쓰고 싶으세요?");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(DOMAIN_TITLE);
 }
 
 /** 목표(다중 선택)를 순서대로 고르고 다음으로 */
 export async function chooseGoals(page: Page, names: RegExp[]) {
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("AI로 이루고 싶은 목표는 무엇인가요?");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(GOAL_TITLE);
   for (const name of names) await page.getByRole("checkbox", { name }).click();
   await page.getByRole("button", { name: "다음", exact: true }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("한국어로 들을 수 있는 강의가 좋으세요?");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(STUDY_TITLE);
+}
+
+/**
+ * 마지막 화면: 공부 방법을 고르고(기본 '골고루') '한국어 강의 먼저' 체크(기본 켜짐)를 맞춘 뒤 결과 보기.
+ * 결과 화면 주소가 될 때까지 기다린다.
+ */
+export async function finishStudy(page: Page, opts: StudyOpts = {}) {
+  await submitStudy(page, opts);
+  await page.waitForURL(/\/result\?/, { timeout: 10_000 });
+}
+
+type StudyOpts = { style?: RegExp; korean?: boolean };
+
+/** finishStudy와 같지만 결과 화면을 기다리지 않는다 (로딩 화면을 검사할 때) */
+export async function submitStudy(page: Page, { style = /^골고루 다 할래요/, korean = true }: StudyOpts = {}) {
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(STUDY_TITLE);
+  await page.getByRole("radio", { name: style }).click();
+  await page.getByRole("checkbox", { name: /한국어 강의를 먼저/ }).setChecked(korean);
+  await page.getByRole("button", { name: "결과 보기" }).click();
 }
 
 /** 결과 화면에 바로 들어갈 수 있는 쿼리 */
@@ -98,4 +120,22 @@ export async function openSummary(page: Page) {
   if ((await toggle.getAttribute("aria-expanded")) !== "true") await toggle.click();
   await expect(toggle).toHaveAttribute("aria-expanded", "true");
   return page.getByRole("group", { name: "진단 요약" });
+}
+
+/** 카드 덱 기억 저장 키 (src/lib/card-deck.ts와 같다) */
+export const DECK_KEY = "aig:deck:v1";
+
+/**
+ * 결과 화면 실습·준비 탭을 '전체 목록 보기'로 연다 (예전 목록 동작을 검사하는 테스트).
+ * 기본은 한 장씩 보는 카드 덱이다. 이미 저장된 값이 있으면 건드리지 않는다(새로고침해도 사용자가 바꾼 값 유지).
+ */
+export async function preferListView(page: Page, kinds: ("practice" | "prep")[] = ["practice", "prep"]) {
+  await page.addInitScript(
+    ([k, list]) => {
+      if (!localStorage.getItem(k)) {
+        localStorage.setItem(k, JSON.stringify({ version: 1, positions: {}, views: Object.fromEntries(list.map((x) => [x, "list"])) }));
+      }
+    },
+    [DECK_KEY, kinds] as const,
+  );
 }

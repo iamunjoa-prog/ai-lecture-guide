@@ -8,12 +8,14 @@
  *  - g  : Goal 1~4개, 쉼표 구분, 앞쪽이 우선순위 (필수). 중복은 처음 것만 남긴다.
  *         예전 단일 목표 링크(`g=use_tools`)도 그대로 읽힌다.
  *  - ko : "1" | "0" (없으면 false)
+ *  - s  : 공부 방법 StudyStyle (lectures | practice | theory | practice_theory | all).
+ *         없으면(예전 링크) "all". 모르는 값·빈 값은 잘못된 링크.
  * 하나라도 잘못되면 decode 결과는 null.
  */
 import type { DiagnosisResult, Domain, Goal } from "../types";
-import { isDomain, isGoal, isLevel, MAX_DOMAINS, MAX_GOALS } from "./questions";
+import { DEFAULT_STUDY_STYLE, isDomain, isGoal, isLevel, isStudyStyle, MAX_DOMAINS, MAX_GOALS } from "./questions";
 
-export const PARAM_KEYS = { level: "l", domains: "d", goals: "g", preferKorean: "ko" } as const;
+export const PARAM_KEYS = { level: "l", domains: "d", goals: "g", preferKorean: "ko", studyStyle: "s" } as const;
 
 /** sessionStorage 키 */
 export const DIAGNOSIS_STORAGE_KEY = "ai-lecture-guide:diagnosis";
@@ -27,10 +29,11 @@ export function toSearchParams(d: DiagnosisResult): URLSearchParams {
   p.set(PARAM_KEYS.domains, d.domains.join(","));
   p.set(PARAM_KEYS.goals, d.goals.join(","));
   p.set(PARAM_KEYS.preferKorean, d.preferKorean ? "1" : "0");
+  p.set(PARAM_KEYS.studyStyle, d.studyStyle);
   return p;
 }
 
-/** "l=user&d=marketing%2Ccoding&g=use_tools%2Cbuild_agents&ko=1" (앞의 "?" 없음) */
+/** "l=user&d=marketing%2Ccoding&g=use_tools%2Cbuild_agents&ko=1&s=practice" (앞의 "?" 없음) */
 export function encodeDiagnosis(d: DiagnosisResult): string {
   return toSearchParams(d).toString();
 }
@@ -86,7 +89,11 @@ export function decodeDiagnosis(
   const ko = get(PARAM_KEYS.preferKorean);
   if (ko !== undefined && ko !== "0" && ko !== "1") return null;
 
-  return { level, domains, goals, preferKorean: ko === "1" };
+  const rawStyle = get(PARAM_KEYS.studyStyle);
+  if (rawStyle !== undefined && !isStudyStyle(rawStyle)) return null;
+  const studyStyle = rawStyle ?? DEFAULT_STUDY_STYLE;
+
+  return { level, domains, goals, preferKorean: ko === "1", studyStyle };
 }
 
 /** sessionStorage에 저장 (브라우저가 아니거나 저장이 막혀 있으면 조용히 무시) */

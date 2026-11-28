@@ -6,11 +6,13 @@ import { AffiliateBlock } from "@/components/AffiliateBlock";
 import { CriteriaSheet } from "@/components/CriteriaSheet";
 import { ResultHeroActions } from "@/components/ResultHeroActions";
 import { LearningJourney } from "@/components/LearningJourney";
-import { MissionItem, WeeklyMissionHighlight } from "@/components/PracticeMissions";
 import { ResultEmptyState } from "@/components/ResultEmptyState";
 import { StarterTerms } from "@/components/StarterTerms";
 import { ResultTabs, type ResultTab } from "@/components/ResultTabs";
 import { TheorySection } from "@/components/TheorySection";
+import { PracticeDeck, type PracticeDeckMission } from "@/components/PracticeDeck";
+import { PrepDeck } from "@/components/PrepDeck";
+import { deckKey, missionDeckOrder } from "@/lib/card-deck";
 import { credentialBadge, glossary, instructors, practice, skills, theory, thumbnailFor, videos } from "@/components/catalog";
 import { resolvePrompts } from "@/components/PracticeMissionBlock";
 import { SkillsSection } from "@/components/SkillsSection";
@@ -20,7 +22,8 @@ import { RememberDiagnosis } from "@/components/saved/RememberDiagnosis";
 import { decodeDiagnosis, diagnosisHref, type SearchParamsRecord } from "@/lib/diagnosis-state";
 import { practiceById, weeklyMission } from "@/lib/practice";
 import { indexVideos, selectSkills } from "@/lib/skills";
-import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_LABELS } from "@/lib/questions";
+import { DOMAIN_LABELS, GOAL_LABELS, LEVEL_LABELS, STUDY_STYLE_LABELS } from "@/lib/questions";
+import { isPracticeStyle, isTheoryStyle, prepTabLabel, styleLine, tabOrder, theoryCountFor, type ResultTabKey } from "@/lib/study-style";
 import { buildConclusion } from "@/lib/conclusion";
 import { glossaryById, INITIAL_TERMS, selectStarterTerms, termsForVideo } from "@/lib/glossary";
 import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
@@ -48,13 +51,17 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     );
   }
 
-  const roadmap = buildRoadmap(diagnosis, videos, instructors);
+  const style = diagnosis.studyStyle;
+  const missionsById = practiceById(practice);
+  // 챗봇만으로 해볼 수 있는 실습이 있는 강의 (실습 위주 공부 방법의 동점 정리)
+  const easyPracticeIds = new Set(practice.filter((m) => !m.needsTool || m.needsTool === "chat").map((m) => m.videoId));
+  const roadmap = buildRoadmap(diagnosis, videos, instructors, { easyPracticeIds });
   const coverageGaps = findCoverageGaps(diagnosis, videos);
   const levelLabel = LEVEL_LABELS[diagnosis.level];
   const byId = glossaryById(glossary);
   const roadmapVideos = roadmap.steps.flatMap((st) => st.items.map((it) => it.video));
   const starterTerms = selectStarterTerms(diagnosis, glossary, roadmapVideos);
-  const theoryConcepts = selectTheory(diagnosis, theory);
+  const theoryConcepts = selectTheory(diagnosis, theory, theoryCountFor(style));
 
   const affiliateItems = selectAffiliate(diagnosis, affiliateJson as unknown as AffiliateItem[], 2);
 
@@ -74,19 +81,22 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
       })),
     },
   ];
+  chipGroups.push({ label: "공부 방법", chips: [{ label: STUDY_STYLE_LABELS[style] }] });
   if (diagnosis.preferKorean) chipGroups.push({ label: "언어", chips: [{ label: "한국어 우선" }] });
   const conclusion = buildConclusion(diagnosis);
 
-  // 이번 주 실습 미션 · 단계별 실습
-  const missionsById = practiceById(practice);
+  // 이번 주 실습 미션: 실습이 주인공이면 덱 순서(1단계 먼저)에서 끝내지 않은 첫 미션(PracticeDeck에서 정한다),
+  // 그 밖에는 1순위 목표에 맞는 미션 (lib/practice.ts weeklyMission)
   const practiceStep = roadmap.steps.find((st) => st.label === STEP_LABELS.practice);
-  const weekly = weeklyMission(
-    diagnosis,
-    roadmapVideos,
-    missionsById,
-    (practiceStep?.items ?? []).map((it) => it.video.id),
-  );
-  const weeklyStepIndex = weekly ? roadmap.steps.findIndex((st) => st.items.some((it) => it.video.id === weekly.video.id)) : -1;
+  const goalWeekly = isPracticeStyle(style)
+    ? undefined
+    : weeklyMission(
+        diagnosis,
+        roadmapVideos,
+        missionsById,
+        (practiceStep?.items ?? []).map((it) => it.video.id),
+      );
+  const resultHref = diagnosisHref(diagnosis);
 
   // 요즘 주목받는 AI 스킬: 입문자에게는 보여 주지 않는다 (기본 용어·개념·강의·실습에 집중)
   const isBeginner = diagnosis.level === "beginner";
@@ -100,7 +110,14 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     roadmap.steps,
     new Set(missionsById.keys()),
     starterTerms.slice(0, INITIAL_TERMS).map((t) => t.id),
+    theoryConcepts.map((c) => c.id),
   );
+
+  // 탭 순서·기본 탭·여정 위치는 공부 방법이 정한다 (lib/study-style.ts)
+  const order = tabOrder(style, false);
+  const journeyHome: ResultTabKey = roadmap.steps.length === 0 ? "lectures" : order[0];
+  const journey =
+    roadmap.steps.length > 0 ? <LearningJourney level={diagnosis.level} steps={journeySteps} studyStyle={style} /> : null;
 
   const lecturesPanel = (
     <Slide tone="light" id="roadmap" className="scroll-mt-16" innerClassName="pb-10">
@@ -110,7 +127,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
         </p>
       ) : (
         <>
-          <LearningJourney level={diagnosis.level} steps={journeySteps} />
+          {journeyHome === "lectures" && journey}
           {coverageGaps.length > 0 && (
             <p
               data-testid="coverage-note"
@@ -225,54 +242,41 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     </Slide>
   );
 
-  // 실습 탭: 이번 주 미션 → 단계별 미션 (강의 탭과 같은 순서)
-  const missionGroups = roadmap.steps
-    .map((step, i) => ({
-      number: i + 1,
-      label: step.label,
-      items: step.items.flatMap(({ video }) => {
-        const mission = missionsById.get(video.id);
-        return mission ? [{ mission, video }] : [];
-      }),
-    }))
-    .filter((g) => g.items.length > 0);
+  // 실습 탭: '오늘의 실습' 카드 덱(기본) ↔ 전체 목록. 순서 = 로드맵 단계 순서 (lib/card-deck.ts)
+  const deckMissions: PracticeDeckMission[] = missionDeckOrder(roadmap.steps, (id) => missionsById.has(id)).map((e) => {
+    const mission = missionsById.get(e.videoId)!;
+    const video = roadmapVideos.find((v) => v.id === e.videoId)!;
+    return {
+      mission,
+      prompts: resolvePrompts(mission, diagnosis.domains),
+      lecture: { id: video.id, title: video.title },
+      stepNumber: e.stepNumber,
+      stepLabel: e.stepLabel,
+    };
+  });
+  const prepLabel = prepTabLabel(style);
 
   const practicePanel = (
-    <Slide tone="light" innerClassName="pt-6 pb-12">
-      {weekly && (
-        <WeeklyMissionHighlight
-          mission={weekly.mission}
-          lecture={{ id: weekly.video.id, title: weekly.video.title }}
-          stepLabel={weeklyStepIndex >= 0 ? `${weeklyStepIndex + 1}단계` : undefined}
-        />
-      )}
-      {missionGroups.length === 0 ? (
-        <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">이 로드맵에는 아직 실습 미션이 없어요. 강의부터 시작해 보세요.</p>
-      ) : (
+    <Slide tone="light" innerClassName="pb-12">
+      {deckMissions.length === 0 ? (
         <>
-          <h2 className="mt-8 text-[19px] font-bold tracking-[-0.02em] text-fg">직접 해보기</h2>
-          <p className="mt-0.5 text-[14px] leading-relaxed text-fg-muted">
-            강의를 본 뒤 직접 해 보면 오래 남아요. 완료하면 학습 여정에 표시돼요.
-          </p>
-          {missionGroups.map((g) => (
-            <section key={g.label} aria-labelledby={`practice-step-${g.number}`} className="mt-6" data-testid="practice-step">
-              <h3 id={`practice-step-${g.number}`} className="text-[15px] font-semibold text-fg-muted">
-                {g.number}단계 · {g.label}
-              </h3>
-              <div className="mt-2.5 flex flex-col gap-3">
-                {g.items.map(({ mission, video }) => (
-                  <MissionItem
-                    key={video.id}
-                    mission={mission}
-                    prompts={resolvePrompts(mission, diagnosis.domains)}
-                    lecture={{ id: video.id, title: video.title }}
-                    weekly={weekly?.video.id === video.id}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
+          {journeyHome === "practice" && journey}
+          <p className="mt-6 text-[15px] leading-relaxed text-fg-muted">이 로드맵에는 아직 실습 미션이 없어요. 강의부터 시작해 보세요.</p>
         </>
+      ) : (
+        <PracticeDeck
+          storageKey={deckKey("practice", resultHref)}
+          missions={deckMissions}
+          pinWeekly={isPracticeStyle(style)}
+          goalWeeklyId={goalWeekly?.video.id}
+          prominent={isPracticeStyle(style)}
+          practiceHubHref={`/practice?l=${diagnosis.level}`}
+          links={[
+            { href: "#lectures", label: "강의 탭에서 관련 강의 보기" },
+            ...(hasPrep ? [{ href: "#prep", label: `${prepLabel} 탭에서 용어·개념 읽기` }] : []),
+          ]}
+          journey={journeyHome === "practice" ? journey : undefined}
+        />
       )}
       <div className="mt-8 border-t border-border pt-4">
         <p className="text-[14px] leading-relaxed text-fg-muted">로드맵 밖의 실습도 수준·목표·도구별로 골라 해 볼 수 있어요.</p>
@@ -288,34 +292,69 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
     </Slide>
   );
 
-  const tabs: ResultTab[] = [
-    { id: "lectures", label: "강의", content: lecturesPanel },
-    { id: "practice", label: "실습", content: practicePanel },
-    {
-      id: "prep",
-      label: "준비",
-      content: (
-        <>
-          {/* 시작 전에 알아두면 좋은 용어 */}
-          <StarterTerms terms={starterTerms} byId={byId} glossaryHref={`/glossary?l=${diagnosis.level}`} roadmapHref={null} />
-          {/* 강의 보기 전 3분 이론 */}
-          <TheorySection
-            concepts={theoryConcepts}
-            roadmapVideos={roadmapVideos}
-            allVideos={videos}
-            instructors={instructors}
-            levelLabel={levelLabel}
-            theoryHref={theoryHref({ level: diagnosis.level })}
-          />
-          {!hasPrep && (
-            <Slide tone="light" innerClassName="py-12">
-              <p className="text-[15px] leading-relaxed text-fg-muted">이 진단에는 미리 볼 용어와 개념이 따로 없어요. 강의부터 시작해 보세요.</p>
-            </Slide>
-          )}
-        </>
-      ),
-    },
-  ];
+  const theoryFirst = isTheoryStyle(style);
+  const starterBlock = (
+    <StarterTerms terms={starterTerms} byId={byId} glossaryHref={`/glossary?l=${diagnosis.level}`} roadmapHref={null} />
+  );
+  const theoryBlock = (
+    <TheorySection
+      concepts={theoryConcepts}
+      roadmapVideos={roadmapVideos}
+      allVideos={videos}
+      instructors={instructors}
+      levelLabel={levelLabel}
+      theoryHref={theoryHref({ level: diagnosis.level })}
+      leading={theoryFirst}
+    />
+  );
+  // 준비/개념 탭: 카드 덱(기본) ↔ 전체 목록(시작 전 용어 · 3분 이론). '이번 주 개념'은 덱의 첫 안 읽은 개념 카드가 맡는다
+  const prepList = theoryFirst ? (
+    <>
+      {theoryBlock}
+      {starterBlock}
+    </>
+  ) : (
+    <>
+      {starterBlock}
+      {theoryBlock}
+    </>
+  );
+  const prepJourney = journeyHome === "prep" ? journey : undefined;
+  const prepPanel = hasPrep ? (
+    <PrepDeck
+      storageKey={deckKey("prep", resultHref)}
+      style={style}
+      concepts={theoryConcepts}
+      terms={starterTerms.slice(0, INITIAL_TERMS)}
+      weeklyConcept={theoryFirst}
+      glossaryHref={`/glossary?l=${diagnosis.level}`}
+      theoryHref={theoryHref({ level: diagnosis.level })}
+      links={[
+        ...(missionsById.size > 0 && deckMissions.length > 0 ? [{ href: "#practice", label: "실습 탭에서 직접 해 보기" }] : []),
+        { href: "#lectures", label: "강의 탭에서 강의 보기" },
+      ]}
+      list={prepList}
+      journey={prepJourney}
+    />
+  ) : (
+    <>
+      {prepJourney && (
+        <Slide tone="light" innerClassName="pb-4">
+          {prepJourney}
+        </Slide>
+      )}
+      <Slide tone="light" innerClassName="py-12">
+        <p className="text-[15px] leading-relaxed text-fg-muted">이 진단에는 미리 볼 용어와 개념이 따로 없어요. 강의부터 시작해 보세요.</p>
+      </Slide>
+    </>
+  );
+
+  const panels: Record<Exclude<ResultTabKey, "skills">, ResultTab> = {
+    lectures: { id: "lectures", label: "강의", content: lecturesPanel },
+    practice: { id: "practice", label: "실습", content: practicePanel },
+    prep: { id: "prep", label: prepLabel, content: prepPanel },
+  };
+  const tabs: ResultTab[] = order.map((id) => panels[id as Exclude<ResultTabKey, "skills">]);
   if (showSkills) {
     tabs.push({
       id: "skills",
@@ -336,7 +375,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
 
   return (
     <main className="flex min-h-dvh flex-col bg-bg">
-      <RememberDiagnosis href={diagnosisHref(diagnosis)} />
+      <RememberDiagnosis href={resultHref} />
       {/* 키노트 히어로 */}
       <Slide tone="stage" as="header" className="border-b border-stage-border" innerClassName="pt-[env(safe-area-inset-top)]">
         <SiteHeaderBar showSkills={!isBeginner} />
@@ -348,6 +387,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
             </>
           }
           conclusion={conclusion}
+          styleNote={styleLine(style)}
           summary={summaryLine(
             levelLabel,
             diagnosis.domains.map((d) => DOMAIN_LABELS[d]),

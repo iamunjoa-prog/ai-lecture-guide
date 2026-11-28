@@ -53,5 +53,6 @@ export const diag = (d: Partial<DiagnosisResult> = {}): DiagnosisResult => ({
   domains: ["marketing"],
   goals: ["use_tools"],
   preferKorean: false,
+  studyStyle: "all",
   ...d,
 });
