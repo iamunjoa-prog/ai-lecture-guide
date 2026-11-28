@@ -12,10 +12,10 @@
 - **카드 형식**: 실습 4(오너 승인본)와 같아요. 제목 → "수준 · 유형 · 약 N분" → 얻는 것 → ① 가는 길 표 → ② 할 일(분야별 예시 6개) → ③ 확인 → ✅ 성공 → ⚠️ 주의 → 다음 실습 → 공식 도움말 → 더 알고 싶다면.
 - **확인 방법**: 메뉴 경로와 기능 설명은 공식 도움말 원문을 읽고 썼어요. 원문을 못 연 곳은 '검색 확인'으로 표시했어요. 맨 아래 "검증 기록"과 "확인 필요/불확실"을 꼭 봐 주세요.
 
-> 표 형식 메모: 승인본(실습 4)의 표에는 구분선 줄(`|---|`)이 없어서 마크다운에서 표로 보이지 않을 수 있어요. 승인본을 그대로 따르려고 다른 카드도 같은 모양으로 썼어요. 앱에 넣을 때 정해 주세요.
 
 ## 목차
 | # | 수준 | 유형 | 실습 |
+|---|---|---|---|
 | 1 | 입문자 | 써보기 | AI와 첫 대화로 오늘 할 일 해결하기 |
 | 2 | 입문자 | 써보기 | 사진·문서 올려서 물어보기 |
 | 3 | 입문자 | 안전 | AI 답 확인하고 내 정보 지키기 |
@@ -36,6 +36,7 @@
 **이 실습으로 얻는 것** AI에게 처음으로 말을 걸고, 오늘 바로 쓸 수 있는 답을 받아 봐요.
 **① AI 앱 열기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 컴퓨터: chatgpt.com / 휴대폰: ChatGPT 앱 → 아래 입력창. 로그인 없이도 쓸 수 있지만, 로그인하면 대화가 저장돼요. |
 | Claude | 컴퓨터: claude.ai / 휴대폰: Claude 앱 → 로그인 → 아래 입력창. 만 18세 이상만 쓸 수 있어요. |
 | Gemini | 컴퓨터: gemini.google.com / 휴대폰: Gemini 앱 → 구글 계정으로 로그인 → 아래 입력창 |
@@ -61,6 +62,7 @@
 **이 실습으로 얻는 것** 종이·사진·문서를 일일이 옮겨 적지 않아도, 찍어서 올리면 AI가 읽고 정리해 줘요.
 **① 파일 올리는 곳 찾기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 입력창의 + → 사진 및 파일 추가(Add photos & files). 사진·문서·표는 무료 요금제도 돼요(녹음 파일은 유료만). |
 | Claude | 입력창 왼쪽 아래 + → 파일 또는 사진 추가(Add files or photos). 끌어다 놓아도 돼요. 한 대화에 20개까지. |
 | Gemini | 입력창의 파일 추가(Add files) → 파일 업로드(Upload files). 한 번에 10개까지(상황에 따라 달라요). |
@@ -86,11 +88,13 @@
 **이 실습으로 얻는 것** 내 대화가 AI 학습에 쓰이지 않게 끄고, AI 답을 믿기 전에 확인하는 습관을 들여요.
 **① 학습 사용 끄기** (내 대화를 AI를 더 좋게 만드는 데 쓰지 않게 하는 설정)
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 프로필 → 설정 → 데이터 제어(Data controls) → "모두를 위한 모델 개선(Improve the model for everyone)" 끄기. 휴대폰: 사이드바 → 프로필 아이콘 → 데이터 제어. |
 | Claude | 왼쪽 아래 내 이름 → 설정(Settings) → 개인정보(Privacy) → "AI 모델 개선에 참여(Help improve our AI models)" 끄기 |
 | Gemini | gemini.google.com → 설정(Settings) → 기록(History) → "채팅 내용(텍스트·첨부 포함)(Chat content including text & uploads)" 체크 해제 → 끄기(Turn off). 예전 화면 이름은 "Gemini 앱 활동(Gemini Apps Activity)"이에요. |
 **잠깐만 쓰는 대화** (기록에 안 남고 학습에도 안 쓰여요)
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 새 채팅 → 임시(Temporary) 또는 임시 채팅(Temporary chat). 안전 확인 때문에 최대 30일 보관돼요. |
 | Claude | 새 채팅 화면 오른쪽 위 유령 아이콘 → 시크릿 채팅(Incognito chat). 프로젝트 안에서는 안 돼요. 30일 보관돼요. |
 | Gemini | "새 채팅(New chat)" 옆 임시 채팅(Temporary chat). 개인 계정만 되고, 약 2개월 보관돼요. |
@@ -117,9 +121,10 @@
 **이 실습으로 얻는 것** 매번 "저는 이런 사람이에요"라고 설명하지 않아도, AI가 나에게 맞춰 답해 줍니다.
 **① 설정 화면 열기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 컴퓨터: 설정 → 개인 맞춤 설정(Personalization) → 맞춤형 지침 / 휴대폰 앱: 설정 → ChatGPT 맞춤 설정(Customize ChatGPT) |
 | Claude | 왼쪽 아래 내 이름(이니셜) → 설정 → Your Claude(예전 화면은 "Account") → Claude 지침 |
-| Gemini | gemini.google.com → 설정 및 도움말 → 개인 맥락(Personal context) → Gemini 지침 |
+| Gemini | gemini.google.com → 설정 및 도움말 → 개인 맥락(Personal context) → Gemini 지침(Your instructions for Gemini) |
 ※ 앱마다 메뉴 이름이 바뀔 수 있어요. 안 보이면 아래 공식 도움말을 눌러 주세요.
 **② 아래 내용을 내 상황에 맞게 고쳐서 붙여 넣기** (분야별 예시 6개)
  살림: 저는 4인 가족 살림을 맡고 있어요. 아이 한 명이 견과류 알레르기가 있어요. 평일 저녁은 30분 안에 만들 수 있는 요리를 좋아해요. 답은 짧게, 장보기 목록은 표로 정리해 주세요.
@@ -145,6 +150,7 @@
 **이 실습으로 얻는 것** 한 가지 일(예: 가족 여행 준비)만 맡는 비서 방을 만들어요. 자료와 지시를 한 번만 넣어 두면 그 방의 모든 대화에 쓰여요.
 **① 프로젝트 만들기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 왼쪽 사이드바 프로젝트(Projects) 옆 + → 새 프로젝트(New project) → 이름 입력 → 프로젝트 만들기(Create project). 지시는 프로젝트 오른쪽 위 ••• → 프로젝트 설정(Project settings) → 지침(Instructions). 파일도 올릴 수 있어요(개수는 요금제마다 달라요). |
 | Claude | 왼쪽 프로젝트(Projects) 또는 claude.ai/projects → + 새 프로젝트(+ New Project) → 이름 입력. 오른쪽 "프로젝트 지침 설정(Set project instructions)"에 지시를, + 로 파일을 넣어요. 무료는 프로젝트 5개까지. |
 | Gemini | Gemini에는 '프로젝트' 대신 노트북(Notebooks)이 있어요 → 사이드바 열기 → "노트북" 아래 새 노트북(New notebook) → 이름 입력 → 소스 추가(Add sources)로 파일 넣기. 지시는 노트북 위쪽 더보기(More) → 노트북 설정(Notebook settings). 아직 순서대로 열리는 중이라 안 보일 수 있어요. |
@@ -170,6 +176,7 @@
 **이 실습으로 얻는 것** 매번 똑같이 부탁하던 일(예: 장보기 목록 만들기)을 '스킬'(저장해 두는 일하는 방법)로 만들어, 어느 대화에서든 꺼내 써요.
 **① 스킬 만드는 곳 찾기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | **개인 요금제(무료·Go·Plus·Pro)에는 스킬 기능이 없어요.** 회사·학교용(Business·Enterprise·Edu)만 돼요: 사이드바 플러그인(Plugins) → 스킬(Skills) 탭 → 추가(Add) → 대화로 만들기(Create with chat). → 개인 요금제는 대신 실습 5의 프로젝트 지침에 같은 내용을 넣으세요. ('GPT 만들기'는 2026년 12월 11일에 종료돼요. 새로 만들지 마세요.) |
 | Claude | 무료도 돼요. 먼저 설정(Settings) → 기능(Capabilities) → "코드 실행 및 파일 생성(Code execution and file creation)"(새 화면 이름 "파일 만들기 및 편집(Create and edit files)") 켜기 → 사용자 지정(Customize) → 스킬(Skills) → + → 스킬 만들기(+ Create skill) → 스킬 올리기(Upload a skill)에 ZIP 파일 올리기. ZIP은 ②처럼 Claude에게 만들어 달라고 하면 돼요. |
 | Gemini | 만 18세 이상. 사이드바 사용자 지정(Customize)(안 보이면 더보기(More) 먼저) → 위쪽 스킬(Skills) → 만들기(Create) → Gemini와 함께 만들기(Create with Gemini) 또는 직접 만들기(Create manually) → 이름·설명·지시 입력 → 만들기(Create). 예전 'Gem'은 2026년 11월 17일부터 읽기 전용이 되었고 12월 17일에 없어져요. |
@@ -195,6 +202,7 @@
 **이 실습으로 얻는 것** 메일함과 달력을 AI에 연결하면, 복사·붙여넣기 없이 "오늘 온 메일 정리해 줘"가 돼요.
 **① 메일·캘린더 연결하기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 설정 → 플러그인(Plugins) → Gmail 또는 Google Calendar(Outlook도 있어요) → 설치(Install plugin)/연결(Connect) → 구글 로그인 → 권한 확인. 대화에서 @ 를 치고 앱을 골라 써요. 요금제·지역에 따라 안 보일 수 있어요. |
 | Claude | 사용자 지정(Customize) → 커넥터(Connectors) → Gmail, Google Calendar 연결 → 구글 로그인. 무료 포함 모든 사용자가 웹·데스크톱 앱에서 쓸 수 있어요. |
 | Gemini | 먼저 설정 → 기록(History)이 켜져 있어야 해요(실습 3 참고). 사이드바 사용자 지정(Customize) → 커넥터(Connectors) → Google Workspace 연결. 대화에서 @ 를 치고 Gmail·Calendar를 골라요. |
@@ -220,6 +228,7 @@
 **이 실습으로 얻는 것** "매일 아침 8시에 오늘 일정 정리"처럼 반복되는 일을 한 번 설정하면 AI가 알아서 해 줘요.
 **① 예약 기능 찾기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 사이드바 예약됨(Scheduled) → 새 작업(New task), 또는 대화에서 "매일 아침 8시에 …해 줘"라고 부탁. 무료는 3개까지, 하루 1번까지, 시간은 '아침·오후·밤'처럼 대략만 돼요. "메일이 오면" 같은 작업은 Plus 이상에서 Work 화면으로만 돼요(무료·Go 불가). |
 | Claude | **유료(Pro 이상)만 돼요.** 새 Claude 화면이면 대화에서 "매주 월요일 오전 9시에 …"라고 부탁, Cowork 화면이면 왼쪽 예약됨(Scheduled) → 새 작업(New task). 컴퓨터를 꺼도 돌아가요. → 무료는 아래 Zapier 같은 도구를 쓰세요. |
 | Gemini | 대화에서 "매일 아침 7시에 …해 줘"라고 보내면 일정(Schedule)이 만들어져요. 사이드바 예약됨(Scheduled)에서 멈춤·수정. 10개까지, 기록(History)이 켜져 있어야 해요. 아직 순서대로 열리는 중이에요. 입력창 아래 작업(Task)을 쓰면, 한국은 구독 없이도 하루 1번 시간대 예약이 되고 "메일이 오면" 감시는 Google AI Pro·Ultra만 돼요. |
@@ -246,6 +255,7 @@
 **이 실습으로 얻는 것** 여러 사이트를 직접 뒤지지 않아도, AI가 수십 곳을 찾아보고 출처가 달린 비교 보고서를 만들어 줘요.
 **① 조사 기능 켜기**
 | 앱 | 가는 길 |
+|---|---|
 | ChatGPT | 입력창의 + → 심층 리서치(Deep research), 또는 /Deepresearch 입력. 조사 계획이 먼저 나오면 고친 뒤 시작해요. 요금제마다 횟수 제한이 있어요(화면에 남은 횟수 표시). |
 | Claude | **유료(Pro 이상)만 돼요.** 웹 검색이 켜져 있어야 해요 → 입력창 왼쪽 아래 + → 리서치(Research) → 파란 표시가 보이면 켜진 것. → 무료는 웹 검색을 켜고 같은 질문을 하면 짧은 조사는 돼요. |
 | Gemini | 만 18세 이상, 무료도 돼요. 입력창의 파일 추가(Add files) 메뉴 → Deep Research → 질문 보내기 → 계획 수정(Edit plan) → 조사 시작(Start research). 하루 횟수 제한이 있어요. |
@@ -271,6 +281,7 @@
 **이 실습으로 얻는 것** API 키(내 프로그램이 AI를 부를 때 쓰는 비밀번호)를 안전하게 만들고, 터미널(명령어 창)에서 AI에게 첫 요청을 보내요.
 **① 키 만들기와 지출 한도 정하기** (코딩 에이전트별로 쓰는 API)
 | 앱 | 가는 길 |
+|---|---|
 | Codex(OpenAI API) | platform.openai.com → API 키(API keys) → 새 키 만들기. 키는 만료일을 정해 만드는 게 좋아요. 프로젝트 설정에서 지출 한도(spend limits)를 정하세요. |
 | Claude Code(Claude API) | platform.claude.com(Claude Console) → API 키 만들기. 지출 한도는 설정 → 지출 한도(Spend limits, platform.claude.com/settings/spend-limits). |
 | Gemini CLI(Gemini API) | Google AI Studio → API 키 받기(Get API key). 지출 한도는 AI Studio 지출(Spend) 페이지 → 월 지출 한도(Monthly spend cap) → 한도 수정(Edit spend cap). |
@@ -305,6 +316,7 @@ curl https://api.anthropic.com/v1/messages -H "content-type: application/json" \
 **이 실습으로 얻는 것** 말로 설명만 하면 코딩 에이전트(내 컴퓨터에서 코드를 직접 쓰고 고치는 AI)가 브라우저에서 열리는 작은 가계부 앱을 만들어 줘요.
 **① 설치하고 시작하기** (먼저 빈 폴더를 만들고 그 폴더에서 터미널을 여세요)
 | 앱 | 가는 길 |
+|---|---|
 | Claude Code | macOS·Linux: `curl -fsSL https://claude.ai/install.sh \| bash` / Windows PowerShell: `irm https://claude.ai/install.ps1 \| iex` → 폴더에서 `claude` → 로그인. Claude 유료 구독(Pro 이상) 또는 Claude Console(선불 API) 계정이 필요해요. 터미널이 낯설면 데스크톱 앱·웹에서도 써요. |
 | Codex | 터미널이 낯설면 ChatGPT 데스크톱 앱의 Codex 모드를 쓰세요. CLI: `npm install -g @openai/codex` → 폴더에서 `codex` → ChatGPT로 로그인(Sign in with ChatGPT). 무료·Go 포함 모든 ChatGPT 요금제에 들어 있어요(사용 한도는 요금제마다 달라요). |
 | Gemini CLI | **주의: 개인 계정(무료·Google AI Pro·Ultra)은 2026년 6월 18일부터 Gemini CLI 대신 Antigravity CLI(명령어 `agy`)를 쓰도록 바뀌었어요(검색 확인).** Gemini CLI는 유료 Gemini API 키로 계속 쓸 수 있어요: `npm install -g @google/gemini-cli`(Node.js 20 이상) → `export GEMINI_API_KEY=...` → `gemini`. 개인 계정은 Antigravity CLI 공식 설치 안내를 따르세요. |
@@ -330,6 +342,7 @@ curl https://api.anthropic.com/v1/messages -H "content-type: application/json" \
 **이 실습으로 얻는 것** MCP(AI 앱과 바깥 도구를 잇는 공통 규격, 'AI용 USB-C')로 코딩 에이전트에 내 폴더를 연결해, 그 안의 파일을 찾아 읽고 정리하게 해요.
 **① 연습용 폴더 하나만 연결하기** (Node.js가 필요해요. 먼저 `~/ai-practice` 폴더를 만들고 연습 파일 몇 개를 넣으세요)
 | 앱 | 가는 길 |
+|---|---|
 | Claude Code | `claude mcp add --transport stdio files -- npx -y @modelcontextprotocol/server-filesystem ~/ai-practice` → 확인: `claude mcp list` 또는 Claude Code 안에서 `/mcp` |
 | Codex | 설정 파일 `~/.codex/config.toml`에 `[mcp_servers.files]` 표를 만들고 `command = "npx"`, `args = ["-y", "@modelcontextprotocol/server-filesystem", "/Users/내이름/ai-practice"]`를 적어요. 원격 서버는 `codex mcp add 이름 --url 주소`로도 돼요. |
 | Gemini CLI | `gemini mcp add files npx -y @modelcontextprotocol/server-filesystem ~/ai-practice` (설정은 `~/.gemini/settings.json`의 `mcpServers`에 저장) → Gemini CLI 안에서 `/mcp`로 확인. 개인 계정은 실습 11의 Antigravity CLI 안내를 먼저 보세요. |
