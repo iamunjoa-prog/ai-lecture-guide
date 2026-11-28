@@ -28,6 +28,7 @@ const diag = (level: Level, goal: Goal, domains: DiagnosisResult["domains"] = ["
   goals: [goal],
   domains,
   preferKorean: false,
+  studyStyle: "all",
 });
 
 function term(id: string, level: Level, goals: Goal[]): GlossaryTerm {

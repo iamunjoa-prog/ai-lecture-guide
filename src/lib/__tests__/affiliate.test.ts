@@ -3,7 +3,7 @@ import affiliateJson from "../../../data/affiliate.json";
 import { selectAffiliate, type AffiliateItem } from "../affiliate";
 import type { DiagnosisResult } from "@/types";
 
-const dx: DiagnosisResult = { level: "user", domains: [], goals: ["use_tools"], preferKorean: true };
+const dx: DiagnosisResult = { level: "user", domains: [], goals: ["use_tools"], preferKorean: true, studyStyle: "all" };
 const item = (id: string, extra: Partial<AffiliateItem> = {}): AffiliateItem => ({
   id,
   title: id,

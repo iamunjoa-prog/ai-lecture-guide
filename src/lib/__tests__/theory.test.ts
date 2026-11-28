@@ -224,7 +224,7 @@ describe("lecturesForConcept", () => {
   });
 
   it("실제 로드맵: 로드맵에 있는 강의는 inRoadmap=true", () => {
-    const diagnosis: DiagnosisResult = { level: "developer", domains: ["coding"], goals: ["build_agents"], preferKorean: false };
+    const diagnosis: DiagnosisResult = { level: "developer", domains: ["coding"], goals: ["build_agents"], preferKorean: false, studyStyle: "all" };
     const roadmap = buildRoadmap(diagnosis, videos, instructors);
     const rv = roadmap.steps.flatMap((s) => s.items.map((i) => i.video));
     const rvIds = new Set(rv.map((v) => v.id));

@@ -19,8 +19,15 @@
  *  - 실전 활용: 고른 목표마다 그 목표에 맞는 강의가 하나 이상 들어가도록 우선순위 순서로
  *    돌아가며(round-robin) 먼저 채우고, 남은 자리는 점수 순. 단계 안은 점수 순으로 다시 정렬한다.
  *  - 전체가 MIN_TOTAL(3)개 미만이면 남은 강의 중 점수 높은 순으로 "실전 활용"에 채운다.
- *  - 정렬: 점수 내림차순 → 짧은 강의 우선 → id (결정적 결과를 위해)
+ *  - 정렬: 점수 내림차순 → (공부 방법 동점 규칙) → 짧은 강의 우선 → id (결정적 결과를 위해)
  *  - 한 강사당 로드맵 전체에서 최대 2개, 같은 강의는 한 번만.
+ *
+ * 공부 방법(studyStyle)별 작은 조정 — 점수는 바꾸지 않고 동점 정리·기초 우선순위만 바꾼다
+ *  - practice · practice_theory: 점수가 같으면 '챗봇만으로 바로 해볼 수 있는 실습'이 있는 강의 먼저
+ *    (`opts.easyPracticeIds`, 결과 화면은 data/practice.json에서 needsTool이 없거나 chat인 미션의 강의 id를 넘긴다)
+ *  - theory: 점수가 같으면 개념 이해(understand) 강의 먼저. 기초 다지기에서는 고른 목표에 맞는 강의 다음으로
+ *    개념 이해 강의를 우선한다(목표 강의가 모자랄 때 채우는 순서)
+ *  - lectures · all: 조정 없음
  */
 import type {
   DiagnosisResult,
@@ -116,13 +123,25 @@ export function scoreVideo(diagnosis: DiagnosisResult, video: Video): number {
   return scoreBreakdown(diagnosis, video).total;
 }
 
-/** 점수 내림차순 → 짧은 강의 → id 순 비교 함수 */
-function compareScored(a: Scored, b: Scored): number {
-  return (
+export interface RoadmapOptions {
+  /** 챗봇만으로 해볼 수 있는 실습 미션이 있는 강의 id (실습 위주 공부 방법의 동점 정리) */
+  easyPracticeIds?: ReadonlySet<string>;
+}
+
+/** 점수 내림차순 → (공부 방법 동점 규칙) → 짧은 강의 → id 순 비교 함수 */
+function makeCompare(diagnosis: DiagnosisResult, opts: RoadmapOptions) {
+  const style = diagnosis.studyStyle;
+  const easy = opts.easyPracticeIds;
+  const tie = (v: Video): number => {
+    if ((style === "practice" || style === "practice_theory") && easy) return easy.has(v.id) ? 0 : 1;
+    if (style === "theory") return v.goals.includes("understand") ? 0 : 1;
+    return 0;
+  };
+  return (a: Scored, b: Scored): number =>
     b.score.total - a.score.total ||
+    tie(a.video) - tie(b.video) ||
     a.video.durationMin - b.video.durationMin ||
-    (a.video.id < b.video.id ? -1 : a.video.id > b.video.id ? 1 : 0)
-  );
+    (a.video.id < b.video.id ? -1 : a.video.id > b.video.id ? 1 : 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -257,7 +276,9 @@ export function buildRoadmap(
   diagnosis: DiagnosisResult,
   videos: Video[],
   instructors: Instructor[],
+  opts: RoadmapOptions = {},
 ): Roadmap {
+  const compareScored = makeCompare(diagnosis, opts);
   const byId = new Map(instructors.map((i) => [i.id, i]));
   const seenVideo = new Set<string>();
   const pool: Scored[] = [];
@@ -311,11 +332,18 @@ export function buildRoadmap(
 
   // 기초 다지기: 고른 목표 중 하나라도 맞는 기초 강의를 먼저 담고, 모자라면 나머지 기초 강의로 채운다.
   const goalRelated = (s: Scored) => s.score.goalMatch;
+  const theoryFirst = diagnosis.studyStyle === "theory";
+  const understandTagged = (s: Scored) => s.video.goals.includes("understand");
   const pickFoundationFrom = (filter: (s: Scored) => boolean, relevant: typeof pick): Scored[] => {
     const limit = limitOf("foundation");
     const first = relevant((s) => filter(s) && goalRelated(s), limit);
     if (first.length >= limit) return first;
-    return [...first, ...relevant(filter, limit - first.length)].sort(compareScored);
+    // 개념 위주: 목표 강의가 모자라면 개념 이해 강의로 먼저 채운다
+    // (분야가 맞는 것만. 분야 미정·입문자는 분야를 따지지 않는다)
+    const domainOk = (s: Scored) => isBeginner || diagnosis.domains.length === 0 || domainMatch(s);
+    const second = theoryFirst ? pick((s) => filter(s) && understandTagged(s) && domainOk(s), limit - first.length) : [];
+    const rest = first.length + second.length >= limit ? [] : relevant(filter, limit - first.length - second.length);
+    return [...first, ...second, ...rest].sort(compareScored);
   };
 
   const pickFoundation = () => {
