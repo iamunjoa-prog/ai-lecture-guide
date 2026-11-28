@@ -26,6 +26,7 @@ import { glossaryById, INITIAL_TERMS, selectStarterTerms, termsForVideo } from "
 import { selectAffiliate, type AffiliateItem } from "@/lib/affiliate";
 import affiliateJson from "@data/affiliate.json";
 import { buildRoadmap, STEP_LABELS } from "@/lib/recommend";
+import { findCoverageGaps } from "@/lib/coverage";
 import { lectureAnchorId, selectTheory } from "@/lib/theory";
 import { theoryHref } from "@/lib/glossary-tabs";
 import { journeyInputs, missionAnchorId, STEP_SUMMARIES, stepAnchorId, summaryLine } from "@/lib/journey";
@@ -48,6 +49,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
   }
 
   const roadmap = buildRoadmap(diagnosis, videos, instructors);
+  const coverageGaps = findCoverageGaps(diagnosis, videos);
   const levelLabel = LEVEL_LABELS[diagnosis.level];
   const byId = glossaryById(glossary);
   const roadmapVideos = roadmap.steps.flatMap((st) => st.items.map((it) => it.video));
@@ -109,6 +111,19 @@ export default async function ResultPage({ searchParams }: { searchParams: Promi
       ) : (
         <>
           <LearningJourney level={diagnosis.level} steps={journeySteps} />
+          {coverageGaps.length > 0 && (
+            <p
+              data-testid="coverage-note"
+              className="mt-5 rounded-xl border border-border bg-surface-2 px-4 py-3 text-[14px] leading-relaxed text-fg-muted"
+            >
+              <span className="font-semibold text-fg">비고</span> ·{" "}
+              {coverageGaps
+                .map((g) => `‘${DOMAIN_LABELS[g.domain]} × ${GOAL_LABELS[g.goal]}’`)
+                .join(", ")}
+              에 맞는 {LEVEL_LABELS[diagnosis.level]}용 공식 강의는 아직 찾지 못했어요. 가장 가까운 강의로 채웠고, 검증된
+              강의를 찾는 대로 추가할게요.
+            </p>
+          )}
           <ol aria-label="단계별 강의" data-testid="roadmap-steps">
             {roadmap.steps.map((step, i) => (
               <li
